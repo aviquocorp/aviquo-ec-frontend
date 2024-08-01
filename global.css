@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+:root {
+  /* fonts */
+  --font-dm-sans: "DM Sans";
+  --font-plus-jakarta-sans: "Plus Jakarta Sans";
+  --single-line-body-base: Inter;
+  --font-exo: Exo;
+
+  /* font sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-2xs: 0.688rem;
+  --single-line-body-base-size: 1rem;
+  --font-size-21xl: 2.5rem;
+  --font-size-sm: 0.875rem;
+
+  /* Colors */
+  --border-default-default: #d9d9d9;
+  --background-default-default: #fff;
+  --color-darkturquoise: rgba(80, 215, 224, 0.64);
+  --color-black: #000;
+  --color-palegreen: rgba(164, 244, 116, 0.64);
+  --text-default-default: #1e1e1e;
+  --color-gray-100: rgba(255, 255, 255, 0.66);
+
+  /* Spacing */
+  --space-200: 0.5rem;
+  --radius-full: 624.937rem;
+  --space-400: 1rem;
+
+  /* Gaps */
+  --gap-7xl: 1.625rem;
+  --gap-xl: 1.25rem;
+  --gap-mini: 0.937rem;
+
+  /* Paddings */
+  --padding-13xl: 2rem;
+  --padding-2xs: 0.687rem;
+  --padding-xs: 0.75rem;
+  --padding-6xs: 0.437rem;
+  --padding-7xs: 0.375rem;
+  --padding-base: 1rem;
+  --padding-mini: 0.937rem;
+  --padding-sm: 0.875rem;
+  --padding-26xl: 2.812rem;
+  --padding-10xs: 0.187rem;
+  --padding-5xs-5: 0.468rem;
+
+  /* Border radiuses */
+  --br-9xs: 4px;
+  --br-mid: 17px;
+  --br-8xs: 5px;
+  --br-130xl: 149px;
+  --br-5xs: 8px;
+  --br-2xl: 21px;
+}

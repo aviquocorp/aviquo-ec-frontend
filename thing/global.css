@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+:root {
+  /* fonts */
+  --font-dm-sans: "DM Sans";
+  --font-plus-jakarta-sans: "Plus Jakarta Sans";
+
+  /* font sizes */
+  --font-size-6xs: 7px;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-21xl: 40px;
+
+  /* Colors */
+  --color-gray: rgba(255, 255, 255, 0.75);
+  --color-black: #000;
+  --color-tomato: rgba(255, 88, 88, 0.66);
+  --color-palegreen: rgba(165, 244, 116, 0.66);
+
+  /* Gaps */
+  --gap-xl: 20px;
+  --gap-9xs: 4px;
+  --gap-3xs: 10px;
+  --gap-6xl: 25px;
+
+  /* Paddings */
+  --padding-42xl: 61px;
+  --padding-14xl: 33px;
+  --padding-7xs: 6px;
+  --padding-12xs: 1px;
+  --padding-smi: 13px;
+  --padding-5xl: 24px;
+  --padding-6xs: 7px;
+  --padding-8xs: 5px;
+  --padding-base: 16px;
+  --padding-11xs: 2px;
+  --padding-mini: 15px;
+  --padding-9xs: 4px;
+  --padding-13xl: 32px;
+  --padding-sm: 14px;
+  --padding-3xs: 10px;
+  --padding-3xl: 22px;
+  --padding-4xs: 9px;
+
+  /* Border radiuses */
+  --br-2xl: 21px;
+}

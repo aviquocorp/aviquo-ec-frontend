@@ -1,3 +1,5 @@
+# convert the google sheet to a sqlite database
+
 import os
 import sqlite3
 from googleapiclient.discovery import build

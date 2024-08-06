@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-    <link rel="stylesheet" href="./global2.css" />
-    <link rel="stylesheet" href="./index2.css" />
+    <link rel="stylesheet" href="/static/global2.css" />
+    <link rel="stylesheet" href="/static/index.css" />
+    <link rel="stylesheet" href="/static/summerSubjects.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@600&display=swap"
@@ -28,100 +29,99 @@
         </div>
       </section>
       <section class="program-areas">
-        <div class="area-icons">
-          <div class="math-icon">
-            <button class="writing-icon">
-              <div class="writing-icon-child"></div>
-              <img class="math-icon1" alt="" src="./public/math@2x.png" />
-
-              <div class="writing">
-                <b class="mathematics">Mathematics</b>
+          <form method="post" action="https://submit-form.com/echo">
+            <div class="area-icons">
+              <div class="math-icon">
+<label>
+                    <input type="checkbox" name="areas" value="mathematics">
+                    <img src="/static/public/math@2x.png" alt="Mathematics">
+                    <span>Mathematics</span>
+                </label>
+                <button class="engineering-icon" type="submit" name="subject" value="engineering">
+                  <div class="engineering-icon-child"></div>
+                  <b class="engineering">Engineering</b>
+                  <img
+                    class="engineering-icon1"
+                    alt=""
+                    src="/static/public/engineering@2x.png"
+                  />
+                </button>
               </div>
-            </button>
-            <button class="engineering-icon">
-              <div class="engineering-icon-child"></div>
-              <b class="engineering">Engineering</b>
-              <img
-                class="engineering-icon1"
-                alt=""
-                src="./public/engineering@2x.png"
-              />
-            </button>
-          </div>
-          <div class="computer-science-area">
-            <button class="computer-science-icon">
-              <div class="computer-science-icon-child"></div>
-              <div class="computer-science-shape"></div>
-              <img
-                class="workstation-icon"
-                alt=""
-                src="./public/workstation@2x.png"
-              />
+              <div class="computer-science-area">
+                <button class="computer-science-icon" type="submit" name="subject" value="cs">
+                  <div class="computer-science-icon-child"></div>
+                  <div class="computer-science-shape"></div>
+                  <img
+                    class="workstation-icon"
+                    alt=""
+                    src="/static/public/workstation@2x.png"
+                  />
 
-              <div class="computer-science-name">
-                <b class="computer-science">Computer Science</b>
+                  <div class="computer-science-name">
+                    <b class="computer-science">Computer Science</b>
+                  </div>
+                </button>
+                <button class="research-area" type="submit" name="subject" value="research">
+                  <div class="research-area-child"></div>
+                  <div class="research-shape"></div>
+                  <b class="research-medsci">Research (med/sci)</b>
+                  <img class="analyze-icon" alt="" src="/static/public/analyze@2x.png" />
+                </button>
               </div>
-            </button>
-            <button class="research-area">
-              <div class="research-area-child"></div>
-              <div class="research-shape"></div>
-              <b class="research-medsci">Research (med/sci)</b>
-              <img class="analyze-icon" alt="" src="./public/analyze@2x.png" />
-            </button>
-          </div>
-          <div class="business-area">
-            <button class="business-icon">
-              <div class="business-icon-child"></div>
-              <div class="business-shape"></div>
-              <img
-                class="crowdfunding-icon"
-                alt=""
-                src="./public/crowdfunding@2x.png"
-              />
+              <div class="business-area">
+                <button class="business-icon" type="submit" name="subject" value="business">
+                  <div class="business-icon-child"></div>
+                  <div class="business-shape"></div>
+                  <img
+                    class="crowdfunding-icon"
+                    alt=""
+                    src="/static/public/crowdfunding@2x.png"
+                  />
 
-              <div class="business-name">
-                <b class="businessfinance">Business/Finance</b>
+                  <div class="business-name">
+                    <b class="businessfinance">Business/Finance</b>
+                  </div>
+                </button>
+                <div class="music-area">
+                  <button class="music-icon" type="submit" name="subject" value="music">
+                    <div class="music-icon-child"></div>
+                    <div class="music-shape"></div>
+                    <b class="musicinstruments">Music/Instruments</b>
+                    <img class="music-icon1" alt="" src="/static/public/music@2x.png" />
+                  </button>
+                </div>
               </div>
-            </button>
-            <div class="music-area">
-              <button class="music-icon">
-                <div class="music-icon-child"></div>
-                <div class="music-shape"></div>
-                <b class="musicinstruments">Music/Instruments</b>
-                <img class="music-icon1" alt="" src="./public/music@2x.png" />
-              </button>
+              <div class="math-icon2">
+                <button class="rectangle-parent" type="submit" name="subject" value="writing">
+                  <div class="frame-child"></div>
+                  <div class="frame-item"></div>
+                  <b class="writingjournalism">Writing/Journalism</b>
+                  <img
+                    class="book-and-pencil"
+                    alt=""
+                    src="/static/public/book-and-pencil@2x.png"
+                  />
+                </button>
+                <button class="rectangle-group" type="submit" name="subject" value="polysci">
+                  <div class="frame-inner"></div>
+                  <div class="rectangle-div"></div>
+                  <b class="polsocial-science">Pol/Social Science</b>
+                  <img
+                    class="courthouse-icon"
+                    alt=""
+                    src="/static/public/courthouse@2x.png"
+                  />
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="math-icon2">
-            <button class="rectangle-parent">
-              <div class="frame-child"></div>
-              <div class="frame-item"></div>
-              <b class="writingjournalism">Writing/Journalism</b>
-              <img
-                class="book-and-pencil"
-                alt=""
-                src="./public/book-and-pencil@2x.png"
-              />
-            </button>
-            <button class="rectangle-group">
-              <div class="frame-inner"></div>
-              <div class="rectangle-div"></div>
-              <b class="polsocial-science">Pol/Social Science</b>
-              <img
-                class="courthouse-icon"
-                alt=""
-                src="./public/courthouse@2x.png"
-              />
-            </button>
-          </div>
-        </div>
+        </form>
         <div class="circled-c-area">
           <div class="circled-c-icon">
             <img
               class="circled-c-icon1"
               loading="lazy"
               alt=""
-              src="./public/11-circled-c@2x.png"
+              src="/static/public/11-circled-c@2x.png"
             />
 
             <div class="inner-circled-c">
@@ -129,7 +129,7 @@
                 class="circled-c-icon2"
                 loading="lazy"
                 alt=""
-                src="./public/10-circled-c@2x.png"
+                src="/static/public/10-circled-c@2x.png"
               />
             </div>
           </div>
@@ -142,12 +142,12 @@
             <img
               class="screenshot-2024-07-27-at-1259"
               alt=""
-              src="./public/screenshot-20240727-at-125942am-1@2x.png"
+              src="/static/public/screenshot-20240727-at-125942am-1@2x.png"
             />
 
             <div class="go-back">go back</div>
           </button>
-          <div class="next-button">
+          <button class="next-button">
             <div class="next-container">
               <div class="next-container-child"></div>
               <div class="almost-there">almost there</div>
@@ -155,7 +155,7 @@
                 <div class="next">(next...)</div>
               </div>
             </div>
-          </div>
+          </button>
         </div>
       </div>
     </div>

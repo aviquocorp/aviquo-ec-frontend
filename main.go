@@ -2,6 +2,7 @@ package main
 
 import (
     "log"
+    "fmt"
     "net/http"
     "database/sql"
 
@@ -11,6 +12,12 @@ import (
 func index(w http.ResponseWriter, r *http.Request) {
     // load index.html from static/
     http.ServeFile(w, r, "./static/index.html")
+}
+
+func summerProgGrade(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+    fmt.Fprintf(w, "<b>Hello, World!</b><br/>")
 }
 
 func main() {
@@ -40,6 +47,7 @@ func main() {
 
 	fs := http.FileServer(http.Dir("./static"))
     http.HandleFunc("/", index)
+    http.HandleFunc("/summer-prog-grades", summerProgGrade)
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	log.Print("Listening on :3000...")

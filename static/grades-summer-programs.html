@@ -1,135 +1,72 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, width=device-width" />
+<html lang="en">
 
-    <link rel="stylesheet" href="./global.css" />
-    <link rel="stylesheet" href="./grades-summer-programs.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@600;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=DM Sans:wght@400;500;700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Exo:wght@400;500&display=swap"
-    />
-  </head>
-  <body>
-    <div class="grades-summer-programs">
-      <section class="program-selection">
-        <div class="grade-selection">
-          <div class="grade-option">
-            <a class="aviquo1">aviquo. </a>
-          </div>
-          <div class="choose-the-grade">
-            choose the grade you’re about to finish this year
-          </div>
-        </div>
-      </section>
-      <section class="grade-buttons">
-        <div class="grade-button-container">
-          <div class="upper-grades-parent">
-            <button class="upper-grades">
-              <div class="upper-grades-child"></div>
-              <b class="freshman">Freshman</b>
-              <img
-                class="circled-9-icon"
-                alt=""
-                src="./public/circled-9@2x.png"
-              />
-            </button>
-            <div class="sophomore-button">
-              <div class="sophomore-button-child"></div>
-              <b class="sophomore">Sophomore</b>
-              <img
-                class="circled-c-icon"
-                loading="lazy"
-                alt=""
-                src="./public/10-circled-c@2x.png"
-              />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades - Summer Programs</title>
+    <link rel="stylesheet" href="grades-summer-programs.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">aviquo.</div>
+        <div class="subtitle">choose the grade you’re about to finish this year</div>
+
+        <form id="gradesForm" method="POST" action="https://submit-form.com/echo">
+            <input type="hidden" name="subject" value="math">
+
+            <div class="checkbox-button">
+                <input type="checkbox" id="freshman" name="grades" value="Freshman">
+                <label for="freshman">
+                    <img src="/static/public/circled-9.svg" alt="Freshman Icon">
+                    Freshman
+                </label>
             </div>
-          </div>
-          <div class="frame-group">
-            <button class="rectangle-parent">
-              <div class="frame-item"></div>
-              <img
-                class="circled-c-icon1"
-                alt=""
-                src="./public/11-circled-c@2x.png"
-              />
-
-              <div class="junior-wrapper">
-                <b class="junior">Junior</b>
-              </div>
-            </button>
-            <button class="rectangle-group">
-              <div class="frame-inner"></div>
-              <img
-                class="circled-c-icon2"
-                alt=""
-                src="./public/12-circled-c@2x.png"
-              />
-
-              <div class="senior-wrapper">
-                <b class="senior">Senior</b>
-              </div>
-            </button>
-          </div>
-        </div>
-        <div class="grade-buttons-inner">
-          <div class="breakfast-time-container-parent">
-            <button class="breakfast-time-container">
-              <div class="breakfast-time-container-child"></div>
-              <b class="cost">cost:</b>
-            </button>
-            <div class="free-option">
-              <div class="breakfast-get-button">
-                <div class="breakfast-get-button-child"></div>
-                <b class="free">free</b>
-              </div>
+            <div class="checkbox-button">
+                <input type="checkbox" id="sophomore" name="grades" value="Sophomore">
+                <label for="sophomore">
+                    <img src="/static/public/10-circled-c.svg" alt="Sophomore Icon">
+                    Sophomore
+                </label>
             </div>
-            <div class="lunch-get-button">
-              <div class="lunch-get-button-child"></div>
-              <b class="paid">paid</b>
+            <div class="checkbox-button">
+                <input type="checkbox" id="junior" name="grades" value="Junior">
+                <label for="junior">
+                    <img src="/static/public/11-circled-c.svg" alt="Junior Icon">
+                    Junior
+                </label>
             </div>
-          </div>
-        </div>
-      </section>
-      <div class="grades-summer-programs-inner">
-        <div class="dinner-get-button-parent">
-          <button class="dinner-get-button">
-            <div class="dinner-get-button-child"></div>
-            <img
-              class="screenshot-2024-07-27-at-1259"
-              alt=""
-              src="./public/screenshot-20240727-at-125942am-1@2x.png"
-            />
+            <div class="checkbox-button">
+                <input type="checkbox" id="senior" name="grades" value="Senior">
+                <label for="senior">
+                    <img src="/static/public/12-circled-c.svg" alt="Senior Icon">
+                    Senior
+                </label>
+            </div>
 
-            <div class="go-back">go back</div>
-          </button>
-          <a href="/static/summer-programs.html">
-              <div class="summer-button">
-                <div class="snacks-get-button">
-                  <div class="snacks-get-button-child"></div>
-                  <div class="button-background"></div>
-                  <div class="have-productive-summer">have productive summer</div>
-                  <div class="next-button">
-                    <div class="next">(next...)</div>
-                  </div>
+            <div class="cost-section">
+                <span class="cost-label">cost:</span>
+                <div class="checkbox-button small">
+                    <input type="checkbox" id="free" name="cost" value="free">
+                    <label for="free" style="background-color: #00ff00;">
+                        free
+                    </label>
                 </div>
-              </div>
-          </a>
-        </div>
-      </div>
+                <div class="checkbox-button small">
+                    <input type="checkbox" id="paid" name="cost" value="paid">
+                    <label for="paid" style="background-color: #ff0000;">
+                        paid
+                    </label>
+                </div>
+            </div>
+
+            <div class="submit-buttons">
+                <button type="button" class="submit-button">go back</button>
+                <button type="submit" class="submit-button" >have productive summer (next...)</button>
+            </div>
+        </form>
     </div>
-  </body>
+</body>
+
 </html>

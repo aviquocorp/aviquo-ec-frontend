@@ -3,6 +3,8 @@ package main
 import (
     "log"
     "fmt"
+    "bytes"
+    "io/ioutil"
     "net/http"
     "database/sql"
 
@@ -17,7 +19,16 @@ func index(w http.ResponseWriter, r *http.Request) {
 func summerProgGrade(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-    fmt.Fprintf(w, "<b>Hello, World!</b><br/>")
+    // read the file manually first
+    content, err := ioutil.ReadFile("./static/grades-summer-programs.html")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // replace the first instance of '{}' with "hi"
+    content = bytes.Replace(content, []byte("{}"), []byte("hi"), 1)
+    fmt.Fprintf(w, string(content))
+
 }
 
 func main() {
@@ -45,9 +56,11 @@ func main() {
         log.Fatal(err)
     }
 
-	fs := http.FileServer(http.Dir("./static"))
     http.HandleFunc("/", index)
-    http.HandleFunc("/summer-prog-grades", summerProgGrade)
+    http.HandleFunc("/static/grades-summer-programs.html", summerProgGrade)
+
+    // fallback to static/
+	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	log.Print("Listening on :3000...")

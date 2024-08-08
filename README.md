@@ -1,10 +1,17 @@
-
-  # Untitled
-
-  Note: Please ensure you have installed <code><a href="https://nodejs.org/en/download/">nodejs</a></code>
-
-  To preview and run the project on your device:
-  1) Open project folder in <a href="https://code.visualstudio.com/download">Visual Studio Code</a>
-  2) In the terminal, run `npm install`
-  3) Run `npm start` to view project in browser
+# aviquo 
   
+Here is the source code of our extracurricular finder. It currently uses no more advanced features than a database lookup, but we will definitely be incorporating some type of neural network in the near future. 
+
+The source is open, but the database is not, for legal reasons. You can add your own scholarship data by running the code.
+
+```bash
+go run main.go
+```
+
+and 
+
+```bash
+go build main.go && ./main
+```
+
+for those new to go. Pretty self explanatory :)

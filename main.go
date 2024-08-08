@@ -11,6 +11,8 @@ import (
     _ "github.com/mattn/go-sqlite3"
 )
 
+var db *sql.DB
+
 func index(w http.ResponseWriter, r *http.Request) {
     // load index.html from static/
     http.ServeFile(w, r, "./static/index.html")
@@ -28,13 +30,9 @@ func summerProgGrade(w http.ResponseWriter, r *http.Request) {
     // iterate over values
     htmlToInsert := ""
 
-    for k, v := range r.Form {
-        if k == "subjects" {
-            for i := 0; i < len(v); i++ {
-                htmlToInsert += fmt.Sprintf("<input type='hidden' name='subjects' value='%s'>", v[i])
-            }
-            break;
-        } 
+    v := r.Form["subjects"]
+    for i := 0; i < len(v); i++ {
+        htmlToInsert += fmt.Sprintf("<input type='hidden' name='subjects' value='%s'>", v[i])
     }
 
     if htmlToInsert == "" {
@@ -55,8 +53,62 @@ func summerProgGrade(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
+    // read the form data from the request
+    err := r.ParseForm()
+    if err != nil {
+        // redirect back to summerSubjects.html
+        http.Redirect(w, r, "/static/summerSubjects.html", http.StatusFound)
+        return
+    }
+
+    // check if subject is defined in form
+    if _, ok := r.Form["subjects"]; !ok {
+        // redirect back to summerSubjects.html
+        http.Redirect(w, r, "/static/summerSubjects.html", http.StatusFound)
+        return
+    }
+
+    
+    // check if grade and cost is defined in form
+    if _, ok := r.Form["grade"]; !ok { 
+        if _, ok = r.Form["cost"]; !ok {
+            // redirect back .html
+            http.Redirect(w, r, "/static/grades-summer-programs.html", http.StatusFound)
+
+            return
+        }
+    }
+
+    log.Print("not the heat death yet")
+    // query the database for the subject
+    data , err := db.Query("SELECT * FROM summerProgs ") //WHERE cost >= ? AND startGrade <= ? AND endGrade >= ?", r.Form["cost"][0] == "paid", r.Form["grade"][0], r.Form["grade"][0])
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    log.Print("data: %s", data)
+
+    /*
+    htmlToInsert := `
+        <div class=\"program-cards2\">
+          <div class=\"nyu-applied-research\">boa student leaders</div>
+          <div class=\"program-cards-child1\"></div>
+          <img
+            class=\"lab-items-icon\"
+            loading=\"lazy\"
+            alt=\"\"
+            src=\"./public/lab-items@2x.png\"
+          />
+        </div>
+    `
+    */
+
+}
+
 func main() {
-    db, err := sql.Open("sqlite3", "./main.db")
+    var err error
+    db, err = sql.Open("sqlite3", "./main.db")
     if err != nil {
         log.Fatal(err)
     }
@@ -82,6 +134,7 @@ func main() {
 
     http.HandleFunc("/", index)
     http.HandleFunc("/static/grades-summer-programs.html", summerProgGrade)
+    http.HandleFunc("/static/results-page-summer-programs.html", resultsSummerProg)
 
     // fallback to static/
 	fs := http.FileServer(http.Dir("./static"))

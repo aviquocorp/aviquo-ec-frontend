@@ -19,6 +19,30 @@ func index(w http.ResponseWriter, r *http.Request) {
 func summerProgGrade(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
+    // read the form data from the request
+    err := r.ParseForm()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // iterate over values
+    htmlToInsert := ""
+
+    for k, v := range r.Form {
+        if k == "subjects" {
+            for i := 0; i < len(v); i++ {
+                htmlToInsert += fmt.Sprintf("<input type='hidden' name='subjects' value='%s'>", v[i])
+            }
+            break;
+        } 
+    }
+
+    if htmlToInsert == "" {
+        // redirect back to summerSubjects.html
+        http.Redirect(w, r, "/static/summerSubjects.html", http.StatusFound)
+        return
+    }
+
     // read the file manually first
     content, err := ioutil.ReadFile("./static/grades-summer-programs.html")
     if err != nil {
@@ -26,7 +50,7 @@ func summerProgGrade(w http.ResponseWriter, r *http.Request) {
     }
 
     // replace the first instance of '{}' with "hi"
-    content = bytes.Replace(content, []byte("{}"), []byte("hi"), 1)
+    content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 1)
     fmt.Fprintf(w, string(content))
 
 }

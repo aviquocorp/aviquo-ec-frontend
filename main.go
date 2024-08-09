@@ -13,6 +13,11 @@ import (
 
 var db *sql.DB
 
+/* https://dev.to/chigbeef_77/bool-int-but-stupid-in-go-3jb3 */
+func fastBoolConv(b bool) int {
+    return int(*(*byte)(unsafe.Pointer(&b)))
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
     // load index.html from static/
     http.ServeFile(w, r, "./static/index.html")
@@ -62,25 +67,32 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+
+    subjects := r.Form["subjects"]
+    grades := r.Form["grade"]
+    costs := r.Form["cost"]
+
     // check if subject is defined in form
-    if _, ok := r.Form["subjects"]; !ok {
+    if subjects == nil || len(subjects) == 0 {
         // redirect back to summerSubjects.html
         http.Redirect(w, r, "/static/summerSubjects.html", http.StatusFound)
         return
     }
 
-    
     // check if grade and cost is defined in form
-    if _, ok := r.Form["grade"]; !ok { 
-        if _, ok = r.Form["cost"]; !ok {
-            // redirect back .html
-            http.Redirect(w, r, "/static/grades-summer-programs.html", http.StatusFound)
-
-            return
-        }
+    if grades == nil || len(grades) == 0 || costs == nil || len(costs) == 0 {
+        http.Redirect(w, r, "/static/grades-summer-programs.html", http.StatusFound)
+        return
     }
 
-    log.Print("not the heat death yet")
+    /* dynamically construct the query */
+    /*
+    query := "SELECT * FROM summerProgs WHERE cost >= " + 
+                (fastBoolConv(costs[0] == "paid")) + 
+                strings.Repeat(" AND grade BETWEEN ? AND ? ", len(grades)) +
+                */
+
+
     // query the database for the subject
     data , err := db.Query("SELECT * FROM summerProgs ") //WHERE cost >= ? AND startGrade <= ? AND endGrade >= ?", r.Form["cost"][0] == "paid", r.Form["grade"][0], r.Form["grade"][0])
     if err != nil {

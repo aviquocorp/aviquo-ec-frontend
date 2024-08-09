@@ -15,15 +15,6 @@ import (
 
 var db *sql.DB
 
-func fastBoolConv(b bool) string {
-    switch b {
-    case true:
-        return "1"
-    default:
-        return "0"
-    }
-}
-
 func index(w http.ResponseWriter, r *http.Request) {
     // load index.html from static/
     http.ServeFile(w, r, "./static/index.html")
@@ -58,7 +49,7 @@ func summerProgGrade(w http.ResponseWriter, r *http.Request) {
         log.Fatal(err)
     }
 
-    // replace the first instance of '{}' with "hi"
+    // replace the first instance of '{}' with the html
     content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 1)
     fmt.Fprintf(w, string(content))
 
@@ -123,20 +114,59 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         args = append(args, subject)
     }
 
-                /*
     // query the database for the subject
-    data , err := db.Query(query) //WHERE cost >= ? AND startGrade <= ? AND endGrade >= ?", r.Form["cost"][0] == "paid", r.Form["grade"][0], r.Form["grade"][0])
+    rows, err := db.Query(query, args...)
     if err != nil {
         log.Fatal(err)
     }
-    */
 
-    log.Print("data: ", query, "\n", args)
+    htmlToInsert := ""
 
-    /*
-    htmlToInsert := `
+    // Iterate over the result set
+    for rows.Next() {
+        var name string
+        var startGrade int
+        var endGrade int
+        var deadline sql.NullString
+        var link string
+        var cost int
+        var scholarship sql.NullString
+        var notes sql.NullString
+        var category string
+
+        // Scan the result into variables
+        err := rows.Scan(&name, &startGrade, &endGrade, &deadline, 
+                        &link, &cost, &scholarship, &notes, &category)
+        if err != nil {
+            fmt.Println("Error scanning row:", err)
+            return
+        }
+
+        // Check if deadline is null
+        deadlineStr := ""
+        if deadline.Valid {
+            deadlineStr = deadline.String
+        }
+
+        // Check if scholarship is null
+        scholarshipStr := ""
+        if scholarship.Valid {
+            scholarshipStr = scholarship.String
+        }
+
+        // Check if notes is null
+        notesStr := ""
+        if notes.Valid {
+            notesStr = notes.String
+        }
+
+        // Process the result
+        fmt.Println(name, startGrade, endGrade, deadlineStr, link, cost, scholarshipStr, notesStr, category)
+
+        
+    htmlToInsert += `
         <div class=\"program-cards2\">
-          <div class=\"nyu-applied-research\">boa student leaders</div>
+          <div class=\"nyu-applied-research\">` + name + `</div>
           <div class=\"program-cards-child1\"></div>
           <img
             class=\"lab-items-icon\"
@@ -146,8 +176,17 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
           />
         </div>
     `
-    */
+    }
 
+    // read the file manually first
+    content, err := ioutil.ReadFile("./static/results-page-summer-programs.html")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // replace the first instance of '{}' with the html
+    content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 1)
+    fmt.Fprintf(w, string(content))
 }
 
 func main() {
@@ -156,20 +195,19 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-    defer db.Close()
 
     // create table
     _, err = db.Exec(
         `CREATE TABLE IF NOT EXISTS summerProgs (
-            name TEXT PRIMARY KEY,
-            startGrade INTEGER,
-            endGrade INTEGER,
+            name TEXT PRIMARY KEY NOT NULL,
+            startGrade INTEGER DEFAULT 0,
+            endGrade INTEGER DEFAULT 255,
             deadline DATE,
-            link TEXT,
-            cost INTEGER,
+            link TEXT NOT NULL,
+            cost INTEGER NOT NULL,
             scholarship TEXT,
             notes TEXT,
-            category TEXT
+            subject TEXT NOT NULL
         );`,
     )
     if err != nil {
@@ -189,4 +227,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+    defer db.Close()
 }

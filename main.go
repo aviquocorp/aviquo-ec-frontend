@@ -4,8 +4,10 @@ import (
     "log"
     "fmt"
     "bytes"
+    "strings"
     "io/ioutil"
     "net/http"
+    "net/url"
     "database/sql"
 
     _ "github.com/mattn/go-sqlite3"
@@ -13,9 +15,13 @@ import (
 
 var db *sql.DB
 
-/* https://dev.to/chigbeef_77/bool-int-but-stupid-in-go-3jb3 */
-func fastBoolConv(b bool) int {
-    return int(*(*byte)(unsafe.Pointer(&b)))
+func fastBoolConv(b bool) string {
+    switch b {
+    case true:
+        return "1"
+    default:
+        return "0"
+    }
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -67,9 +73,8 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-
     subjects := r.Form["subjects"]
-    grades := r.Form["grade"]
+    grades := r.Form["grades"]
     costs := r.Form["cost"]
 
     // check if subject is defined in form
@@ -81,25 +86,52 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 
     // check if grade and cost is defined in form
     if grades == nil || len(grades) == 0 || costs == nil || len(costs) == 0 {
-        http.Redirect(w, r, "/static/grades-summer-programs.html", http.StatusFound)
+        // TODO: pass form data to make this work
+        params := url.Values{}
+
+        for _, subject := range subjects {
+            params.Add("subjects", subject)
+        }
+        http.Redirect(w, r, 
+            "/static/grades-summer-programs.html?" + params.Encode(), http.StatusFound)
         return
     }
 
+
     /* dynamically construct the query */
-    /*
-    query := "SELECT * FROM summerProgs WHERE cost >= " + 
-                (fastBoolConv(costs[0] == "paid")) + 
-                strings.Repeat(" AND grade BETWEEN ? AND ? ", len(grades)) +
-                */
 
+    // Create placeholders for the 'IN' clause
+    subjectPlaceholders := make([]string, len(subjects))
+    for i := range subjects {
+        subjectPlaceholders[i] = "?" // Each ? is a placeholder
+    }
 
+    query := "SELECT * FROM summerProgs WHERE " + 
+                strings.Repeat(" startGrade <= ? AND  ? <= endGrade AND ", len(grades)) +
+                " subject IN (" + strings.Join(subjectPlaceholders, ",") + ")"
+
+    if len(costs) == 1 && costs[0] == "paid" {
+        query += " AND cost > 0"
+    }
+
+    // Prepare arguments
+    args := []interface{}{}
+    for _, grade := range grades {
+        args = append(args, grade, grade)
+    }
+    for _, subject := range subjects {
+        args = append(args, subject)
+    }
+
+                /*
     // query the database for the subject
-    data , err := db.Query("SELECT * FROM summerProgs ") //WHERE cost >= ? AND startGrade <= ? AND endGrade >= ?", r.Form["cost"][0] == "paid", r.Form["grade"][0], r.Form["grade"][0])
+    data , err := db.Query(query) //WHERE cost >= ? AND startGrade <= ? AND endGrade >= ?", r.Form["cost"][0] == "paid", r.Form["grade"][0], r.Form["grade"][0])
     if err != nil {
         log.Fatal(err)
     }
+    */
 
-    log.Print("data: %s", data)
+    log.Print("data: ", query, "\n", args)
 
     /*
     htmlToInsert := `

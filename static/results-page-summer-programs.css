@@ -419,3 +419,21 @@
   line-height: normal;
   letter-spacing: normal;
 }
+
+
+.value-input {
+  flex: 1;
+  border: none; /* Remove default border */
+  background-color: var(--background-default-default); /* Match background color */
+  font-family: var(--font-dm-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-black);
+  line-height: 32px; /* Ensure it aligns with container height */
+  padding: 0 var(--padding-mini); /* Adjust padding to fit design */
+  box-sizing: border-box;
+  outline: none; /* Remove default outline */
+}
+
+.value-input::placeholder {
+  color: var(--color-gray-500); /* Placeholder color */
+}

@@ -23,7 +23,6 @@
       href="https://fonts.googleapis.com/css2?family=DM Sans:wght@400;500;700&display=swap"
     />
 
-<script src="./results.js"></script>
   </head>
   <body>
     <div class="results-page-summer-programs">
@@ -37,12 +36,12 @@
               <input class="value-input" id="search" type="text" placeholder="Value" />
             </div>
             <div class="slider-controls">
-              <button class="icon-btn" onclick="clearInput()">
+              <button class="icon-btn" id="clear">
               <img class="x-icon1" alt="" src="./public/x.svg" />
             </button>
             </div>
             <div class="slider-controls">
- <button class="icon-btn" onclick="clearInput()">
+ <button class="icon-btn" id="filter">
               <img
                 class="slider-icon1"
                 loading="lazy"
@@ -52,7 +51,7 @@
             </button>
             </div>
             <div class="slider-controls">
-                <button class="icon-btn" onclick="clearInput()">
+                <button class="icon-btn" id="save">
               <img
                 class="bookmark-icon1"
                 loading="lazy"
@@ -76,3 +75,4 @@
     </div>
   </body>
 </html>
+<script src="./results.js"></script>

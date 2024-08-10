@@ -99,7 +99,8 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 
     query := "SELECT * FROM summerProgs WHERE " + 
                 strings.Repeat(" startGrade <= ? AND  ? <= endGrade AND ", len(grades)) +
-                " subject IN (" + strings.Join(subjectPlaceholders, ",") + ")"
+                " subject IN (" + strings.Join(subjectPlaceholders, ",") + ") 
+                ORDER BY name ASC;"
 
     if len(costs) == 1 && costs[0] == "paid" {
         query += " AND cost > 0"
@@ -135,8 +136,10 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         var subject string
 
         // Scan the result into variables
-        err := rows.Scan(&name, &startGrade, &endGrade, &deadline, 
-                        &link, &cost, &scholarship, &notes, &subject)
+        err := rows.Scan(&name, &startGrade, &endGrade, &deadlineMonth, 
+                        &deadline, &link, &cost, &scholarship, 
+                        &notes, &subject)
+
         if err != nil {
             fmt.Println("Error scanning row:", err)
             return
@@ -166,7 +169,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         
     htmlToInsert += `
         <div class="program-cards2">
-          <div class="nyu-applied-research">` + name + `</div>
+          <div class="nyu-applied-research" id=` + name + `>` + name + `</div>
           <div class="program-cards-child1"></div>
           <img
             class="lab-items-icon"
@@ -200,8 +203,8 @@ func main() {
     _, err = db.Exec(
         `CREATE TABLE IF NOT EXISTS summerProgs (
             name TEXT PRIMARY KEY NOT NULL,
-            startGrade INTEGER DEFAULT 0,
-            endGrade INTEGER DEFAULT 255,
+            start_grade INTEGER DEFAULT 0,
+            end_grade INTEGER DEFAULT 255,
             deadline DATE,
             link TEXT NOT NULL,
             cost INTEGER NOT NULL,

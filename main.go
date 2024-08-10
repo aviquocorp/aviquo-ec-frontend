@@ -132,11 +132,11 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         var cost int
         var scholarship sql.NullString
         var notes sql.NullString
-        var category string
+        var subject string
 
         // Scan the result into variables
         err := rows.Scan(&name, &startGrade, &endGrade, &deadline, 
-                        &link, &cost, &scholarship, &notes, &category)
+                        &link, &cost, &scholarship, &notes, &subject)
         if err != nil {
             fmt.Println("Error scanning row:", err)
             return
@@ -161,18 +161,18 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         }
 
         // Process the result
-        fmt.Println(name, startGrade, endGrade, deadlineStr, link, cost, scholarshipStr, notesStr, category)
+        fmt.Println(name, startGrade, endGrade, deadlineStr, link, cost, scholarshipStr, notesStr, subject)
 
         
     htmlToInsert += `
-        <div class=\"program-cards2\">
-          <div class=\"nyu-applied-research\">` + name + `</div>
-          <div class=\"program-cards-child1\"></div>
+        <div class="program-cards2">
+          <div class="nyu-applied-research">` + name + `</div>
+          <div class="program-cards-child1"></div>
           <img
-            class=\"lab-items-icon\"
-            loading=\"lazy\"
-            alt=\"\"
-            src=\"./public/lab-items@2x.png\"
+            class="lab-items-icon"
+            loading="lazy"
+            alt=""
+            src="./public/` + subject + `@2x.png"
           />
         </div>
     `

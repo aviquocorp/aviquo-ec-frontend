@@ -109,3 +109,64 @@ function save() {
     // not implemented
     location.href = "/";
 }
+
+
+function launchModal() {
+  // Create the modal overlay
+  const modalOverlay = document.createElement('div');
+  modalOverlay.classList.add('modal-overlay');
+
+  // Create the modal content
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal');
+
+  // Create the "boa- student leaders" header
+  const header = document.createElement('h2');
+  header.innerText = 'boa- student leaders';
+  header.classList.add('modal-header');
+  modalContent.appendChild(header);
+
+  // Button container
+  const buttonContainer = document.createElement('div');
+  buttonContainer.classList.add('modal-button-container');
+
+  // Create buttons
+  const buttonLabels = ['11th', 'free', 'bus/fin'];
+  buttonLabels.forEach(label => {
+    const button = document.createElement('button');
+    button.innerText = label;
+    button.classList.add('modal-button');
+    buttonContainer.appendChild(button);
+  });
+
+  modalContent.appendChild(buttonContainer);
+
+  // Description paragraph
+  const description = document.createElement('p');
+  description.innerText =
+    'desicrpiotn disr-peion dies cisjd fiasd f\nsidfisdif odfidasosifn asdfpoas dfpasd fD\nasidfoiasdfsiadf...';
+  description.classList.add('modal-description');
+  modalContent.appendChild(description);
+
+  // Apply button
+  const applyButton = document.createElement('button');
+  applyButton.innerText = 'apply!';
+  applyButton.classList.add('modal-apply');
+  modalContent.appendChild(applyButton);
+
+  // Add modal content to overlay
+  modalOverlay.appendChild(modalContent);
+
+  // Append overlay to body
+  document.body.appendChild(modalOverlay);
+
+  // Close modal when clicking on the overlay
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      document.body.removeChild(modalOverlay);
+    }
+  });
+}
+
+// Call the function to launch the modal
+launchModal();

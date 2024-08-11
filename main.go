@@ -99,8 +99,8 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 
     query := "SELECT * FROM summerProgs WHERE " + 
                 strings.Repeat(" startGrade <= ? AND  ? <= endGrade AND ", len(grades)) +
-                " subject IN (" + strings.Join(subjectPlaceholders, ",") + ") 
-                ORDER BY name ASC;"
+                " subject IN (" + strings.Join(subjectPlaceholders, ",") + ") " +
+                "ORDER BY name ASC;"
 
     if len(costs) == 1 && costs[0] == "paid" {
         query += " AND cost > 0"
@@ -136,7 +136,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         var subject string
 
         // Scan the result into variables
-        err := rows.Scan(&name, &startGrade, &endGrade, &deadlineMonth, 
+        err := rows.Scan(&name, &startGrade, &endGrade, 
                         &deadline, &link, &cost, &scholarship, 
                         &notes, &subject)
 
@@ -163,10 +163,6 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
             notesStr = notes.String
         }
 
-        // Process the result
-        fmt.Println(name, startGrade, endGrade, deadlineStr, link, cost, scholarshipStr, notesStr, subject)
-
-        
     htmlToInsert += `
         <div class="program-cards2">
           <div class="nyu-applied-research" id=` + name + `>` + name + `</div>

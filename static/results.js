@@ -1,21 +1,53 @@
-// index the results
+
+// the container so we can remove the cards children
+var container = document.getElementsByClassName("program-grid")[0];
+
+
 // select all the divs with class "nyu-applied-research"
-var nyuAppliedResearch = document.querySelectorAll(".nyu-applied-research");
+var cards = document.querySelectorAll(".program-cards2");
+var allCards = Array.from(cards);
 
 // get the input element
 var input = document.getElementById("search");
 
 // every time the input changes, run the filter function
 input.addEventListener("input", () => {
-    for (var i = 0; i < nyuAppliedResearch.length; i++) {
-        if (distance(input.value.toLowerCase(), nyuAppliedResearch[i].innerHTML.toLowerCase()) <= 2 || input.value.length == 0) {
-            nyuAppliedResearch[i].style.display = "block";
+    const threshold = 5;
+
+    container.innerHTML = ""; 
+
+    // filter and sort cards from global array
+    // Filter and sort cards from the global array
+    const filteredSortedCards = allCards
+        .map(card => {
+            const text = card.childNodes[1].textContent
+                .slice(0, input.value.length).toLowerCase();
+
+            const dist = distance(input.value.toLowerCase(), text);
+            return { card, dist };
+        })
+        .filter(({ dist }) => dist <= threshold)  // Filter by distance threshold
+        .sort((a, b) => a.dist - b.dist)           // Sort by distance
+        .map(({ card }) => card);
+
+    // Add the filtered and sorted cards to the DOM
+    filteredSortedCards.forEach(card => {
+        container.appendChild(card);
+    });
+
+    /*
+    for (var i = 0; i < cards.length; i++) {
+        if (distance(input.value.toLowerCase(), 
+            cards[i].childNodes[1].textContent.slice(0, input.value.length).toLowerCase()) 
+            <= 3 || input.value.length == 0) {
+            cards[i].style.display = "block";
         } else {
-            nyuAppliedResearch[i].style.display = "none";
+            cards[i].style.display = "none";
         }
     }
     
     console.log(input.value);
+    */
 });
 
 // thank you Vincent Loh 
@@ -43,6 +75,19 @@ function distance(a, b){
 var clear = document.getElementById("clear");
 clear.addEventListener("click", () => {
     search.value = "";
+
+    // show all the cards again
+
+    container.innerHTML = `
+        <div class="program-cards3">
+          <div class="program-cards-child2"></div>
+          <div class="need-feedback-on">
+              need feedback on your ECs or advice from experts? join <a href="https://discord.gg/QMahMhBUsK">our discord!</a>
+          </div>
+        </div>` ;
+    for (var i = 0; i < allCards.length; i++) {
+        container.appendChild(allCards[i]);
+    }
 });
 
 

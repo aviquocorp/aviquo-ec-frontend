@@ -165,7 +165,15 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 
     htmlToInsert += `
         <div class="program-cards2">
-          <div class="nyu-applied-research" id=` + name + `>` + name + `</div>
+          <div class="nyu-applied-research" 
+            data-start-grade="` + fmt.Sprint(startGrade) + `"
+            data-end-grade="` + fmt.Sprint(endGrade) + `"
+            data-deadline="` + deadlineStr + `"
+            data-link="` + link + `"
+            data-cost="` + fmt.Sprint(cost) + `"
+            data-scholarship="` + scholarshipStr + `"
+            data-notes="` + notesStr + `"
+            id="` + name + `">` + name + `</div>
           <div class="program-cards-child1"></div>
           <img
             class="lab-items-icon"

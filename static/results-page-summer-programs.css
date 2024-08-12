@@ -225,7 +225,7 @@
 }
 .program-cards-child1 {
   position: absolute;
-  top: 47px;
+  bottom: 10px;
   left: 11px;
   border-radius: var(--br-130xl);
   background-color: var(--color-black);
@@ -234,13 +234,14 @@
   z-index: 1;
 }
 .lab-items-icon {
-  top: 32px;
-  left: 277px;
   border-radius: 29px;
   width: 39px;
   height: 25px;
   object-fit: cover;
   z-index: 1;
+display: block;
+margin-left: auto;
+
 }
 .program-cards-child2,
 .program-cards2 {

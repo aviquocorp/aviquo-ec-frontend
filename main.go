@@ -177,15 +177,14 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
             htmlToInsert += ` data-notes="` + notes.String + `"`
         }
 
-        htmlToInsert += `        
-              id="` + name + `">` + name + `</div>
-              <div class="program-cards-child1"></div>
+        htmlToInsert += `        id="` + name + `">` + name + `</div>
               <img
                 class="lab-items-icon"
                 loading="lazy"
                 alt=""
                 src="./public/` + subject + `@2x.png"
               />
+              <div class="program-cards-child1"></div>
               </button>
         `
     }

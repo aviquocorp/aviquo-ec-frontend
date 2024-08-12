@@ -49,8 +49,9 @@ func summerProgGrade(w http.ResponseWriter, r *http.Request) {
         log.Fatal(err)
     }
 
-    // replace the first instance of '{}' with the html
-    content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 1)
+    // replace the first two instances of '{}' with the html
+    // one for next; one for back
+    content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 2)
     fmt.Fprintf(w, string(content))
 
 }
@@ -100,8 +101,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
     query := "SELECT * FROM summerProgs WHERE " + 
                 strings.Repeat(" startGrade <= ? AND  ? <= endGrade AND ", len(grades)) +
                 " subject IN (" + strings.Join(subjectPlaceholders, ",") + ") " +
-                "ORDER BY name ASC;"
-
+                "OR startGrade IS NULL OR endGrade IS NULL ORDER BY name ASC;"
     if len(costs) == 1 && costs[0] == "paid" {
         query += " AND cost > 0"
     }
@@ -116,9 +116,10 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
     }
 
     // query the database for the subject
+
     rows, err := db.Query(query, args...)
     if err != nil {
-        log.Fatal(err)
+        log.Print("Query error:", err)
     }
 
     htmlToInsert := ""
@@ -126,8 +127,8 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
     // Iterate over the result set
     for rows.Next() {
         var name string
-        var startGrade int
-        var endGrade int
+        var startGrade sql.NullInt32
+        var endGrade sql.NullInt32
         var deadline sql.NullString
         var link string
         var cost int
@@ -141,48 +142,52 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
                         &notes, &subject)
 
         if err != nil {
-            fmt.Println("Error scanning row:", err)
+            log.Print("Error scanning row:", err)
             return
         }
 
-        // Check if deadline is null
-        deadlineStr := ""
+
+        htmlToInsert += `
+            <button onclick="launchModal('` + name + `')" class="program-cards2">
+              <div class="nyu-applied-research" 
+                data-link="` + link + `"
+                data-cost="` + fmt.Sprint(cost) + `"
+                data-subject="` + subject + `"`
+
+        // add the grade if its not null
+        if startGrade.Valid {
+            htmlToInsert += ` data-start-grade="` + fmt.Sprint(startGrade.Int32) + `"`
+        }
+        if endGrade.Valid {
+            htmlToInsert += ` data-end-grade="` + fmt.Sprint(endGrade.Int32) + `"`
+        }
+
+        // add the deadline if its not null
         if deadline.Valid {
-            deadlineStr = deadline.String
+            htmlToInsert += ` data-deadline="` + deadline.String + `"`
         }
 
-        // Check if scholarship is null
-        scholarshipStr := ""
+        // add the scholarship if its not null
         if scholarship.Valid {
-            scholarshipStr = scholarship.String
+            htmlToInsert += ` data-scholarship="` + scholarship.String + `"`
         }
 
-        // Check if notes is null
-        notesStr := ""
+        // add the notes if its not null
         if notes.Valid {
-            notesStr = notes.String
+            htmlToInsert += ` data-notes="` + notes.String + `"`
         }
 
-    htmlToInsert += `
-        <div class="program-cards2">
-          <div class="nyu-applied-research" 
-            data-start-grade="` + fmt.Sprint(startGrade) + `"
-            data-end-grade="` + fmt.Sprint(endGrade) + `"
-            data-deadline="` + deadlineStr + `"
-            data-link="` + link + `"
-            data-cost="` + fmt.Sprint(cost) + `"
-            data-scholarship="` + scholarshipStr + `"
-            data-notes="` + notesStr + `"
-            id="` + name + `">` + name + `</div>
-          <div class="program-cards-child1"></div>
-          <img
-            class="lab-items-icon"
-            loading="lazy"
-            alt=""
-            src="./public/` + subject + `@2x.png"
-          />
-        </div>
-    `
+        htmlToInsert += `        
+              id="` + name + `">` + name + `</div>
+              <div class="program-cards-child1"></div>
+              <img
+                class="lab-items-icon"
+                loading="lazy"
+                alt=""
+                src="./public/` + subject + `@2x.png"
+              />
+              </button>
+        `
     }
 
     // read the file manually first
@@ -207,8 +212,8 @@ func main() {
     _, err = db.Exec(
         `CREATE TABLE IF NOT EXISTS summerProgs (
             name TEXT PRIMARY KEY NOT NULL,
-            start_grade INTEGER DEFAULT 0,
-            end_grade INTEGER DEFAULT 255,
+            start_grade INTEGER,
+            end_grade INTEGER,
             deadline DATE,
             link TEXT NOT NULL,
             cost INTEGER NOT NULL,

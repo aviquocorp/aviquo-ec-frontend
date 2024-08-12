@@ -121,7 +121,10 @@ function save() {
 }
 
 
-function launchModal() {
+function launchModal(name) {
+  // get the element
+  const nameElement = document.getElementById(name);
+
   // Create the modal overlay
   const modalOverlay = document.createElement('div');
   modalOverlay.classList.add('modal-overlay');
@@ -132,7 +135,7 @@ function launchModal() {
 
   // Create the "boa- student leaders" header
   const header = document.createElement('h2');
-  header.innerText = 'boa- student leaders';
+  header.innerText = name;
   header.classList.add('modal-header');
   modalContent.appendChild(header);
 
@@ -141,7 +144,12 @@ function launchModal() {
   buttonContainer.classList.add('modal-button-container');
 
   // Create buttons
-  const buttonLabels = ['11th', 'free', 'bus/fin'];
+  const buttonLabels = 
+        [(nameElement.dataset.startGrade == undefined || nameElement.dataset.endGrade == undefined) ? "All Grades" :
+            nameElement.dataset.startGrade + "-" + nameElement.dataset.endGrade, 
+            nameElement.dataset.cost == 0 ? "free" : "$" + nameElement.dataset.cost,
+            nameElement.dataset.subject];
+
   buttonLabels.forEach(label => {
     const button = document.createElement('button');
     button.innerText = label;
@@ -153,13 +161,17 @@ function launchModal() {
 
   // Description paragraph
   const description = document.createElement('p');
-  description.innerText =
-    'desicrpiotn disr-peion dies cisjd fiasd f\nsidfisdif odfidasosifn asdfpoas dfpasd fD\nasidfoiasdfsiadf...';
+  description.innerHTML =
+        (nameElement.dataset.notes == undefined ? "" : nameElement.dataset.notes) 
+        + "<br>" +
+        (nameElement.dataset.scholarship == undefined ? "" : 
+            nameElement.dataset.scholarship);
   description.classList.add('modal-description');
   modalContent.appendChild(description);
 
   // Apply button
-  const applyButton = document.createElement('button');
+  const applyButton = document.createElement('a');
+  applyButton.href = nameElement.dataset.link;
   applyButton.innerText = 'apply!';
   applyButton.classList.add('modal-apply');
   modalContent.appendChild(applyButton);
@@ -177,6 +189,3 @@ function launchModal() {
     }
   });
 }
-
-// Call the function to launch the modal
-launchModal();

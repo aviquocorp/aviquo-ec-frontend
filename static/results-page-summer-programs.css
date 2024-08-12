@@ -212,7 +212,6 @@
   max-width: 100%;
 }
 .program-cards-inner {
-  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -220,9 +219,6 @@
   display: none;
 }
 .nyu-applied-research {
-  position: absolute;
-  top: 18px;
-  left: 15px;
   display: inline-block;
   min-width: 124px;
   z-index: 1;
@@ -238,7 +234,6 @@
   z-index: 1;
 }
 .lab-items-icon {
-  position: absolute;
   top: 32px;
   left: 277px;
   border-radius: 29px;
@@ -253,11 +248,24 @@
   border-radius: var(--br-9xs);
   background-color: var(--color-gray-100);
 }
+
+/* Style the button to look like a div */
 .program-cards2 {
-  align-self: stretch;
+  position: relative;
+  border-radius: var(--br-9xs);
+  background-color: var(--color-gray-100);
   height: 62px;
+  width: 100%;
   flex-shrink: 0;
+  border: none; /* Remove default border */
+  cursor: pointer; /* Change cursor to pointer */
+  padding: 10px 15px; /* Add some padding */
+  margin-bottom: 10px; /* Add space between cards */
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Distribute space between items */
 }
+
 .program-cards-child2 {
   height: 68px;
   width: 332px;
@@ -285,6 +293,7 @@
   justify-content: flex-start;
   padding: var(--padding-2xs) var(--padding-mini);
   max-width: 100%;
+  height: 62px;
 }
 .cosmos {
   border: 0;
@@ -397,17 +406,14 @@
 }
 .program-grid {
   align-self: stretch;
-  height: 545px;
   padding: 0 0 79px;
   gap: 38.6px;
   text-align: left;
   font-size: var(--font-size-xs);
   color: var(--color-black);
   font-family: var(--font-dm-sans);
-  overflow: auto;
 }
 .results-page-summer-programs {
-  width: 390px;
   background: linear-gradient(
     180deg,
     rgba(244, 90, 254, 0.2),
@@ -528,4 +534,3 @@
   font-size: 15px;
   cursor: pointer;
 }
-

@@ -23,7 +23,7 @@ input.addEventListener("input", () => {
             const text = card.childNodes[1].textContent
                 .slice(0, input.value.length).toLowerCase();
 
-            const dist = distance(input.value.toLowerCase(), text);
+            const dist = distance_sl(input.value.toLowerCase(), text);
             return { card, dist };
         })
         .filter(({ dist }) => dist <= threshold)  // Filter by distance threshold
@@ -49,6 +49,16 @@ input.addEventListener("input", () => {
     console.log(input.value);
     */
 });
+
+function distance_sl(a, b) {
+    let cost = 0;
+    for (let i = 0; i < Math.min(a.length, b.length); i++) {
+        if (a[i] != b[i]) {
+            cost += 1;
+        }
+    }
+    return cost
+} 
 
 // thank you Vincent Loh 
 function distance(a, b){

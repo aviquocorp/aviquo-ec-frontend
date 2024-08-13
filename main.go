@@ -59,6 +59,31 @@ func difficultyScholarships(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, string(content))
 }
 
+func resultsScholarship(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+    // check if grades are set in the request
+    err = r.ParseForm()
+    if err != nil {
+        http.Redirect(w, r, "/static/grades-scholarships.html", http.StatusFound)
+        return
+    }
+
+    // check if difficulty is set in the request
+    if r.Form["difficulty"] == nil {
+        http.Redirect(w, r, "/static/difficulty-scholarships.html", http.StatusFound)
+        return
+    }
+
+
+    // load scholarship.html from static/
+    content, err := ioutil.ReadFile("./static/results-scholarships.html")
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Fprintf(w, string(content))
+}
+
 
 
 
@@ -282,7 +307,7 @@ func main() {
 
     http.HandleFunc("/", index)
     http.HandleFunc("/static/difficulty-scholarships.html", difficultyScholarships)
-
+    http.HandleFunc("/static/results-scholarships.html", resultsScholarship)
     http.HandleFunc("/static/grades-summer-programs.html", summerProgGrade)
     http.HandleFunc("/static/results-page-summer-programs.html", resultsSummerProg)
 

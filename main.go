@@ -98,25 +98,36 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         subjectPlaceholders[i] = "?" // Each ? is a placeholder
     }
 
-    query := "SELECT * FROM summerProgs WHERE " + 
-                strings.Repeat(" startGrade <= ? AND  ? <= endGrade AND ", len(grades)) +
-                " subject IN (" + strings.Join(subjectPlaceholders, ",") + ") " +
-                "OR startGrade IS NULL OR endGrade IS NULL ORDER BY name ASC;"
-    if len(costs) == 1 && costs[0] == "paid" {
-        query += " AND cost > 0"
+    gradePlaceholder := make([]string, len(grades))
+    for i := range grades {
+        gradePlaceholder[i] = " startGrade <= ? AND ? <= endGrade " 
     }
+
+    query := "SELECT * FROM summerProgs WHERE "  
+
+    if len(costs) == 1 {
+        if costs[0] == "paid" {
+            query += "cost > 0 AND "
+        } else {
+            query += "cost IS 0 AND "
+        } 
+    }
+
+    query +=    " subject IN (" + strings.Join(subjectPlaceholders, ",") + ") AND ((" +
+                strings.Join(gradePlaceholder, " AND ") +
+                ") OR startGrade IS NULL OR endGrade IS NULL)" +
+                " ORDER BY name ASC;"
 
     // Prepare arguments
     args := []interface{}{}
-    for _, grade := range grades {
-        args = append(args, grade, grade)
-    }
     for _, subject := range subjects {
         args = append(args, subject)
     }
+    for _, grade := range grades {
+        args = append(args, grade, grade)
+    }
 
     // query the database for the subject
-
     rows, err := db.Query(query, args...)
     if err != nil {
         log.Print("Query error:", err)
@@ -234,7 +245,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	log.Print("Listening on :3000...")
-	err = http.ListenAndServe(":3000", nil)
+	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

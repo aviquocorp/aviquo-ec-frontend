@@ -1,44 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grades - Scholarships</title>
-    <link rel="stylesheet" href="grades-scholarships.css">
+    <title>Grades - Summer Programs</title>
+    <link rel="stylesheet" href="grades-summer-programs.css">
 </head>
+
 <body>
     <div class="container">
-        <h1 class="aviquo">aviquo.</h1>
-        <p class="choose-grade">choose the grade you’re about to finish this year</p>
-        <div class="grade-options">
-            <div class="grade-option">
-                <img src="./assets/circled-9.svg" alt="9">
-                <p class="grade-label">Freshman</p>
+        <div class="title">aviquo.</div>
+        <div class="subtitle">choose the grade(s) you will be when you apply<br>
+            and the program cost</div>
+
+        <form id="gradesForm" method="GET" action="/static/results-page-summer-programs.html">
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="freshman" name="grades" value="9">
+                <label for="freshman">
+                    <img src="/static/public/circled-9.svg" alt="Freshman Icon">
+                    Freshman
+                </label>
             </div>
-            <div class="grade-option">
-                <img src="./assets/10-circled-c.svg" alt="10">
-                <p class="grade-label">Sophomore</p>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="sophomore" name="grades" value="10">
+                <label for="sophomore">
+                    <img src="/static/public/10-circled-c.svg" alt="Sophomore Icon">
+                    Sophomore
+                </label>
             </div>
-            <div class="grade-option">
-                <img src="./assets/11-circled-c.svg" alt="11">
-                <p class="grade-label">Junior</p>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="junior" name="grades" value="11">
+                <label for="junior">
+                    <img src="/static/public/11-circled-c.svg" alt="Junior Icon">
+                    Junior
+                </label>
             </div>
-            <div class="grade-option">
-                <img src="./assets/12-circled-c.svg" alt="12">
-                <p class="grade-label">Senior</p>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="senior" name="grades" value="12">
+                <label for="senior">
+                    <img src="/static/public/12-circled-c.svg" alt="Senior Icon">
+                    Senior
+                </label>
             </div>
-        </div>
-        <div class="navigation-buttons">
-            <div class="button">
-                <img src="./assets/rectangle-7.svg" alt="go back">
-                <p class="button-text">go back</p>
+
+            {}
+            <div class="submit-buttons">
+                <a href="/static/summerSubjects.html" class="submit-button">go back</a>
+                <button type="submit" class="submit-button" >have productive summer (next...)</button>
+
             </div>
-            <div class="button">
-                <img src="./assets/rectangle-8.svg" alt="almost there">
-                <p class="button-text">almost there</p>
-                <p class="button-next">(next...)</p>
-            </div>
-        </div>
+        </form>
     </div>
 </body>
+
 </html>

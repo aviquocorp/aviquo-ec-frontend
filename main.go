@@ -63,7 +63,7 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
     // check if grades are set in the request
-    err = r.ParseForm()
+    err := r.ParseForm()
     if err != nil {
         http.Redirect(w, r, "/static/grades-scholarships.html", http.StatusFound)
         return
@@ -75,12 +75,96 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    // dynamically construct the query
+
+    // Create placeholders for the 'IN' clause
+    gradePlaceholders := make([]string, len(r.Form["grades"]))
+    for i := range r.Form["grades"] {
+        gradePlaceholders[i] = "?" // Each ? is a placeholder
+    }
+
+    // Create placeholders for the 'IN' clause
+    difficultyPlaceholders := make([]string, len(r.Form["difficulty"]))
+    for i := range r.Form["difficulty"] {
+        difficultyPlaceholders[i] = "?" // Each ? is a placeholder
+    }
+
+    query := "SELECT * FROM scholarships WHERE " +
+            "category IN (" + strings.Join(difficultyPlaceholders, ", ") + ")" +
+            " AND " +
+            "grades IN (" + strings.Join(gradePlaceholders, ", ") + ")"
+
+    // add the args
+    args := []interface{}{}
+    for _, difficulty := range r.Form["difficulty"] {
+        args = append(args, difficulty)
+    }
+
+    for _, grade := range r.Form["grades"] {
+        args = append(args, grade)
+    }
+
+    // print the query
+    fmt.Println(query)
+    fmt.Println(args)
+
+    // execute the query
+    rows, err := db.Query(query, args...)
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    htmlToInsert := ""
+    for rows.Next() {
+        var name string
+        var grades string
+        var amount string
+        var deadline string 
+        var link string
+        var notes string
+        var category string
+
+        err := rows.Scan(&name, &grades, &amount, &deadline, &link, &notes, &category)
+        if err != nil {
+            log.Print("error scanning rows: ", err)
+        }
+
+        htmlToInsert += `
+            <button onclick="launchModal('` + name + `')" class="program-cards2">
+              <div class="nyu-applied-research" 
+                data-link="` + link + `"
+                data-amount="` + amount + `"
+                data-category="` + category + `"
+                data-grades="` + grades + `"
+                data-deadline="` + deadline + `"
+                data-notes="` + notes + `">
+                <div class="program-name">` + name + `</div>
+                <div class="program-amount">` + amount + `</div>
+              </div>
+              <img
+                class="lab-items-icon"
+                loading="lazy"
+                alt=""
+                src="./public/` + category + `@2x.png"
+              />
+              <div class="program-cards-child1"></div>
+              </button>
+            `
+    } 
+
+
+
+    defer rows.Close()
+
 
     // load scholarship.html from static/
     content, err := ioutil.ReadFile("./static/results-scholarships.html")
     if err != nil {
         log.Fatal(err)
     }
+
+    /* replace the first instance of '{}' with the html */
+    content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 1)
     fmt.Fprintf(w, string(content))
 }
 
@@ -269,6 +353,8 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         `
     }
 
+    defer rows.Close()
+
     // read the file manually first
     content, err := ioutil.ReadFile("./static/results-page-summer-programs.html")
     if err != nil {
@@ -288,6 +374,21 @@ func main() {
     }
 
     // create table
+    _, err = db.Exec(
+        `CREATE TABLE IF NOT EXISTS scholarships (
+            name TEXT PRIMARY KEY NOT NULL,
+            grades TEXT DEFAULT "All Grades",
+            amount TEXT NOT NULL,
+            deadline TEXT DEFAULT "",
+            link TEXT NOT NULL,
+            notes TEXT DEFAULT "",
+            category TEXT DEFAULT "misc"
+        );`,
+    )
+    if err != nil {
+        log.Fatal(err)
+    }
+
     _, err = db.Exec(
         `CREATE TABLE IF NOT EXISTS summerProgs (
             name TEXT PRIMARY KEY NOT NULL,

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>difficulty - Scholarships</title>
+    <link rel="stylesheet" href="grades-summer-programs.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">aviquo.</div>
+        <div class="subtitle">higher difficulty generally equals higher reward
+            </div>
+
+        <form id="difficultyForm" method="GET" action="/static/results-page-scholarships.html">
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="hypercompetitive" name="difficulty" value="9">
+                <label for="hypercompetitive">
+                    hypercompetitive
+                </label>
+            </div>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="high-effort" name="difficulty" value="10">
+                <label for="high-effort">
+                    high effort
+                </label>
+            </div>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="medium-effort" name="difficulty" value="11">
+                <label for="medium-effort">
+                    medium effort
+                </label>
+            </div>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="low-effort" name="difficulty" value="12">
+                <label for="low-effort">
+                    low effort
+                </label>
+            </div>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="misc" name="difficulty" value="12">
+                <label for="misc">
+                    misc.
+                </label>
+            </div>
+            <div class="submit-buttons">
+                <a href="/static/summerSubjects.html" class="submit-button">go back</a>
+                <button type="submit" class="submit-button" >go on scholarship arc (next...)</button>
+
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

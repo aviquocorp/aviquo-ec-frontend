@@ -4,7 +4,7 @@ body {
   align-items: center;
   text-align: center;
   font-family: 'DM Sans', sans-serif;
-  background: linear-gradient(180deg, rgba(70, 166, 255, 0.2) 0%, rgba(85, 222, 255, 0.07) 100%);
+  background: linear-gradient(180deg, rgba(244, 90, 254, 0.2) 0%, rgba(255, 166, 246, 0.07) 100%);
   background-size: cover; /* Ensures the gradient covers the entire viewport */
   background-attachment: fixed; /* Keeps the background fixed while scrolling */
   background-repeat: no-repeat; /* Prevents background repetition */

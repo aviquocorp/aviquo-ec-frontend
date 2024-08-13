@@ -20,6 +20,13 @@ func index(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, "./static/index.html")
 }
 
+/* scholarships */
+
+
+
+
+/* summer programs */
+
 func summerProgGrade(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
 

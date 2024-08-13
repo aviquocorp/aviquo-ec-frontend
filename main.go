@@ -22,6 +22,43 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 /* scholarships */
 
+func difficultyScholarships(w http.ResponseWriter, r *http.Request) {
+    // check if grades are set in the request
+    err := r.ParseForm()
+    if err != nil {
+        // redirect back to scholarship.html
+        http.Redirect(w, r, "/static/grades-scholarships.html", http.StatusFound)
+        return
+    }
+
+    if r.Form["grades"] == nil {
+        // redirect back to scholarship.html
+        http.Redirect(w, r, "/static/grades-scholarships.html", http.StatusFound)
+        return
+    }
+
+    // load difficulty-scholarships.html from static/
+    content, err := ioutil.ReadFile("./static/difficulty-scholarships.html")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    /* replace the first instance of '{}' with the html */
+
+    // construct the html
+    htmlToInsert := "";
+
+    for i := 0; i < len(r.Form["grades"]); i++ {
+        htmlToInsert += 
+            fmt.Sprintf("<input type='hidden' name='grades' value='%s'>", 
+            r.Form["grades"][i])
+    }
+
+
+    content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 1)
+    fmt.Fprintf(w, string(content))
+}
+
 
 
 
@@ -33,7 +70,7 @@ func summerProgGrade(w http.ResponseWriter, r *http.Request) {
     // read the form data from the request
     err := r.ParseForm()
     if err != nil {
-        log.Fatal(err)
+        log.Print("wasn't able to parse form: ", err)
     }
 
     // iterate over values
@@ -244,6 +281,8 @@ func main() {
     }
 
     http.HandleFunc("/", index)
+    http.HandleFunc("/static/difficulty-scholarships.html", difficultyScholarships)
+
     http.HandleFunc("/static/grades-summer-programs.html", summerProgGrade)
     http.HandleFunc("/static/results-page-summer-programs.html", resultsSummerProg)
 

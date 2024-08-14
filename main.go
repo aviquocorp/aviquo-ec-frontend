@@ -132,12 +132,12 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 
         htmlToInsert += `
             <button onclick="launchModal('` + name + `')" class="program-cards2">
-              <div class="nyu-applied-research" 
+              <div class="nyu-applied-research" id="` + name + `"
                 data-link="` + link + `"
                 data-amount="` + amount + `"
-                data-category="` + category + `"
                 data-grades="` + grades + `"
                 data-deadline="` + deadline + `"
+                data-category="` + category + `"
                 data-notes="` + notes + `">
                 <div class="program-name">` + name + `</div>
                 <div class="program-amount">` + amount + `</div>
@@ -367,6 +367,85 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, string(content))
 }
 
+/* competitions */
+
+func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
+    // check if category is defined
+    err := r.ParseForm()
+    if err != nil {
+        // redirect back to scholarship.html
+        http.Redirect(w, r, "/static/subjects-competitions.html", http.StatusFound)
+        return
+    }
+
+    // load the file manually
+    content, err := ioutil.ReadFile("./static/results-competitions.html")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // prepare the query
+
+    // make category placeholders
+    categoryPlaceholders := make([]string, len(r.Form["category"]))
+    for i := range r.Form["category"] {
+        categoryPlaceholders[i] = " ? " // Each ? is a placeholder
+    }
+
+    query := "SELECT * FROM competitions WHERE category IN (" + 
+            strings.Join(categoryPlaceholders, ",") + ") ORDER BY name ASC;"
+
+    // Prepare arguments
+    args := []interface{}{}
+    for _, category := range r.Form["category"] {
+        args = append(args, category)
+    }
+
+    // query the database for the subject
+    rows, err := db.Query(query, args...)
+    if err != nil {
+        log.Print("Query error:", err)
+    }
+
+    // iterate over the result set
+    htmlToInsert := ""
+    for rows.Next() {
+        var name string
+        var date string
+        var link string
+        var category string
+        var notes string
+        err := rows.Scan(&name, &category)
+        if err != nil {
+            log.Print("Error scanning row:", err)
+            return
+        }
+
+        // update htmlToInsert
+        htmlToInsert += `
+            <button onclick="launchModal('` + name + `')" class="program-cards2">
+              <div class="nyu-applied-research" 
+                data-link="` + link + `"
+                data-category="` + category + `"
+                data-notes="` + notes + `"
+                data-date="` + date + `"
+                id="` + name + `">` + name + `</div>
+              <img
+                class="lab-items-icon"
+                loading="lazy"
+                alt=""
+                src="./public/` + category + `@2x.png"
+              />
+              <div class="program-cards-child1"></div>
+              </button>
+        `
+    } 
+
+    // replace the first instance of '{}' with the html
+    content = bytes.Replace(content, []byte("{}"), []byte(htmlToInsert), 1)
+    fmt.Fprintf(w, string(content))
+}
+
 func main() {
     var err error
     db, err = sql.Open("sqlite3", "./main.db")
@@ -401,6 +480,19 @@ func main() {
             scholarship TEXT,
             notes TEXT,
             subject TEXT NOT NULL
+        );`,
+    )
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    _, err = db.Exec(
+        `CREATE TABLE IF NOT EXISTS competitions (
+            name TEXT PRIMARY KEY NOT NULL,
+            date TEXT DEFAULT "",
+            link TEXT NOT NULL,
+            category TEXT NOT NULL,
+            notes TEXT DEFAULT ""
         );`,
     )
     if err != nil {

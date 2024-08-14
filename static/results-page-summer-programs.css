@@ -501,7 +501,7 @@ margin-left: auto;
 
 /* Button */
 .modal-button {
-  width: 80px;
+  min-width: 60px;
   height: 45px;
   border-radius: 8px;
   background-color: rgba(144, 238, 144, 0.7);
@@ -509,22 +509,21 @@ margin-left: auto;
   color: #000;
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
-  font-size: 11px;
-  line-height: 14.32px;
-}
-
-/* Description */
-.modal-description {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 15.62px;
-  color: #000000;
-  margin-bottom: 20px;
+  font-size: clamp(10px, 2vw, 12px); /* Responsive font size */
+  line-height: clamp(12px, 2.5vw, 14px); /* Responsive line-height */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Apply Button */
 .modal-apply {
+  min-width: 80px;
   padding: 10px 20px;
   background-color: skyblue;
   border: none;
@@ -532,6 +531,14 @@ margin-left: auto;
   color: #000;
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
-  font-size: 15px;
+  font-size: clamp(14px, 2.5vw, 18px); /* Responsive font size */
   cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

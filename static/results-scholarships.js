@@ -25,7 +25,7 @@ input.addEventListener("input", () => {
     // Filter and sort cards from the global array
     const filteredSortedCards = allCards
         .map(card => {
-            const text = card.childNodes[1].textContent
+            const text = card.children[0].children[0].textContent
                 .slice(0, input.value.length).toLowerCase();
 
             const dist = distance_sl(input.value.toLowerCase(), text);
@@ -150,10 +150,9 @@ function launchModal(name) {
 
   // Create buttons
   const buttonLabels = 
-        [(nameElement.dataset.startGrade == undefined || nameElement.dataset.endGrade == undefined) ? "All Grades" :
-            nameElement.dataset.startGrade + "-" + nameElement.dataset.endGrade, 
-            nameElement.dataset.cost == 0 ? "free" : "$" + nameElement.dataset.cost,
-            nameElement.dataset.subject];
+        [nameElement.dataset.grades,
+            nameElement.dataset.deadline,
+            nameElement.dataset.category];
 
   buttonLabels.forEach(label => {
     const button = document.createElement('button');
@@ -166,11 +165,7 @@ function launchModal(name) {
 
   // Description paragraph
   const description = document.createElement('p');
-  description.innerHTML =
-        (nameElement.dataset.notes == undefined ? "" : nameElement.dataset.notes) 
-        + "<br>" +
-        (nameElement.dataset.scholarship == undefined ? "" : 
-            nameElement.dataset.scholarship);
+  description.innerHTML = nameElement.dataset.notes;
   description.classList.add('modal-description');
   modalContent.appendChild(description);
 

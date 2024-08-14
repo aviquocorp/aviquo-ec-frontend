@@ -326,3 +326,56 @@
   color: var(--color-black);
   font-family: var(--font-dm-sans);
 }
+
+
+/* Hide default checkbox appearance */
+.subjects-competitions input[type="checkbox"] {
+  display: none;
+}
+
+/* Style for checkboxes */
+.subjects-competitions label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Add visual styling for the form container */
+.subjects-competitions {
+  transition: border 0.3s ease;
+}
+
+/* Checkboxes affect the border of the form */
+.subjects-competitions input[type="checkbox"]:checked ~ .frame-parent7,
+.subjects-competitions input[type="checkbox"]:checked ~ .double-subject,
+.subjects-competitions input[type="checkbox"]:checked ~ .next-button {
+  border: 2px solid rgba(70, 166, 255, 0.7); /* Adjust color and width as needed */
+}
+
+/* Optional: Add styling for better visibility */
+.subjects-competitions {
+  border: 2px solid transparent;
+  padding: 20px; /* Initial padding */
+  box-shadow: 0 0 10px rgba(70, 166, 255, 0.3); /* Optional: Add shadow for emphasis */
+}
+
+/* Apply a border around the form when a checkbox is selected */
+.subjects-competitions input[type="checkbox"]:checked ~ .subject-pair,
+.subjects-competitions input[type="checkbox"]:checked ~ .subject-input,
+.subjects-competitions input[type="checkbox"]:checked ~ .rectangle-parent7,
+.subjects-competitions input[type="checkbox"]:checked ~ .rectangle-parent8,
+.subjects-competitions input[type="checkbox"]:checked ~ .rectangle-parent9 {
+  border: 2px solid rgba(70, 166, 255, 0.7); /* Adjust color and width as needed */
+  padding: 5px; /* Optional: Adjust padding to fit */
+}
+
+/* Example CSS for the internal elements */
+.subject-pair,
+.subject-input,
+.rectangle-parent7,
+.rectangle-parent8,
+.rectangle-parent9 {
+  border-radius: var(--br-2xl);
+  background-color: var(--color-gray-100);
+}

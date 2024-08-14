@@ -91,8 +91,9 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 
     query := "SELECT * FROM scholarships WHERE " +
             "category IN (" + strings.Join(difficultyPlaceholders, ", ") + ")" +
-            " AND " +
-            "grades IN (" + strings.Join(gradePlaceholders, ", ") + ")"
+            " AND (" +
+            strings.Repeat("grades LIKE ? OR ", len(r.Form["grades"])) +
+            "grades = '9-12');"
 
     // add the args
     args := []interface{}{}
@@ -101,7 +102,7 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
     }
 
     for _, grade := range r.Form["grades"] {
-        args = append(args, grade)
+        args = append(args, fmt.Sprintf("%%%s%%", grade))
     }
 
     // print the query
@@ -377,7 +378,7 @@ func main() {
     _, err = db.Exec(
         `CREATE TABLE IF NOT EXISTS scholarships (
             name TEXT PRIMARY KEY NOT NULL,
-            grades TEXT DEFAULT "All Grades",
+            grades TEXT DEFAULT "9-12",
             amount TEXT NOT NULL,
             deadline TEXT DEFAULT "",
             link TEXT NOT NULL,
@@ -417,7 +418,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	log.Print("Listening on :3000...")
-	err = http.ListenAndServe(":8080", nil)
+    err = http.ListenAndServe(":8888", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

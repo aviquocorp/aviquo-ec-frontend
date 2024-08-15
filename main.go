@@ -389,16 +389,16 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
     // make category placeholders
     categoryPlaceholders := make([]string, len(r.Form["category"]))
     for i := range r.Form["category"] {
-        categoryPlaceholders[i] = " ? " // Each ? is a placeholder
+        categoryPlaceholders[i] = " category LIKE ? " // Each ? is a placeholder
     }
 
-    query := "SELECT * FROM competitions WHERE category IN (" + 
-            strings.Join(categoryPlaceholders, ",") + ") ORDER BY name ASC;"
+    query := "SELECT * FROM competitions WHERE " + 
+            strings.Join(categoryPlaceholders, " OR ") + " ORDER BY name ASC;"
 
     // Prepare arguments
     args := []interface{}{}
     for _, category := range r.Form["category"] {
-        args = append(args, category)
+        args = append(args, fmt.Sprintf("%%%s%%", category))
     }
 
     // query the database for the subject
@@ -504,6 +504,7 @@ func main() {
     http.HandleFunc("/static/results-scholarships.html", resultsScholarship)
     http.HandleFunc("/static/grades-summer-programs.html", summerProgGrade)
     http.HandleFunc("/static/results-page-summer-programs.html", resultsSummerProg)
+    http.HandleFunc("/static/results-competitions.html", resultsCompetitions)
 
     // fallback to static/
 	fs := http.FileServer(http.Dir("./static"))

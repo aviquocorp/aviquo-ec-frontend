@@ -105,10 +105,6 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
         args = append(args, fmt.Sprintf("%%%s%%", grade))
     }
 
-    // print the query
-    fmt.Println(query)
-    fmt.Println(args)
-
     // execute the query
     rows, err := db.Query(query, args...)
     if err != nil {
@@ -378,18 +374,23 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    // check if subjects is defined
+    if r.Form["subjects"] == nil || len(r.Form["subjects"]) == 0 {
+        // redirect back to scholarship.html
+        http.Redirect(w, r, "/static/subjects-competitions.html", http.StatusFound)
+        return
+    }
+
     // load the file manually
     content, err := ioutil.ReadFile("./static/results-competitions.html")
     if err != nil {
         log.Fatal(err)
     }
 
-    // prepare the query
-
     // make category placeholders
-    categoryPlaceholders := make([]string, len(r.Form["category"]))
-    for i := range r.Form["category"] {
-        categoryPlaceholders[i] = " category LIKE ? " // Each ? is a placeholder
+    categoryPlaceholders := make([]string, len(r.Form["subjects"]))
+    for i := range r.Form["subjects"] {
+        categoryPlaceholders[i] = " category LIKE ? "
     }
 
     query := "SELECT * FROM competitions WHERE " + 
@@ -397,7 +398,7 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
 
     // Prepare arguments
     args := []interface{}{}
-    for _, category := range r.Form["category"] {
+    for _, category := range r.Form["subjects"] {
         args = append(args, fmt.Sprintf("%%%s%%", category))
     }
 
@@ -415,7 +416,7 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
         var link string
         var category string
         var notes string
-        err := rows.Scan(&name, &category)
+        err := rows.Scan(&name, &date, &link, &category, &notes)
         if err != nil {
             log.Print("Error scanning row:", err)
             return
@@ -489,7 +490,7 @@ func main() {
     _, err = db.Exec(
         `CREATE TABLE IF NOT EXISTS competitions (
             name TEXT PRIMARY KEY NOT NULL,
-            date TEXT DEFAULT "",
+            date TEXT DEFAULT "Unavailable",
             link TEXT NOT NULL,
             category TEXT NOT NULL,
             notes TEXT DEFAULT ""

@@ -50,8 +50,8 @@ func difficultyScholarships(w http.ResponseWriter, r *http.Request) {
 
     for i := 0; i < len(r.Form["grades"]); i++ {
         htmlToInsert += 
-            fmt.Sprintf("<input type='hidden' name='grades' value='%s'>", 
-            r.Form["grades"][i])
+                fmt.Sprintf("<input type='hidden' name='grades' value='%s'>", 
+                r.Form["grades"][i])
     }
 
 

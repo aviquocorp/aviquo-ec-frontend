@@ -6,9 +6,13 @@ The source is open, but the database is not, for legal reasons. You can add your
 
 ## Usage
 
-Below is the shell input for running the Aviquo EC finder.
+Below is the shell input for building and running the Aviquo EC finder.
 
 ```bash
+# clone
+git clone https://github.com/om-raheja/aviquo-ec-frontend
+cd aviquo-ec-frontend
+
 # build
 go build
 

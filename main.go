@@ -511,7 +511,7 @@ func main() {
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	log.Print("Listening on :3000...")
+	log.Print("Listening on :8888...")
     err = http.ListenAndServe(":8888", nil)
 	if err != nil {
 		log.Fatal(err)

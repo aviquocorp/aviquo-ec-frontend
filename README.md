@@ -4,14 +4,16 @@ Here is the source code of our extracurricular finder. It currently uses no more
 
 The source is open, but the database is not, for legal reasons. You can add your own scholarship data by running the code.
 
-```bash
-go run main.go
-```
+## Usage
 
-and 
+Below is the shell input for running the Aviquo EC finder.
 
 ```bash
-go build main.go && ./main
+# build
+go build
+
+# run
+./aviquo
 ```
 
-for those new to go. Pretty self explanatory :)
+It runs on port 8888 by default and can be viewed on a web browser using the URL `http://localhost:8888`.

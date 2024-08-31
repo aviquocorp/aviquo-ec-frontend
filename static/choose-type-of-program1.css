@@ -9,15 +9,6 @@ body {
   box-sizing: border-box;
 }
 
-.choose-type-of-program {
-  width: 100%;
-  max-width: 390px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
-}
 
 .frame-section {
   width: 100%;

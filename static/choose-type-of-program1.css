@@ -10,7 +10,7 @@ body {
 }
 
 
-.frame-section {
+.subject {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -18,19 +18,16 @@ body {
   margin-top: 20px;
 }
 
-.aviquo-container {
+.primary {
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
-}
-
-.aviquo1 {
   font-weight: 600;
   font-size: 40px;
   color: #000000;
 }
 
-.choose-the-type {
+.secondary {
   font-size: 12px;
   font-family: 'DM Sans', sans-serif;
   margin-bottom: 20px;
@@ -45,7 +42,7 @@ body {
   max-width: 250px;
 }
 
-.group-button, .rectangle-parent1, .frame-button {
+.group-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,13 +53,6 @@ body {
   padding: 12px 24px;
   background-color: white;
   cursor: pointer;
-}
-
-.group-button:hover, .rectangle-parent1:hover, .frame-button:hover {
-  background-color: #e0e0e0;
-}
-
-.item {
   font-size: 14px;
   font-weight: 500;
   font-family: 'Exo', sans-serif;
@@ -72,7 +62,11 @@ body {
   text-decoration: none;
 }
 
-.screenshot-2024-07-27-at-12531 {
+.group-button:hover {
+  background-color: #e0e0e0;
+}
+
+.item-icon {
   width: 24px;
   height: 24px;
   object-fit: cover;
@@ -87,7 +81,7 @@ body {
   gap: 10px;
 }
 
-.instagram-icon, .tiktok-icon, .linkedin-icon, .youtube-icon {
+.social-icon {
   width: 24px;
   height: 24px;
   object-fit: cover;

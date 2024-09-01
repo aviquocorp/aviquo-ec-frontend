@@ -115,6 +115,12 @@ body {
     background-color: #f0f0f0;
 }
 
+#subjectsForm {
+  display: grid;
+  grid-template-columns: repeat(2, 200px);
+  justify-content: center;
+}
+
 /* social icons */
 
 .frame-parent3 {

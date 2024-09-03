@@ -139,6 +139,7 @@
   overflow: hidden;
   padding: var(--padding-42xl) var(--padding-9xl) 0 var(--padding-13xl);
   gap: 85px;
+  min-height: 100vh;
 }
 
 

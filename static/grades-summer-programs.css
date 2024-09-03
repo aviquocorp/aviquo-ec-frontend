@@ -155,3 +155,18 @@ max-width: 600px;
 .submit-button:hover {
   background-color: #f0f0f0;
 }
+
+/* Social Media Icons at bottom right corner */
+.frame-parent3 {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}

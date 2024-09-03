@@ -128,7 +128,7 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 
         htmlToInsert += `
             <button onclick="launchModal('` + name + `')" class="program-cards2">
-              <div class="nyu-applied-research" id="` + name + `"
+              <div id="` + name + `"
                 data-link="` + link + `"
                 data-amount="` + amount + `"
                 data-grades="` + grades + `"

@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grades - Summer Programs</title>
     <link rel="stylesheet" href="grades-summer-programs.css">
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@600;700&display=swap"
+        />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Exo:wght@400;500&display=swap"
+        />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap"
+        />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM Sans:wght@400;500;700&display=swap"
+            />
 </head>
 
 <body>
@@ -15,6 +31,9 @@
             and the program cost</div>
 
         <form id="gradesForm" method="GET" action="/static/results-page-summer-programs.html">
+            <table class="options">
+                <tr>
+                    <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="freshman" name="grades" value="9">
                 <label for="freshman">
@@ -22,6 +41,8 @@
                     Freshman
                 </label>
             </div>
+                    </td>
+                    <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="sophomore" name="grades" value="10">
                 <label for="sophomore">
@@ -29,6 +50,10 @@
                     Sophomore
                 </label>
             </div>
+            </td>
+            </tr>
+            <tr>
+            <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="junior" name="grades" value="11">
                 <label for="junior">
@@ -36,6 +61,8 @@
                     Junior
                 </label>
             </div>
+            </td>
+            <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="senior" name="grades" value="12">
                 <label for="senior">
@@ -43,21 +70,30 @@
                     Senior
                 </label>
             </div>
+            </td>
+            </tr>
+            <tr>
 
             <div class="cost-section">
+                <td>
                 <div class="checkbox-button small">
                     <input type="checkbox" id="free" name="cost" value="free">
                     <label for="free" style="background-color: #00ff00;">
                         free
                     </label>
                 </div>
+                </td>
+                <td>
                 <div class="checkbox-button small">
                     <input type="checkbox" id="paid" name="cost" value="paid">
                     <label for="paid" style="background-color: #ff0000;">
                         paid
                     </label>
                 </div>
+                </td>
             </div>
+            </tr>
+            </table>
             {}
             <div class="submit-buttons">
                 <a href="/static/summerSubjects.html" class="submit-button">go back</a>

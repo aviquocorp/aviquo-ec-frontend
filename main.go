@@ -77,23 +77,26 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 
     // dynamically construct the query
 
-    // Create placeholders for the 'IN' clause
-    gradePlaceholders := make([]string, len(r.Form["grades"]))
-    for i := range r.Form["grades"] {
-        gradePlaceholders[i] = "?" // Each ? is a placeholder
-    }
+    // read the form data from the request
+    subjects := r.Form["difficulty"]
+    grades := r.Form["grades"]
 
     // Create placeholders for the 'IN' clause
-    difficultyPlaceholders := make([]string, len(r.Form["difficulty"]))
-    for i := range r.Form["difficulty"] {
-        difficultyPlaceholders[i] = "?" // Each ? is a placeholder
+    subjectPlaceholders := make([]string, len(subjects))
+    for i := range subjects {
+        subjectPlaceholders[i] = "?" // Each ? is a placeholder
     }
 
-    query := "SELECT * FROM scholarships WHERE " +
-            "category IN (" + strings.Join(difficultyPlaceholders, ", ") + ")" +
-            " AND (" +
-            strings.Repeat("grades LIKE ? OR ", len(r.Form["grades"])) +
-            "grades = '9-12');"
+    gradePlaceholder := make([]string, len(grades))
+    for i := range grades {
+        gradePlaceholder[i] = " (startGrade <= ? AND ? <= endGrade) " 
+    }
+
+    query := "SELECT * FROM scholarships WHERE " + 
+             " category IN (" + strings.Join(subjectPlaceholders, ",") + ") AND (" +
+             strings.Join(gradePlaceholder, " OR ") +
+             " OR startGrade IS NULL OR endGrade IS NULL)" +
+             " ORDER BY name ASC;"
 
     // add the args
     args := []interface{}{}
@@ -102,8 +105,12 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
     }
 
     for _, grade := range r.Form["grades"] {
-        args = append(args, fmt.Sprintf("%%%s%%", grade))
+        args = append(args, grade, grade)
     }
+
+    // print query and args
+    fmt.Println(query)
+    fmt.Println(args)
 
     // execute the query
     rows, err := db.Query(query, args...)
@@ -114,14 +121,16 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
     htmlToInsert := ""
     for rows.Next() {
         var name string
-        var grades string
+        var startGrade int
+        var endGrade int
         var amount string
         var deadline string 
         var link string
         var notes string
         var category string
 
-        err := rows.Scan(&name, &grades, &amount, &deadline, &link, &notes, &category)
+        err := rows.Scan(&name, &startGrade, &endGrade, 
+                &amount, &deadline, &link, &notes, &category)
         if err != nil {
             log.Print("error scanning rows: ", err)
         }
@@ -131,7 +140,7 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
               <div id="` + name + `"
                 data-link="` + link + `"
                 data-amount="` + amount + `"
-                data-grades="` + grades + `"
+                data-grades="` + fmt.Sprintf("%d-%d", startGrade, endGrade) + `"
                 data-deadline="` + deadline + `"
                 data-category="` + category + `"
                 data-notes="` + notes + `">
@@ -250,7 +259,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 
     gradePlaceholder := make([]string, len(grades))
     for i := range grades {
-        gradePlaceholder[i] = " startGrade <= ? AND ? <= endGrade " 
+        gradePlaceholder[i] = " (startGrade <= ? AND ? <= endGrade) " 
     }
 
     query := "SELECT * FROM summerProgs WHERE "  
@@ -263,9 +272,9 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         } 
     }
 
-    query +=    " subject IN (" + strings.Join(subjectPlaceholders, ",") + ") AND ((" +
-                strings.Join(gradePlaceholder, " AND ") +
-                ") OR startGrade IS NULL OR endGrade IS NULL)" +
+    query +=    " category IN (" + strings.Join(subjectPlaceholders, ",") + ") AND (" +
+                strings.Join(gradePlaceholder, " OR ") +
+                " OR startGrade IS NULL OR endGrade IS NULL)" +
                 " ORDER BY name ASC;"
 
     // Prepare arguments
@@ -292,15 +301,15 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
         var endGrade sql.NullInt32
         var deadline sql.NullString
         var link string
-        var cost int
+        var cost string 
         var scholarship sql.NullString
         var notes sql.NullString
-        var subject string
+        var category string
 
         // Scan the result into variables
         err := rows.Scan(&name, &startGrade, &endGrade, 
                         &deadline, &link, &cost, &scholarship, 
-                        &notes, &subject)
+                        &notes, &category)
 
         if err != nil {
             log.Print("Error scanning row:", err)
@@ -313,7 +322,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
               <div class="nyu-applied-research" 
                 data-link="` + link + `"
                 data-cost="` + fmt.Sprint(cost) + `"
-                data-subject="` + subject + `"`
+                data-subject="` + category + `"`
 
         // add the grade if its not null
         if startGrade.Valid {
@@ -343,7 +352,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
                 class="lab-items-icon"
                 loading="lazy"
                 alt=""
-                src="./public/` + subject + `@2x.png"
+                src="./public/` + category + `@2x.png"
               />
               <div class="program-cards-child1"></div>
               </button>
@@ -412,14 +421,30 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
     htmlToInsert := ""
     for rows.Next() {
         var name string
-        var date string
+        var date sql.NullString 
         var link string
         var category string
-        var notes string
+        var notes sql.NullString
         err := rows.Scan(&name, &date, &link, &category, &notes)
         if err != nil {
             log.Print("Error scanning row:", err)
             return
+        }
+
+        notesString := ""
+        if notes.Valid {
+            notesString = notes.String
+        }
+
+        deadlineString := "Not Found"
+        if date.Valid {
+            deadlineString = date.String
+        }
+
+        // check if multiple categories are dnoted by slash
+        multipleCategories := strings.Split(category, "/")
+        if len(multipleCategories) > 1 {
+            category = multipleCategories[0]
         }
 
         // update htmlToInsert
@@ -428,8 +453,8 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
               <div class="nyu-applied-research" 
                 data-link="` + link + `"
                 data-category="` + category + `"
-                data-notes="` + notes + `"
-                data-date="` + date + `"
+                data-notes="` + notesString + `"
+                data-date="` + deadlineString + `"
                 id="` + name + `">` + name + `</div>
               <img
                 class="lab-items-icon"
@@ -458,7 +483,8 @@ func main() {
     _, err = db.Exec(
         `CREATE TABLE IF NOT EXISTS scholarships (
             name TEXT PRIMARY KEY NOT NULL,
-            grades TEXT DEFAULT "9-12",
+            startGrade INTEGER DEFAULT 9,
+            endGrade INTEGER DEFAULT 12,
             amount TEXT NOT NULL,
             deadline TEXT DEFAULT "",
             link TEXT NOT NULL,

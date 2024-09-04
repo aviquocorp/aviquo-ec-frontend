@@ -14,7 +14,13 @@ var input = document.getElementById("search");
 input.addEventListener("input", () => {
     const threshold = 5;
 
-    container.innerHTML = ""; 
+    container.innerHTML = `
+        <div class="program-cards3">
+          <div class="program-cards-child2"></div>
+          <div class="need-feedback-on">
+              need feedback on your ECs or advice from experts? join <a href="https://discord.gg/QMahMhBUsK">our discord!</a>
+          </div>
+        </div>` ;
 
     if (input.value.length == 0) {
         clear.click();

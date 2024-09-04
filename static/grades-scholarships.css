@@ -3,7 +3,9 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Exo', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
   background: linear-gradient(180deg, rgba(244, 90, 254, 0.2) 0%, rgba(255, 166, 246, 0.07) 100%);
   background-size: cover; /* Ensures the gradient covers the entire viewport */
   background-attachment: fixed; /* Keeps the background fixed while scrolling */
@@ -12,9 +14,18 @@ body {
   overflow: auto;
 }
 
+table {
+    display: flex;
+    justify-content: center;
+}
+
 .container {
-  width: 390px;
-  position: relative;
+    width: 90%;
+} 
+
+#gradesForm {
+max-width: 600px;
+  margin: 0 auto;
 }
 
 .title {
@@ -27,6 +38,7 @@ body {
 }
 
 .subtitle {
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 15.62px;
@@ -66,8 +78,8 @@ body {
   justify-content: center;
   width: 100%;
   height: 100%;
-  cursor: pointer;
   margin: 0;
+  border-radius: 24px;
 }
 
 .checkbox-button input[type="checkbox"]:checked + label {
@@ -115,40 +127,58 @@ body {
   content-align: center;
 }
 
-.cost-label {
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 15.62px;
-}
-
 .checkbox-button.small {
   width: 100px;
 }
 
+
+.options {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-family: 'Exo', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+} 
+
 .submit-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin: 40px auto 0;
-  width: 80%;
 }
 
 .submit-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 48px;
-  border-radius: 24px;
-  background: white;
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 15.62px;
-  font-weight: 500;
-  text-decoration: none;
-  border: none;
-  color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 48px;
+    border-radius: 24px;
+    background: white;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 15.62px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    color: black;
 }
 
 .submit-button:hover {
   background-color: #f0f0f0;
+}
+
+/* Social Media Icons at bottom right corner */
+.frame-parent3 {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
 }

@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grades - Summer Programs</title>
     <link rel="stylesheet" href="grades-scholarships.css">
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@600;700&display=swap"
+        />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Exo:wght@400;500&display=swap"
+        />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap"
+        />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM Sans:wght@400;500;700&display=swap"
+            />
 </head>
 
 <body>
@@ -15,41 +31,90 @@
             and the program cost</div>
 
         <form method="GET" action="/static/difficulty-scholarships.html">
+            <table>
+                <tr>
+                    <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="freshman" name="grades" value="9">
                 <label for="freshman">
                     <img src="/static/public/circled-9.svg" alt="Freshman Icon">
-                    Freshman
+                    freshman
                 </label>
             </div>
+                    </td>
+                    <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="sophomore" name="grades" value="10">
                 <label for="sophomore">
                     <img src="/static/public/10-circled-c.svg" alt="Sophomore Icon">
-                    Sophomore
+                    sophomore
                 </label>
             </div>
+            </td>
+            </tr>
+            <tr>
+            <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="junior" name="grades" value="11">
                 <label for="junior">
                     <img src="/static/public/11-circled-c.svg" alt="Junior Icon">
-                    Junior
+                    junior
                 </label>
             </div>
+            </td>
+            <td>
             <div class="checkbox-button grade-checkbox">
                 <input type="checkbox" id="senior" name="grades" value="12">
                 <label for="senior">
                     <img src="/static/public/12-circled-c.svg" alt="Senior Icon">
-                    Senior
+                    senior
                 </label>
             </div>
+            </td>
+            </tr>
+            </table>
             <div class="submit-buttons">
-                <a href="/static/summerSubjects.html" class="submit-button">go back</a>
+                <a href="/" class="submit-button">go back</a>
                 <button type="submit" class="submit-button" >almost there (next...)</button>
 
             </div>
         </form>
     </div>
+
+            <div class="frame-parent3">
+                <a href="https://www.linkedin.com/company/aviquo/" target="_blank">
+                <img
+                    class="social-icon"
+                    loading="lazy"
+                    alt=""
+                    src="/static/public/linkedin@2x.png"
+                    />
+                </a>
+                <a href="https://www.tiktok.com/@aviquo_" target="_blank">
+                <img
+                    class="social-icon"
+                    loading="lazy"
+                    alt=""
+                    src="/static/public/tiktok@2x.png"
+                    />
+                </a>
+                <a href="https://www.instagram.com/aviquo_?igsh=MzRlODBiNWFlZA==" target="_blank">
+                <img
+                    class="social-icon"
+                    loading="lazy"
+                    alt=""
+                    src="/static/public/instagram@2x.png"
+                    />
+                </a>
+                <a href="https://youtube.com/channel/UCuEXrlSgb-vo6kyUeuppfJA" target="_blank">
+                <img
+                    class="social-icon"
+                    loading="lazy"
+                    alt=""
+                    src="/static/public/youtube@2x.png"
+                    />
+                </a>
+            </div>
 </body>
 
 </html>

@@ -17,7 +17,12 @@ cd aviquo-ec-frontend
 go build
 
 # run
-./aviquo
+./main
 ```
 
 It runs on port 8888 by default and can be viewed on a web browser using the URL `http://localhost:8888`.
+
+
+## Demo
+
+[![demo](demo.png)](https://aviquo.com)

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aviquo</title>
+    <link href="../css/practice.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Toggle checkbox for collapsible menu -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+    <label for="menu-toggle" class="menu-toggle-label">☰</label>
+
+    <div class="vertical-nav" id="verticalNav">
+        <h2 class="mainHeader">
+            <a href="../index.html">aquarc</a>
+        </h2>
+        <ul>
+            <li><a href="practice.html">DSAT Practice</a></li>
+            <li><a href="dsat.html">DSAT</a></li>
+            <li><a href="dsatstudy.html">DSAT Study Plan</a></li>
+            <li><a href="performance.html">Performance</a></li>
+            <li><a href="resources.html">Resources</a></li>
+            <li><a href="psat.html">PSAT</a></li>
+            <li><a href="act.html">ACT</a></li>
+            <li><a href="bio.html">AP Bio</a></li>
+            <li><a href="calcab.html">AP Calc AB</a></li>
+            <li><a href="calcbc.html">AP Calc BC</a></li>
+            <li><a href="lit.html">AP Lit</a></li>
+            <li><a href="precalc.html">AP Precalc</a></li>
+            <li><a href="apush.html">AP US History</a></li>
+            <li><a href="world.html">AP World History</a></li>
+        </ul>
+
+        <div class="user-dropdown">
+            <button class="user-button">
+                <img src="../images/blankpfp.jpg" alt="Profile" class="profile-pic">
+                User
+                <img src="../images/whiteuparrow.png" alt="arrow" class="arrow-icon">
+            </button>
+            <div class="dropdown-content">
+                <a href="#">My Account</a>
+                <a href="#">Support</a>
+                <a href="#">Sign Out</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mainContent">
+        <div class="container">
+            <div class="left-side">
+                <!--<h1 id = "questionBank">Question Bank</h1>-->
+                <h3 class="h3_question">Assessment</h3>
+                <p class = "p_description">Please select one</h4>
+                <div class="checkbox-container" id = "assessmentCheckboxes">
+                    <label><input type="checkbox" name="assessment1">SAT</label>
+                </div>
+                <h3 class="h3_question">Test Section</h3>
+                <p class = "p_description">Please select one</h4>
+                <div class="checkbox-container hidden" id = "testSectionCheckboxes">
+                    <label><input type="checkbox" name="test_section1" data-target="readingDomainCheckboxes">Reading and Writing</label>
+                    <label><input type="checkbox" name="test_section2" data-target="mathDomainCheckboxes">Math</label>
+                
+                </div>
+                <h3 class="h3_question">Domain</h3>
+                <p class = "p_description">Select all that apply</h4>
+                <div class="checkbox-container hidden" id="readingDomainCheckboxes">
+                    <label><input type="checkbox" name="reading_domain1">Information and Ideas</label>
+                    <label><input type="checkbox" name="reading_domain2">Craft and Structure</label>
+                    <label><input type="checkbox" name="reading_domain3">Expression of Ideas</label>
+                    <label><input type="checkbox" name="reading_domain4">Standard English Conventions</label>
+                    <button class="domain_button">Next</button>
+                </div>
+                <div class="checkbox-container hidden" id="mathDomainCheckboxes">
+                    <label><input type="checkbox" name="math_domain1">Algebra</label>
+                    <label><input type="checkbox" name="math_domain2">Advanced Math</label>
+                    <label><input type="checkbox" name="math_domain3">Problem-Solving and Data Analysis</label>
+                    <label><input type="checkbox" name="math_domain4">Geometry and Trigonometry</label>
+                    <button class="domain_button">Next</button>
+                </div>
+                <h3 class="h3_question">Difficulty</h3>
+                <p class = "p_description">Select all that apply</h4>
+                <div class="checkbox-container hidden" id="difficultyCheckboxes">
+                    <label><input type="checkbox" name="difficulty1">Easy</label>
+                    <label><input type="checkbox" name="difficulty2">Medium</label>
+                    <label><input type="checkbox" name="difficulty3">Hard</label>
+                    <button class="difficulty_button">Next</button>
+                </div>
+
+
+                <h3 class="h3_question">Subdomain</h3>
+                <p class = "p_description">Select all that apply</h4>
+
+                <!-- Reading and Writing Subdomains -->
+                <div class="checkbox-container hidden" id="readingWritingSubdomainCheckboxes">
+                    <h4>Information and Ideas</h4>
+                    <label><input type="checkbox" name="subdomain_info_ideas1">Central Ideas and Details</label>
+                    <label><input type="checkbox" name="subdomain_info_ideas2">Inferences</label>
+                    <label><input type="checkbox" name="subdomain_info_ideas3">Command of Evidence</label>
+
+                    <h4>Craft and Structure</h4>
+                    <label><input type="checkbox" name="subdomain_craft_structure1">Words in Context</label>
+                    <label><input type="checkbox" name="subdomain_craft_structure2">Text Structure and Purpose</label>
+                    <label><input type="checkbox" name="subdomain_craft_structure3">Cross-Text Connections</label>
+
+                    <h4>Expression of Ideas</h4>
+                    <label><input type="checkbox" name="subdomain_expression_ideas1">Rhetorical Synthesis</label>
+                    <label><input type="checkbox" name="subdomain_expression_ideas2">Transitions</label>
+                    <label><input type="checkbox" name="subdomain_expression_ideas3">Style and Tone</label>
+
+                    <h4>Standard English Conventions</h4>
+                    <label><input type="checkbox" name="subdomain_standard_english1">Sentence Structure</label>
+                    <label><input type="checkbox" name="subdomain_standard_english2">Punctuation</label>
+                    <label><input type="checkbox" name="subdomain_standard_english3">Usage</label>
+                    <button class="subdomain_button">Next</button>
+                </div>
+
+                <!-- Math Subdomains -->
+                <div class="checkbox-container hidden" id="mathSubdomainCheckboxes">
+                    <h4>Algebra</h4>
+                    <label><input type="checkbox" name="subdomain_algebra1">Linear Equations</label>
+                    <label><input type="checkbox" name="subdomain_algebra2">Quadratic Functions</label>
+                    <label><input type="checkbox" name="subdomain_algebra3">Systems of Equations</label>
+
+                    <h4>Advanced Math</h4>
+                    <label><input type="checkbox" name="subdomain_advanced_math1">Functions</label>
+                    <label><input type="checkbox" name="subdomain_advanced_math2">Complex Numbers</label>
+                    <label><input type="checkbox" name="subdomain_advanced_math3">Exponential and Logarithmic Equations</label>
+
+                    <h4>Problem Solving</h4>
+                    <label><input type="checkbox" name="subdomain_problem_solving1">Ratios and Proportions</label>
+                    <label><input type="checkbox" name="subdomain_problem_solving2">Statistics</label>
+                    <label><input type="checkbox" name="subdomain_problem_solving3">Probability</label>
+
+                    <h4>Geometry</h4>
+                    <label><input type="checkbox" name="subdomain_geometry1">Angles</label>
+                    <label><input type="checkbox" name="subdomain_geometry2">Triangles</label>
+                    <label><input type="checkbox" name="subdomain_geometry3">Circles</label>
+                    <button class="subdomain_button">Next</button>
+                </div>
+
+
+                <h3 class="h3_question">Exclude Active Questions</h3>
+                <p class = "p_description">Exclude questions on Bluebook practice tests</h4>
+                <div class="checkbox-container hidden" id="excludeQuestions">
+                <label><input type="checkbox" name="active_questions">Yes</label>
+                </div>
+
+                <button class="search_button" id = "searchButton">Search For Questions</button>
+
+
+            </div>
+
+            <div class="right-side">
+                <h1 id = "questionHeader">Question</h1>
+                <p class="p_question">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                <div class="answer_container large-screen-options">
+                    <p class="answer_option">a) Lorem ipsum dolor sit amet...</p>
+                    <p class="answer_option">b) Lorem ipsum dolor sit amet...</p>
+                    <p class="answer_option">c) Lorem ipsum dolor sit amet...</p>
+                    <p class="answer_option">d) Lorem ipsum dolor sit amet...</p>
+                </div>
+
+                <div class="answer_container large-screen-buttons">
+                    <a href="#" class="option_box">a</a>
+                    <a href="#" class="option_box">b</a>
+                    <a href="#" class="option_box">c</a>
+                    <a href="#" class="option_box">d</a>
+                </div>
+
+                <div class="answer_container small-screen-options">
+                    <button class="option_button">Option A</button>
+                    <button class="option_button">Option B</button>
+                    <button class="option_button">Option C</button>
+                    <button class="option_button">Option D</button>
+                </div>
+
+                <button class = "next_button">Next Question</button>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="../js.js"></script>
+</body>
+</html>

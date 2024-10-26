@@ -1,0 +1,506 @@
+/* Global Box-Sizing */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Menu Toggle Checkbox and Label */
+.menu-toggle-checkbox {
+  display: none; /* Hide the checkbox */
+}
+
+.menu-toggle-label {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background-color: #324DC7;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  z-index: 1001;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.menu-toggle-label:hover {
+  background-color: #6b75fc;
+}
+
+/* Vertical Navigation Styles */
+.vertical-nav {
+  height: 100%;
+  width: 20%;
+  max-width: 250px;
+  min-width: 100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #324DC7;
+  padding-top: 50px;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+/* Show Sidebar When Checkbox is Checked */
+.menu-toggle-checkbox:checked + .menu-toggle-label + .vertical-nav {
+  transform: translateX(0); /* Slide in */
+}
+
+.vertical-nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.vertical-nav li {
+  padding: 0;
+}
+
+.vertical-nav a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  font-size: 16px;
+  color: white;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+.vertical-nav a:hover {
+  background-color: #6b75fc;
+  color: white;
+  border-radius: 10px;
+}
+
+/* Header Styles */
+.mainHeader {
+  background-color: #1E1E1E;
+  color: white;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Main Content Layout */
+.mainContent {
+  display: flex;
+  padding-left: 250px; /* Matches fixed sidebar width */
+  padding-top: 50px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* User Dropdown Menu */
+.user-dropdown {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.user-button {
+  background-color: #324DC7;
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.user-button:hover {
+  background-color: #6b75fc;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  background-color: #f9f9f9;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.user-dropdown:focus-within .dropdown-content {
+  display: block;
+}
+
+.user-button img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.arrow-icon {
+  width: 10px;
+  height: 10px;
+  transition: transform 0.1s ease;
+}
+
+.user-dropdown:focus-within .arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* Main Layout Grid */
+.container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%; /* Use full width of screen */
+  flex-direction: row-reverse;
+}
+
+/* Left and Right Side */
+.left-side {
+  background-color: #f4f4f4;
+  padding: 20px;
+  flex: 1; /* Allow the left side to take equal space */
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  min-width: 0; /* Ensure it can shrink properly */
+}
+
+.right-side {
+  background-color: #ddd;
+  padding: 20px;
+  flex: 1; /* Allow the right side to take equal space */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-width: 0; /* Ensure it can shrink properly */
+}
+
+/* Hide checkbox containers by default */
+.hidden {
+  display: none;
+}
+
+/* General checkbox container styling for left alignment */
+.checkbox-container {
+  margin-bottom: 0px; /* Space between checkbox items */
+}
+
+/* Ensure checkboxes are aligned left */
+.checkbox-container label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom:10px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+}
+
+/* Style for checkbox input */
+.checkbox-container input[type="checkbox"] {
+  margin-right: 10px; /* Space between checkbox and text */
+  transform: scale(1.5); /* Increase size of the checkbox */
+  /* Optional: Keep the native appearance and adjust size */
+  width: 15px; /* Set a custom width */
+  height: 15px; /* Set a custom height */
+}
+
+h4{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  margin-bottom:5px;
+}
+.p_description{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  margin-bottom:15px;
+  font-size: 15px;
+}
+
+
+.domain_button {
+  display: inline-block; /* Allows padding and margins */
+  margin-top:10px;
+  padding: 10px 20px; /* Vertical and horizontal padding */
+  background-color: #324DC7; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1rem; /* Font size */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.difficulty_button {
+  display: inline-block; /* Allows padding and margins */
+  margin-top:10px;
+  padding: 10px 20px; /* Vertical and horizontal padding */
+  background-color: #324DC7; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1rem; /* Font size */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.subdomain_button {
+  display: inline-block; /* Allows padding and margins */
+  margin-top:10px;
+  padding: 10px 20px; /* Vertical and horizontal padding */
+  background-color: #324DC7; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1rem; /* Font size */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.search_button {
+  display: inline-block; /* Allows padding and margins */
+  margin-top:30px;
+  padding: 20px 10px;
+  background-color: #324DC7; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1rem; /* Font size */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Questions & Answers Section */
+.h3_question {
+  margin-top: 10px;
+  font-size: 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  text-align: left;
+  width: 100%;
+}
+
+.active_question {
+  text-align: center;
+}
+
+.p_question {
+  margin: 40px;
+  font-size: 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  text-align: center;
+}
+
+.right-side h1{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+}
+
+.left-side h1{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+}
+.left-side h3{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+}
+
+/* Answer Options for Large Screens */
+.answer_container {
+  margin-top: 30px;
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.answer_option{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+}
+
+.large-screen-options,
+.large-screen-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.option_box, 
+.option_button_large {
+  margin: 10px;
+  height: 50px;
+  background-color: #324DC7;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-size: 18px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  border-radius: 8px;
+  line-height: 50px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.option_box:hover, 
+.option_button_large:hover {
+  background-color: #6b75fc;
+}
+
+/* Hide small-screen options by default */
+.small-screen-options {
+  display: none;
+}
+
+/* Responsive Design for Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column-reverse;
+  }
+
+  .mainContent {
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .vertical-nav {
+    width: 200px;
+    transform: translateX(-100%); /* Initially hidden */
+  }
+
+  .menu-toggle-label {
+    display: block; /* Show the toggle button on smaller screens */
+  }
+
+  .left-side, .right-side {
+    width: 100%;
+    padding: 10px;
+  }
+
+  /* Hide the large-screen answer options */
+  .large-screen-options,
+  .large-screen-buttons {
+    display: none;
+  }
+
+  /* Display answer options as buttons for small screens */
+  .small-screen-options {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column for better readability */
+  }
+
+  .option_button {
+    height: 50px;
+    background-color: #324DC7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    margin: 10px 0;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    line-height: 50px;
+  }
+
+  .option_button:hover {
+    background-color: #6b75fc;
+  }
+
+  .h3_question {
+    font-size: 26px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  }
+
+  .p_question {
+    font-size: 22px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  }
+
+  .change_box {
+    font-size: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  }
+}
+
+/* Responsive Design for Small Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+  .container {
+    flex-direction: column-reverse; /* Switch top and bottom */
+    min-height: auto;
+  }
+
+  .left-side, .right-side {
+    width: 100%;
+    height: auto;
+  }
+
+  .right-side {
+    padding-top: 20px; /* Add padding to avoid content being cut off */
+  }
+
+  .option_button {
+    font-size: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  }
+
+  .h3_question {
+    font-size: 26px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  }
+
+  .p_question {
+    font-size: 26px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+  }
+
+  .change_box {
+    font-size: 12px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    width: 80px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .user-dropdown {
+    margin-left: 0; 
+    margin-bottom: 10px; 
+  }
+
+  .user-button {
+    width: 100%; 
+  }
+
+  .dropdown-content {
+    left: 0; 
+  }
+}

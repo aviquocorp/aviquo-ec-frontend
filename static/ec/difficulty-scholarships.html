@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grades - Summer Programs</title>
-    <link rel="stylesheet" href="grades-summer-programs.css">
+    <title>difficulty - Scholarships</title>
+    <link rel="stylesheet" href="/static/ec/difficulty-scholarships.css">
     <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Plus Jakarta Sans:wght@600;700&display=swap"
@@ -27,88 +27,74 @@
 <body>
     <div class="container">
         <div class="title">aviquo.</div>
-        <div class="subtitle">choose the grade(s) you will be when you apply<br>
-            and the program cost</div>
+        <div class="subtitle">higher difficulty generally equals higher reward
+            </div>
 
-        <form id="gradesForm" method="GET" action="/static/results-page-summer-programs.html">
-            <table class="options">
+        <form id="difficultyForm" method="GET" action="/static/ec/results-scholarships.html">
+            <table>
                 <tr>
                     <td>
             <div class="checkbox-button grade-checkbox">
-                <input type="checkbox" id="freshman" name="grades" value="9">
-                <label for="freshman">
-                    <img src="/static/public/circled-9.svg" alt="Freshman Icon">
-                    Freshman
+                <input type="checkbox" id="hypercompetitive" name="difficulty" value="hypercompetitive">
+                <label for="hypercompetitive">
+                    hypercompetitive
                 </label>
             </div>
                     </td>
                     <td>
             <div class="checkbox-button grade-checkbox">
-                <input type="checkbox" id="sophomore" name="grades" value="10">
-                <label for="sophomore">
-                    <img src="/static/public/10-circled-c.svg" alt="Sophomore Icon">
-                    Sophomore
+                <input type="checkbox" id="high-effort" name="difficulty" value="high">
+                <label for="high-effort">
+                    high effort
                 </label>
             </div>
             </td>
             </tr>
             <tr>
-            <td>
+                <td>
             <div class="checkbox-button grade-checkbox">
-                <input type="checkbox" id="junior" name="grades" value="11">
-                <label for="junior">
-                    <img src="/static/public/11-circled-c.svg" alt="Junior Icon">
-                    Junior
+                <input type="checkbox" id="medium-effort" name="difficulty" value="medium">
+                <label for="medium-effort">
+                    medium effort
                 </label>
             </div>
-            </td>
-            <td>
+                </td>
+                <td>
             <div class="checkbox-button grade-checkbox">
-                <input type="checkbox" id="senior" name="grades" value="12">
-                <label for="senior">
-                    <img src="/static/public/12-circled-c.svg" alt="Senior Icon">
-                    Senior
+                <input type="checkbox" id="low-effort" name="difficulty" value="low">
+                <label for="low-effort">
+                    low effort
                 </label>
             </div>
-            </td>
+                </td>
             </tr>
             <tr>
-
-            <div class="cost-section">
                 <td>
-                <div class="checkbox-button small">
-                    <input type="checkbox" id="free" name="cost" value="free">
-                    <label for="free" style="background-color: #00ff00;">
-                        free
-                    </label>
-                </div>
-                </td>
-                <td>
-                <div class="checkbox-button small">
-                    <input type="checkbox" id="paid" name="cost" value="paid">
-                    <label for="paid" style="background-color: #ff0000;">
-                        paid
-                    </label>
-                </div>
-                </td>
+            <div class="checkbox-button grade-checkbox">
+                <input type="checkbox" id="misc" name="difficulty" value="msc">
+                <label for="misc">
+                    misc.
+                </label>
             </div>
+                </td>
             </tr>
             </table>
             {}
             <div class="submit-buttons">
-                <a href="/static/summerSubjects.html" class="submit-button">go back</a>
-                <button type="submit" class="submit-button" >have productive summer (next...)</button>
+                <a href="/static/ec/grades-scholarships.html" class="submit-button">go back</a>
+                <button type="submit" class="submit-button" >go on scholarship arc (next...)</button>
 
             </div>
         </form>
     </div>
+
             <div class="frame-parent3">
                 <a href="https://www.linkedin.com/company/aviquo/" target="_blank">
                 <img
                     class="social-icon"
                     loading="lazy"
                     alt=""
-                    src="/static/public/linkedin@2x.png"
+                    src="/static/ec/public/linkedin@2x.png"
                     />
                 </a>
                 <a href="https://www.tiktok.com/@aviquo_" target="_blank">
@@ -116,7 +102,7 @@
                     class="social-icon"
                     loading="lazy"
                     alt=""
-                    src="/static/public/tiktok@2x.png"
+                    src="/static/ec/public/tiktok@2x.png"
                     />
                 </a>
                 <a href="https://www.instagram.com/aviquo_?igsh=MzRlODBiNWFlZA==" target="_blank">
@@ -124,7 +110,7 @@
                     class="social-icon"
                     loading="lazy"
                     alt=""
-                    src="/static/public/instagram@2x.png"
+                    src="/static/ec/public/instagram@2x.png"
                     />
                 </a>
                 <a href="https://youtube.com/channel/UCuEXrlSgb-vo6kyUeuppfJA" target="_blank">
@@ -132,7 +118,7 @@
                     class="social-icon"
                     loading="lazy"
                     alt=""
-                    src="/static/public/youtube@2x.png"
+                    src="/static/ec/public/youtube@2x.png"
                     />
                 </a>
             </div>

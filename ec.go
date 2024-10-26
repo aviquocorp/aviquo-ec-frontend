@@ -15,7 +15,7 @@ import (
 
 func index(w http.ResponseWriter, r *http.Request) {
 	// load index.html from static/
-	http.ServeFile(w, r, "./ec/index.html")
+	http.ServeFile(w, r, "./static/ec/index.html")
 }
 
 /* scholarships */
@@ -25,18 +25,18 @@ func difficultyScholarships(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		// redirect back to scholarship.html
-		http.Redirect(w, r, "/ec/grades-scholarships.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/grades-scholarships.html", http.StatusFound)
 		return
 	}
 
 	if r.Form["grades"] == nil {
 		// redirect back to scholarship.html
-		http.Redirect(w, r, "/ec/grades-scholarships.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/grades-scholarships.html", http.StatusFound)
 		return
 	}
 
 	// load difficulty-scholarships.html from static/
-	content, err := ioutil.ReadFile("./ec/difficulty-scholarships.html")
+	content, err := ioutil.ReadFile("./static/ec/difficulty-scholarships.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,13 +62,13 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 	// check if grades are set in the request
 	err := r.ParseForm()
 	if err != nil {
-		http.Redirect(w, r, "/ec/grades-scholarships.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/grades-scholarships.html", http.StatusFound)
 		return
 	}
 
 	// check if difficulty is set in the request
 	if r.Form["difficulty"] == nil {
-		http.Redirect(w, r, "/ec/difficulty-scholarships.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/difficulty-scholarships.html", http.StatusFound)
 		return
 	}
 
@@ -158,7 +158,7 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	// load scholarship.html from static/
-	content, err := ioutil.ReadFile("./ec/results-scholarships.html")
+	content, err := ioutil.ReadFile("./static/ec/results-scholarships.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -189,12 +189,12 @@ func summerProgGrade(w http.ResponseWriter, r *http.Request) {
 
 	if htmlToInsert == "" {
 		// redirect back to summerSubjects.html
-		http.Redirect(w, r, "/ec/summerSubjects.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/summerSubjects.html", http.StatusFound)
 		return
 	}
 
 	// read the file manually first
-	content, err := ioutil.ReadFile("./ec/grades-summer-programs.html")
+	content, err := ioutil.ReadFile("./static/ec/grades-summer-programs.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -211,7 +211,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		// redirect back to summerSubjects.html
-		http.Redirect(w, r, "/ec/summerSubjects.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/summerSubjects.html", http.StatusFound)
 		return
 	}
 
@@ -222,7 +222,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 	// check if subject is defined in form
 	if subjects == nil || len(subjects) == 0 {
 		// redirect back to summerSubjects.html
-		http.Redirect(w, r, "/ec/summerSubjects.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/summerSubjects.html", http.StatusFound)
 		return
 	}
 
@@ -235,7 +235,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 			params.Add("subjects", subject)
 		}
 		http.Redirect(w, r,
-			"/ec/grades-summer-programs.html?"+params.Encode(), http.StatusFound)
+			"/static/ec/grades-summer-programs.html?"+params.Encode(), http.StatusFound)
 		return
 	}
 
@@ -351,7 +351,7 @@ func resultsSummerProg(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	// read the file manually first
-	content, err := ioutil.ReadFile("./ec/results-page-summer-programs.html")
+	content, err := ioutil.ReadFile("./static/ec/results-page-summer-programs.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -368,19 +368,19 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		// redirect back to scholarship.html
-		http.Redirect(w, r, "/ec/subjects-competitions.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/subjects-competitions.html", http.StatusFound)
 		return
 	}
 
 	// check if subjects is defined
 	if r.Form["subjects"] == nil || len(r.Form["subjects"]) == 0 {
 		// redirect back to scholarship.html
-		http.Redirect(w, r, "/ec/subjects-competitions.html", http.StatusFound)
+		http.Redirect(w, r, "/static/ec/subjects-competitions.html", http.StatusFound)
 		return
 	}
 
 	// load the file manually
-	content, err := ioutil.ReadFile("./ec/results-competitions.html")
+	content, err := ioutil.ReadFile("./static/ec/results-competitions.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -461,14 +461,10 @@ func resultsCompetitions(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(content))
 }
 
-func initializeEc() {
+func initializeEc(db *sql.DB) {
 	// put code into initializeEc func
 	// in main code: initializeEc and initializeSat
 	var err error
-	db, err = sql.Open("sqlite3", "./main.db")
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	// create table
 	_, err = db.Exec(
@@ -518,22 +514,21 @@ func initializeEc() {
 	}
 
 	// extraciricular handlers
-	http.HandleFunc("/ec/index", index)
-	http.HandleFunc("/ec/difficulty-scholarships.html", difficultyScholarships)
-	http.HandleFunc("/ec/results-scholarships.html", resultsScholarship)
-	http.HandleFunc("/ec/grades-summer-programs.html", summerProgGrade)
-	http.HandleFunc("/ec/results-page-summer-programs.html", resultsSummerProg)
-	http.HandleFunc("/ec/results-competitions.html", resultsCompetitions)
+	http.HandleFunc("/ec", index)
+	http.HandleFunc("/static/ec/difficulty-scholarships.html", difficultyScholarships)
+	http.HandleFunc("/static/ec/results-scholarships.html", resultsScholarship)
+	http.HandleFunc("/static/ec/grades-summer-programs.html", summerProgGrade)
+	http.HandleFunc("/static/ec/results-page-summer-programs.html", resultsSummerProg)
+	http.HandleFunc("/static/ec/results-competitions.html", resultsCompetitions)
 
 	// add HandleFuncs for sat /sat...
 
 	// fallback to static/
-	fs := http.FileServer(http.Dir("./ec"))
-	http.Handle("/ec/", http.StripPrefix("/ec/", fs))
+	fs := http.FileServer(http.Dir("./static/ec"))
+	http.Handle("/static/ec/", http.StripPrefix("/static/ec/", fs))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
 }

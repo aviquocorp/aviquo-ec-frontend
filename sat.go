@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 )
 
 func findQuestions(w http.ResponseWriter, r *http.Request, test, category, domain, skill, difficulty string) {
-	// Open the SQLite database file
+	
 	db, err := sql.Open("sqlite3", "./satData.db")
 	if err != nil {
 		http.Error(w, "Failed to open database", http.StatusInternalServerError)
@@ -36,12 +37,7 @@ func findQuestions(w http.ResponseWriter, r *http.Request, test, category, domai
 	}
 	defer rows.Close()
 
-	// Start HTML response
-	fmt.Fprintln(w, `<html><body>`)
-	fmt.Fprintln(w, `<h1>Matching Question IDs:</h1>`)
-
-	// Display matching question IDs in an unordered list
-	fmt.Fprintln(w, `<ul>`)
+	// Collect matching question IDs
 	var questionId string
 	matchingQuestions := []string{}
 	for rows.Next() {
@@ -49,32 +45,21 @@ func findQuestions(w http.ResponseWriter, r *http.Request, test, category, domai
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintf(w, `<li>%s</li>`, questionId)
 		matchingQuestions = append(matchingQuestions, questionId)
 	}
-	fmt.Fprintln(w, `</ul>`)
 
-	// If there are matching questions, ask for a questionId to display details and answer
+
 	if len(matchingQuestions) > 0 {
-		fmt.Fprintln(w, `
-		<form action="/sat/view-details" method="post">
-			<label for="questionId">Enter the question ID to view details and answer:</label><br>
-			<input type="text" id="questionId" name="questionId"><br>
-			<input type="submit" value="Submit">
-		</form>
-		`)
+		viewQuestionDetails(w, matchingQuestions)
 	} else {
-		fmt.Fprintln(w, "No questions found matching the filters.")
+		fmt.Fprintln(w, `<html><body>No questions found matching the filters.</body></html>`)
 	}
-
-	// End HTML response
-	fmt.Fprintln(w, `</body></html>`)
 }
 
-// viewQuestionDetails handles displaying all information for a specific questionId
-// and showing the answer and rationale
-func viewQuestionDetails(w http.ResponseWriter, r *http.Request, questionId string) {
-	// Open the SQLite database file
+// viewQuestionDetails handles displaying all information for each questionId in matchingQuestions
+
+func viewQuestionDetails(w http.ResponseWriter, matchingQuestions []string) {
+	
 	db, err := sql.Open("sqlite3", "./satData.db")
 	if err != nil {
 		log.Printf("Error opening database: %v", err)
@@ -83,50 +68,69 @@ func viewQuestionDetails(w http.ResponseWriter, r *http.Request, questionId stri
 	}
 	defer db.Close()
 
-	// Query to get all the information about the selected question
-	queryDetails := `
-        SELECT questionId, id, test, category, domain, skill, difficulty, details, 
-               question, answer_choices, answer, rationale 
-        FROM sat_questions 
-        WHERE questionId = ?`
+	// JSON struct to hold question details
+	type QuestionDetails struct {
+		QuestionID    string `json:"questionId"`
+		ID            string `json:"id"`
+		Test          string `json:"test"`
+		Category      string `json:"category"`
+		Domain        string `json:"domain"`
+		Skill         string `json:"skill"`
+		Difficulty    string `json:"difficulty"`
+		Details       string `json:"details"`
+		Question      string `json:"question"`
+		AnswerChoices string `json:"answerChoices"`
+		Answer        string `json:"answer"`
+		Rationale     string `json:"rationale"`
+	}
 
-	// Variable to store question details
-	var (
-		id, test, category, domain, skill, difficulty, details, question, answerChoices, answer, rationale string
-	)
+	// Slice to store details of all matching questions
+	var questions []QuestionDetails
 
-	// Execute the query and scan the result into the variables
-	err = db.QueryRow(queryDetails, questionId).Scan(
-		&id, &questionId, &test, &category, &domain, &skill, &difficulty, &details, &question, &answerChoices, &answer, &rationale,
-	)
+	for _, questionId := range matchingQuestions {
+		
+		queryDetails := `
+			SELECT questionId, id, test, category, domain, skill, difficulty, details, 
+				question, answer_choices, answer, rationale 
+			FROM sat_questions 
+			WHERE questionId = ?`
 
-	if err != nil {
-		if err == sql.ErrNoRows {
-			fmt.Fprintln(w, "No question found with that ID.")
-		} else {
-			log.Printf("Error querying the database for questionId %s: %v", questionId, err)
-			http.Error(w, "Error querying the database", http.StatusInternalServerError)
+		// Stores question details
+		var question QuestionDetails
+
+		// Execute the query and scan the result into the struct
+		err = db.QueryRow(queryDetails, questionId).Scan(
+			&question.QuestionID, &question.ID, &question.Test, &question.Category, &question.Domain,
+			&question.Skill, &question.Difficulty, &question.Details, &question.Question,
+			&question.AnswerChoices, &question.Answer, &question.Rationale,
+		)
+
+		if err != nil {
+			if err == sql.ErrNoRows {
+				log.Printf("No question found with ID: %s", questionId)
+				continue
+			} else {
+				log.Printf("Error querying the database for questionId %s: %v", questionId, err)
+				http.Error(w, "Error querying the database", http.StatusInternalServerError)
+				return
+			}
 		}
+
+		// Append the question details to the slice
+		questions = append(questions, question)
+	}
+
+	// Convert the slice of questions to a JSON string
+	jsonData, err := json.Marshal(questions)
+	if err != nil {
+		log.Printf("Error converting questions to JSON: %v", err)
+		http.Error(w, "Error generating JSON response", http.StatusInternalServerError)
 		return
 	}
 
-	// Display the details of the selected question and the answer/rationale
-	fmt.Fprintf(w, `
-    <html><body>
-    
-    <p><strong>ID:</strong> %s</p>
-    <p><strong>Test:</strong> %s</p>
-    <p><strong>Category:</strong> %s</p>
-    <p><strong>Domain:</strong> %s</p>
-    <p><strong>Skill:</strong> %s</p>
-    <p><strong>Difficulty:</strong> %s</p>
-    <p><strong>Details:</strong> %s</p>
-    <p><strong>Question:</strong> %s</p>
-    <p><strong>Answer Choices:</strong> %s</p>
-    <p><strong>Answer:</strong> %s</p>
-    <p><strong>Rationale:</strong> %s</p>
-    </body></html>
-`, id, test, category, domain, skill, difficulty, details, question, answerChoices, answer, rationale)
+	
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jsonData)
 }
 
 func ServeForm(w http.ResponseWriter, r *http.Request) {
@@ -159,19 +163,6 @@ func FindQuestionsHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Call the findQuestions function with the provided inputs
 		findQuestions(w, r, test, category, domain, skill, difficulty)
-	} else {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-	}
-}
-
-// Handle displaying details and answer for a specific question ID
-func ViewQuestionDetailsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		// Get the questionId from the form
-		questionID := r.FormValue("questionId")
-
-		// Call the function to display question details and answer
-		viewQuestionDetails(w, r, questionID)
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}

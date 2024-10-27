@@ -148,7 +148,7 @@ func FindQuestionsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		// Extract form values
 		test := r.FormValue("test")
-		category := r.FormValue("category")
+		category := r.Formalue("category")
 		domain := r.FormValue("domain")
 		skill := r.FormValue("skill")
 		difficulty := r.FormValue("difficulty")
@@ -159,6 +159,23 @@ func FindQuestionsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
+
+func FindQuestionsHandlerv2(w http.ResponseWriter, r *http.Request) {
+    // parse JSON in the form of
+    // {
+    //      "SAT": { 
+    //          "difficulty": ["Medium", "Hard"],
+    //          "Math" : { 
+    //              "Algebra" : ["Linear Equations", "Systems of Equations"],
+    //              "Advanced Math": ["Functions"],
+    //          } 
+    //          "Reading and Writing": {
+    //              "Information and Ideas" : ["Central Ideas and Details"],
+    //          }
+    //      }
+    // }
+    var input map[string]string
+} 
 
 func initializeSat(db *sql.DB) {
     // create table if not exists

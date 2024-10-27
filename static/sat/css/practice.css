@@ -46,7 +46,6 @@ html, body {
   top: 0;
   left: 0;
   background-color: #324DC7;
-  padding-top: 50px;
   transition: transform 0.3s ease;
   z-index: 1000;
 }
@@ -100,7 +99,6 @@ html, body {
 .mainContent {
   display: flex;
   padding-left: 250px; /* Matches fixed sidebar width */
-  padding-top: 50px;
   width: 100%;
   overflow: hidden;
 }

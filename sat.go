@@ -10,14 +10,13 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+func indexSat(w http.ResponseWriter, r *http.Request) {
+	// load index.html from static/
+	http.ServeFile(w, r, "./static/sat/pages/practice.html")
+}
+
 func findQuestions(w http.ResponseWriter, r *http.Request, test, category, domain, skill, difficulty string) {
-	
-	db, err := sql.Open("sqlite3", "./satData.db")
-	if err != nil {
-		http.Error(w, "Failed to open database", http.StatusInternalServerError)
-		return
-	}
-	defer db.Close()
+    var err error
 
 	// Build the query with filters
 	query := `
@@ -59,14 +58,7 @@ func findQuestions(w http.ResponseWriter, r *http.Request, test, category, domai
 // viewQuestionDetails handles displaying all information for each questionId in matchingQuestions
 
 func viewQuestionDetails(w http.ResponseWriter, matchingQuestions []string) {
-	
-	db, err := sql.Open("sqlite3", "./satData.db")
-	if err != nil {
-		log.Printf("Error opening database: %v", err)
-		http.Error(w, "Failed to open database", http.StatusInternalServerError)
-		return
-	}
-	defer db.Close()
+    var err error
 
 	// JSON struct to hold question details
 	type QuestionDetails struct {
@@ -166,4 +158,29 @@ func FindQuestionsHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
+}
+
+func initializeSat(db *sql.DB) {
+    // create table if not exists
+    _, err := db.Exec(`CREATE TABLE IF NOT EXISTS sat_questions (
+        questionId TEXT PRIMARY KEY,
+        id TEXT,
+        test TEXT,
+        category TEXT,
+        domain TEXT,
+        skill TEXT,
+        difficulty TEXT,
+        details TEXT,
+        question TEXT,
+        answer_choices TEXT,
+        answer TEXT,
+        rationale TEXT
+    )`)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    http.HandleFunc("/sat", indexSat)
+	http.HandleFunc("/sat/test", ServeForm)
+	http.HandleFunc("/sat/find-questions", FindQuestionsHandler)
 }

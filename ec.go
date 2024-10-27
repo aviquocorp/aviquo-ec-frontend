@@ -13,7 +13,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func index(w http.ResponseWriter, r *http.Request) {
+func indexEc(w http.ResponseWriter, r *http.Request) {
 	// load index.html from static/
 	http.ServeFile(w, r, "./static/ec/index.html")
 }
@@ -514,7 +514,7 @@ func initializeEc(db *sql.DB) {
 	}
 
 	// extraciricular handlers
-	http.HandleFunc("/ec", index)
+	http.HandleFunc("/ec", indexEc)
 	http.HandleFunc("/static/ec/difficulty-scholarships.html", difficultyScholarships)
 	http.HandleFunc("/static/ec/results-scholarships.html", resultsScholarship)
 	http.HandleFunc("/static/ec/grades-summer-programs.html", summerProgGrade)
@@ -523,9 +523,6 @@ func initializeEc(db *sql.DB) {
 
 	// add HandleFuncs for sat /sat...
 
-	// fallback to static/
-	fs := http.FileServer(http.Dir("./static/ec"))
-	http.Handle("/static/ec/", http.StripPrefix("/static/ec/", fs))
 
 	if err != nil {
 		log.Fatal(err)

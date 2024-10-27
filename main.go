@@ -19,8 +19,12 @@ func main() {
 
 
 	initializeEc(db)
-	http.HandleFunc("/sat", ServeForm)
-	http.HandleFunc("/sat/find-questions", FindQuestionsHandler)
+    initializeSat(db)
+
+	// fallback to static/
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+    
 	fmt.Println("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 	defer db.Close()

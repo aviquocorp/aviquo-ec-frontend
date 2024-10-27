@@ -4,11 +4,34 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+    "strings"
 	"log"
 	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
 )
+
+// JSON struct to hold question details
+type QuestionDetails struct {
+	QuestionID    string `json:"questionId"`
+	ID            string `json:"id"`
+	Test          string `json:"test"`
+	Category      string `json:"category"`
+	Domain        string `json:"domain"`
+	Skill         string `json:"skill"`
+	Difficulty    string `json:"difficulty"`
+	Details       string `json:"details"`
+	Question      string `json:"question"`
+	AnswerChoices string `json:"answerChoices"`
+	Answer        string `json:"answer"`
+	Rationale     string `json:"rationale"`
+}
+
+type SATQuestion struct {
+    Test string `json:"test"`
+    Difficulty []string `json:"difficulty"`
+    Subdomain []string `json:"subdomain"`
+}
 
 func indexSat(w http.ResponseWriter, r *http.Request) {
 	// load index.html from static/
@@ -60,21 +83,6 @@ func findQuestions(w http.ResponseWriter, r *http.Request, test, category, domai
 func viewQuestionDetails(w http.ResponseWriter, matchingQuestions []string) {
     var err error
 
-	// JSON struct to hold question details
-	type QuestionDetails struct {
-		QuestionID    string `json:"questionId"`
-		ID            string `json:"id"`
-		Test          string `json:"test"`
-		Category      string `json:"category"`
-		Domain        string `json:"domain"`
-		Skill         string `json:"skill"`
-		Difficulty    string `json:"difficulty"`
-		Details       string `json:"details"`
-		Question      string `json:"question"`
-		AnswerChoices string `json:"answerChoices"`
-		Answer        string `json:"answer"`
-		Rationale     string `json:"rationale"`
-	}
 
 	// Slice to store details of all matching questions
 	var questions []QuestionDetails
@@ -148,7 +156,7 @@ func FindQuestionsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		// Extract form values
 		test := r.FormValue("test")
-		category := r.Formalue("category")
+		category := r.FormValue("category")
 		domain := r.FormValue("domain")
 		skill := r.FormValue("skill")
 		difficulty := r.FormValue("difficulty")
@@ -163,18 +171,90 @@ func FindQuestionsHandler(w http.ResponseWriter, r *http.Request) {
 func FindQuestionsHandlerv2(w http.ResponseWriter, r *http.Request) {
     // parse JSON in the form of
     // {
-    //      "SAT": { 
-    //          "difficulty": ["Medium", "Hard"],
-    //          "Math" : { 
-    //              "Algebra" : ["Linear Equations", "Systems of Equations"],
-    //              "Advanced Math": ["Functions"],
-    //          } 
-    //          "Reading and Writing": {
-    //              "Information and Ideas" : ["Central Ideas and Details"],
-    //          }
-    //      }
+    //      "test": "SAT",
+    //      "difficulty": ["Medium", "Hard"],
+    //      "subdomains": ["Information and Ideas", "Algebra"]
     // }
-    var input map[string]string
+
+    // parse json
+    var data SATQuestion
+    err := json.NewDecoder(r.Body).Decode(&data)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    query := `
+		SELECT questionId, id, test, category, domain, skill, difficulty, details, 
+			question, answer_choices, answer, rationale 
+        FROM sat_questions
+        WHERE test = ?
+        `
+    args := []interface{}{}
+
+    args = append(args, data.Test)
+
+    query += " AND difficulty IN ("
+
+    difficultyPlaceholders := []string{}
+    for _, item := range data.Difficulty {
+        difficultyPlaceholders = append(difficultyPlaceholders, "?")
+        args = append(args, item)
+
+    }
+
+    query += strings.Join(difficultyPlaceholders, ",") + ") AND skill IN ("
+
+    subdomainPlaceholders := []string{}
+    for _, item := range data.Subdomain {
+        subdomainPlaceholders = append(subdomainPlaceholders, "?")
+        args = append(args, item)
+    } 
+
+    query += strings.Join(subdomainPlaceholders, ",") + ")"
+    
+    // query the db
+    rows, err := db.Query(query, args...)
+    if err != nil {
+        // return http internal error
+        http.Error(w, "Error querying: " + err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    questions := []QuestionDetails{}
+
+    // iterate oer the rows
+    for rows.Next() {
+        var question QuestionDetails 
+        err = rows.Scan(&question.QuestionID, &question.ID, &question.Test, 
+            &question.Category, &question.Domain, &question.Skill, 
+            &question.Difficulty, &question.Details, &question.Question, 
+            &question.AnswerChoices, &question.Answer, &question.Rationale,
+        )
+        if err != nil {
+            // return http internal error
+            http.Error(w, "Error querying the database" + err.Error(), http.StatusInternalServerError)
+            return
+        }
+        // append the question
+        // make the object json and append
+
+        // convert to json
+        // append the json
+        questions = append(questions, question)
+    } 
+
+    // return the json
+    jsonData, err := json.Marshal(questions)
+    if err != nil {
+        log.Printf("Error converting questions to JSON: %v", err)
+        http.Error(w, "Error generating JSON response", http.StatusInternalServerError)
+        return
+    }
+
+    defer rows.Close()
+
+    w.Header().Set("Content-Type", "application/json")
+    w.Write(jsonData)
 } 
 
 func initializeSat(db *sql.DB) {
@@ -200,4 +280,5 @@ func initializeSat(db *sql.DB) {
     http.HandleFunc("/sat", indexSat)
 	http.HandleFunc("/sat/test", ServeForm)
 	http.HandleFunc("/sat/find-questions", FindQuestionsHandler)
+    http.HandleFunc("/sat/find-questions-v2", FindQuestionsHandlerv2)
 }

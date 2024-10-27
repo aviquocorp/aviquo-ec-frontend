@@ -10,6 +10,14 @@ import (
 
 var db *sql.DB
 
+func index(w http.ResponseWriter, r *http.Request) {
+	// load index.html from static/
+
+	//http.ServeFile(w, r, "./static/landing/index.html")
+    // redirect to "/ec"
+    http.Redirect(w, r, "/ec", http.StatusFound)
+}
+
 func main() {
 	var err error
 	db, err = sql.Open("sqlite3", "./main.db")
@@ -23,6 +31,8 @@ func main() {
 
 	// fallback to static/
 	fs := http.FileServer(http.Dir("./static"))
+    // load index.html from static/
+    http.HandleFunc("/", index) 
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
     
 	fmt.Println("Server is running on http://localhost:8080")

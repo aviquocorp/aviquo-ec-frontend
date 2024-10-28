@@ -13,9 +13,8 @@ var db *sql.DB
 func index(w http.ResponseWriter, r *http.Request) {
 	// load index.html from static/
 
-	//http.ServeFile(w, r, "./static/landing/index.html")
+	http.ServeFile(w, r, "./static/landing/index.html")
     // redirect to "/ec"
-    http.Redirect(w, r, "/ec", http.StatusFound)
 }
 
 func main() {

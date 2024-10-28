@@ -1,0 +1,164 @@
+.extracurricular-section {
+  display: flex;
+  align-items: center;
+  gap: 6rem;
+  padding: 2rem;
+  padding-bottom: 100px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 400px;
+  position: relative;
+  flex-direction: row-reverse;
+}
+
+.section-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #7928CA, #FF0080);
+  color: white;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #1a202c 0%, #4A5568 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.extracurricular-content {
+  flex: 1;
+  padding-left: 2rem;
+}
+
+.section-description {
+  font-size: 1.125rem;
+  color: #4A5568;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+.section-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.125rem;
+  color: #2D3748;
+}
+
+.feature-item svg {
+  width: 24px;
+  height: 24px;
+  color: #7928CA;
+}
+
+.cta-button {
+  background: linear-gradient(135deg, #7928CA, #FF0080);
+  display: inline-flex;
+  text-decoration: none;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(121, 40, 202, 0.25);
+}
+
+.extracurricular-visual {
+  flex: 1;
+  position: relative;
+  height: 400px; /* Fixed height container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10%;
+  box-shadow: 0 6px 18px rgba(73, 38, 134, 0.25);
+}
+
+.visual-image {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.visual-card.offset {
+  top: 100px;
+  right: 100px; /* Change from left to right */
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.card-header {
+  height: 24px;
+  background: #E2E8F0;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-line {
+  height: 12px;
+  background: #EDF2F7;
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.card-line.short {
+  width: 60%;
+}
+
+/* Hover effects */
+.visual-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .extracurricular-section {
+    flex-direction: column;
+    gap: 4rem;
+    padding: 4rem 2rem;
+  }
+
+  .extracurricular-content {
+    padding-left: 0;
+  }
+
+  .extracurricular-visual {
+    width: 100%;
+  }
+
+  .visual-card {
+      width: 250px;
+  }
+
+  .visual-card.offset {
+      right: 50px; /* Change from left to right */
+  }
+}

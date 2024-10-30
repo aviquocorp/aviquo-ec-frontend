@@ -1,0 +1,194 @@
+.newsletter-section {
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+    padding: 8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 400px;
+    position: relative;
+  }
+  
+  .newsletter-content {
+    flex: 1;
+    padding-right: 2rem;
+  }
+  
+  .newsletter-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #0D47A1, #1976D2);
+    color: white;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .newsletter-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #1a202c 0%, #4A5568 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .newsletter-description {
+    font-size: 1.125rem;
+    color: #4A5568;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+  
+  .newsletter-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .newsletter-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 2rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .newsletter-input:focus {
+    outline: none;
+    border-color: #7928CA;
+  }
+  
+  .newsletter-button {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #0D47A1, #1976D2);
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .newsletter-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(121, 40, 202, 0.25);
+  }
+  
+  .newsletter-visual {
+    flex: 1;
+    position: relative;
+    height: 400px;
+  }
+  
+  .newsletter-card {
+    position: absolute;
+    width: 300px;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .newsletter-card:nth-child(1) {
+    top: 0;
+    right: 0;
+    z-index: 2;
+  }
+  
+  .newsletter-card:nth-child(2) {
+    top: 100px;
+    right: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 1;
+  }
+  
+  .card-header {
+    height: 24px;
+    background: #E2E8F0;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .card-line {
+    height: 12px;
+    background: #EDF2F7;
+    border-radius: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .card-line.short {
+    width: 60%;
+  }
+  
+  .benefits-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #4A5568;
+  }
+  
+  .benefit-icon {
+    width: 20px;
+    height: 20px;
+    color: #7928CA;
+  }
+  
+  @media (max-width: 768px) {
+    .newsletter-section {
+      flex-direction: column;
+      gap: 4rem;
+      padding: 4rem 2rem;
+    }
+  
+    .newsletter-content {
+      padding-right: 0;
+    }
+  
+    .newsletter-form {
+      flex-direction: column;
+    }
+  
+    .newsletter-visual {
+      height: 300px;
+      width: 100%;
+    }
+  
+    .newsletter-card {
+      width: 250px;
+    }
+  
+    .newsletter-card:nth-child(2) {
+      right: 25px;
+    }
+  }
+  
+  .newsletter-image {
+    width: 600px;  /* Reduced from full width */
+    height: 400px; /* Reduced from 300px */
+    object-fit: cover; /* This ensures the image maintains its aspect ratio */
+    border-radius: 10%;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(73, 38, 134, 0.25);
+}
+
+
+@media (max-width: 768px) {
+    .newsletter-image {
+        width: 300px;  /* Smaller width on mobile */
+        height: 150px; /* Smaller height on mobile */
+    }
+}

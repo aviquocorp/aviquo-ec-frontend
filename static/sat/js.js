@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const selectedAssessment = [...assessmentCheckboxes].find(cb => cb.checked).name;
                 if (selectedAssessment === "SAT") {
                     test = "SAT"
-                    //jsonToSend = { "SAT" : {} }
+                    jsonToSend = { "SAT" : {} }
                 }
             } else {
                 testSectionCheckboxes.style.display = "none";
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // figure out the difficulty selected
         difficulty = Array.from(difficultyCheckboxesInputs).find(cb => cb.checked).name;
-        //jsonToSend[test]["difficulty"] = difficulty;
+        jsonToSend[test]["difficulty"] = difficulty;
         console.log(difficulty);
 
         if (selectedTestSection) {

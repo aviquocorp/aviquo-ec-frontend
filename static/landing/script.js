@@ -14,20 +14,20 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Rotating headlines functionality
 const headlines = [
     {
-        main: 'Finding your',
-        highlight: 'passion and reaching ',
-        end: 'it has never been easier.'
-    },
-    {
-        main: 'Finding your',
-        highlight: 'passion and reaching ',
-        end: 'it has never been easier.'
-    },
-    {
         main: 'Find the best',
         highlight: 'extracurriculars ',
 
-    }
+    },
+    {
+        main: 'Finding your',
+        highlight: 'passion and reaching ',
+        end: 'it has never been easier.'
+    },
+    {
+        main: 'Your path to the ',
+        highlight: 'ivy league ',
+        end: 'starts here.'
+    },
 ];
 
 let currentIndex = 0;

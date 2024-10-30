@@ -17,7 +17,7 @@
   .newsletter-badge {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, #7928CA, #FF0080);
+    background: linear-gradient(135deg, #0D47A1, #1976D2);
     color: white;
     border-radius: 2rem;
     font-size: 0.875rem;
@@ -65,7 +65,7 @@
   
   .newsletter-button {
     padding: 1rem 2rem;
-    background: linear-gradient(135deg, #7928CA, #FF0080);
+    background: linear-gradient(135deg, #0D47A1, #1976D2);
     color: white;
     border: none;
     border-radius: 2rem;

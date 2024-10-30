@@ -14,7 +14,7 @@
 .section-badge {
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, #7928CA, #FF0080);
+  background: linear-gradient(135deg, #0D47A1, #1976D2);
   color: white;
   border-radius: 2rem;
   font-size: 0.875rem;
@@ -67,11 +67,11 @@
 .feature-item svg {
   width: 24px;
   height: 24px;
-  color: #7928CA;
+  color: #0D47A1;
 }
 
 .cta-button {
-  background: linear-gradient(135deg, #7928CA, #FF0080);
+  background: linear-gradient(135deg, #0D47A1, #1976D2);
   display: inline-flex;
   text-decoration: none;
   align-items: center;

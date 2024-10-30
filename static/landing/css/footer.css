@@ -1,7 +1,7 @@
 /* Footer Styles */
 .footer {
-    background: white;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #FFFAE5 0%, #FFFDF0 50%, #FFFAE5 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding: 2.5rem 2rem 1.5rem; /* Reduced from 4rem 2rem 2rem */
     color: #4A5568;
   }

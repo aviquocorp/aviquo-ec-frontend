@@ -14,14 +14,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Rotating headlines functionality
 const headlines = [
     {
-        main: 'Aquarc the tool',
-        highlight: 'to make ',
-        end: 'highschool easier.'
+        main: 'Finding your',
+        highlight: 'passion and reaching ',
+        end: 'it has never been easier.'
     },
     {
-        main: 'SAT studying made',
-        highlight: 'easier ',
-        end: 'with aquarc.'
+        main: 'Finding your',
+        highlight: 'passion and reaching ',
+        end: 'it has never been easier.'
     },
     {
         main: 'Find the best',

@@ -12,16 +12,16 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aviquo</title>
-    <link href="/static/sat/css/practice.css" rel="stylesheet">
+    <title>aquarc</title>
+    <link href="../css/practice.css" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Toggle checkbox for collapsible menu -->
+    <!-- Toggle checkbox for collapsible menu 
     <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
-    <label for="menu-toggle" class="menu-toggle-label">☰</label>
+    <label for="menu-toggle" class="menu-toggle-label">☰</label>-->
 
-    <div class="vertical-nav" id="verticalNav">
+    <!--<div class="vertical-nav" id="verticalNav">
         <h2 class="mainHeader">
             <a href="/">aquarc</a>
         </h2>
@@ -40,9 +40,33 @@
             <li><a href="/static/sat/pages/precalc.html">AP Precalc</a></li>
             <li><a href="/static/sat/pages/apush.html">AP US History</a></li>
             <li><a href="/static/sat/pages/world.html">AP World History</a></li>
-        </ul>
+        </ul>-->
 
-        <div class="user-dropdown">
+        <!--Feedback-->
+        <button  class = "feedback_button" id="openPopupBtn">Feedback</button>
+
+        <div id="popupModal" class="modal">
+        <div class="modal-content">
+            <span id="closePopupBtn" class="close">&times;</span>
+            <form action="https://submit-form.com/VaXdTtgHh">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Name" required="" />
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Email" required="" />
+                <label for="message">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Message"
+                  required=""
+                ></textarea>
+                <button type="submit">Send</button>
+              </form>
+              
+        </div>
+        </div>
+
+        <!--<div class="user-dropdown">
             <button class="user-button">
                 <img src="/static/sat/images/blankpfp.jpg" alt="Profile" class="profile-pic">
                 User
@@ -53,7 +77,7 @@
                 <a href="#">Support</a>
                 <a href="#">Sign Out</a>
             </div>
-        </div>
+        </div>-->
     </div>
 
     <div class="mainContent">
@@ -76,24 +100,24 @@
                 <p class = "p_description">Select all that apply</h4>
                 <div class="checkbox-container hidden" id="readingDomainCheckboxes">
                     <label><input type="checkbox" name="Information and Ideas">Information and Ideas</label>
-                    <label><input type="checkbox" name="craft-and-structure">Craft and Structure</label>
-                    <label><input type="checkbox" name="expression-of-ideas">Expression of Ideas</label>
-                    <label><input type="checkbox" name="standard-english-conventions">Standard English Conventions</label>
+                    <label><input type="checkbox" name="Craft and Structure">Craft and Structure</label>
+                    <label><input type="checkbox" name="Expression of Ideas">Expression of Ideas</label>
+                    <label><input type="checkbox" name="Standard English Conventions">Standard English Conventions</label>
                     <button class="domain_button">Next</button>
                 </div>
                 <div class="checkbox-container hidden" id="mathDomainCheckboxes">
-                    <label><input type="checkbox" name="algebra">Algebra</label>
-                    <label><input type="checkbox" name="advanced-math">Advanced Math</label>
-                    <label><input type="checkbox" name="problem-solving">Problem-Solving and Data Analysis</label>
-                    <label><input type="checkbox" name="geometry">Geometry and Trigonometry</label>
+                    <label><input type="checkbox" name="Algebra">Algebra</label>
+                    <label><input type="checkbox" name="Advanced Math">Advanced Math</label>
+                    <label><input type="checkbox" name="Problem-Solving and Data Analysis">Problem-Solving and Data Analysis</label>
+                    <label><input type="checkbox" name="Geometry and Trigonometry">Geometry and Trigonometry</label>
                     <button class="domain_button">Next</button>
                 </div>
                 <h3 class="h3_question">Difficulty</h3>
                 <p class = "p_description">Select all that apply</h4>
                 <div class="checkbox-container hidden" id="difficultyCheckboxes">
-                    <label><input type="checkbox" name="easy">Easy</label>
-                    <label><input type="checkbox" name="medium">Medium</label>
-                    <label><input type="checkbox" name="hard">Hard</label>
+                    <label><input type="checkbox" name="Easy">Easy</label>
+                    <label><input type="checkbox" name="Medium">Medium</label>
+                    <label><input type="checkbox" name="Hard">Hard</label>
                     <button class="difficulty_button">Next</button>
                 </div>
 
@@ -104,48 +128,48 @@
                 <!-- Reading and Writing Subdomains -->
                 <div class="checkbox-container hidden" id="readingWritingSubdomainCheckboxes">
                     <h4>Information and Ideas</h4>
-                    <label><input type="checkbox" name="central-ideas">Central Ideas and Details</label>
-                    <label><input type="checkbox" name="inferences">Inferences</label>
-                    <label><input type="checkbox" name="command-of-evidence">Command of Evidence</label>
+                    <label><input type="checkbox" name="Central Ideas and Details">Central Ideas and Details</label>
+                    <label><input type="checkbox" name="Inferences">Inferences</label>
+                    <label><input type="checkbox" name="Command of Evidence">Command of Evidence</label>
 
                     <h4>Craft and Structure</h4>
-                    <label><input type="checkbox" name="words-in-context">Words in Context</label>
-                    <label><input type="checkbox" name="text-structure">Text Structure and Purpose</label>
-                    <label><input type="checkbox" name="cross-text-connections">Cross-Text Connections</label>
+                    <label><input type="checkbox" name="Words in Context">Words in Context</label>
+                    <label><input type="checkbox" name="Text Structure and Purpose">Text Structure and Purpose</label>
+                    <label><input type="checkbox" name="Cross-Text Connections">Cross-Text Connections</label>
 
                     <h4>Expression of Ideas</h4>
-                    <label><input type="checkbox" name="rhetorical-synthesis">Rhetorical Synthesis</label>
-                    <label><input type="checkbox" name="transitions">Transitions</label>
-                    <label><input type="checkbox" name="style-and-tone">Style and Tone</label>
+                    <label><input type="checkbox" name="Rhetorical Synthesis">Rhetorical Synthesis</label>
+                    <label><input type="checkbox" name="Transitions">Transitions</label>
+                    <label><input type="checkbox" name="Style and Tone">Style and Tone</label>
 
                     <h4>Standard English Conventions</h4>
-                    <label><input type="checkbox" name="sentence-structure">Sentence Structure</label>
-                    <label><input type="checkbox" name="punctuation">Punctuation</label>
-                    <label><input type="checkbox" name="usage">Usage</label>
+                    <label><input type="checkbox" name="Sentence Structure">Sentence Structure</label>
+                    <label><input type="checkbox" name="Punctuation">Punctuation</label>
+                    <label><input type="checkbox" name="Usage">Usage</label>
                     <button class="subdomain_button">Next</button>
                 </div>
 
                 <!-- Math Subdomains -->
                 <div class="checkbox-container hidden" id="mathSubdomainCheckboxes">
                     <h4>Algebra</h4>
-                    <label><input type="checkbox" name="linear-equations">Linear Equations</label>
-                    <label><input type="checkbox" name="quadratic-functions">Quadratic Functions</label>
-                    <label><input type="checkbox" name="systems-of-equations">Systems of Equations</label>
+                    <label><input type="checkbox" name="Linear Equations">Linear Equations</label>
+                    <label><input type="checkbox" name="Quadratic Functions">Quadratic Functions</label>
+                    <label><input type="checkbox" name="Systems of Equations">Systems of Equations</label>
 
                     <h4>Advanced Math</h4>
-                    <label><input type="checkbox" name="functions">Functions</label>
-                    <label><input type="checkbox" name="complex-numbers">Complex Numbers</label>
-                    <label><input type="checkbox" name="exponential-and-log">Exponential and Logarithmic Equations</label>
+                    <label><input type="checkbox" name="Functions">Functions</label>
+                    <label><input type="checkbox" name="Complex Numbers">Complex Numbers</label>
+                    <label><input type="checkbox" name="Exponential and Logarithmic Equations">Exponential and Logarithmic Equations</label>
 
                     <h4>Problem Solving</h4>
-                    <label><input type="checkbox" name="ratios-and-proportions">Ratios and Proportions</label>
-                    <label><input type="checkbox" name="statistics">Statistics</label>
-                    <label><input type="checkbox" name="probability">Probability</label>
+                    <label><input type="checkbox" name="Ratios and Proportions">Ratios and Proportions</label>
+                    <label><input type="checkbox" name="Statistics">Statistics</label>
+                    <label><input type="checkbox" name="Probability">Probability</label>
 
                     <h4>Geometry</h4>
-                    <label><input type="checkbox" name="angles">Angles</label>
-                    <label><input type="checkbox" name="triangles">Triangles</label>
-                    <label><input type="checkbox" name="circles">Circles</label>
+                    <label><input type="checkbox" name="Angles">Angles</label>
+                    <label><input type="checkbox" name="Triangles">Triangles</label>
+                    <label><input type="checkbox" name="Circles">Circles</label>
                     <button class="subdomain_button">Next</button>
                 </div>
 
@@ -191,6 +215,6 @@
         </div>
     </div>
 
-    <script src="/static/sat/js.js"></script>
+    <script src="../js.js"></script>
 </body>
 </html>

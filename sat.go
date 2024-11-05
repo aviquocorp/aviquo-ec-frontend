@@ -178,9 +178,18 @@ func FindQuestionsHandlerv2(w http.ResponseWriter, r *http.Request) {
 
     // parse json
     var data SATQuestion
+
+    // Check if the body is empty first
+    if r.Body == nil || r.ContentLength == 0 {
+        http.Error(w, "Request body is empty", http.StatusBadRequest)
+        return
+    }
+
     err := json.NewDecoder(r.Body).Decode(&data)
     if err != nil {
-        log.Fatal(err)
+        // return 400 bad request
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
     }
 
     query := `

@@ -330,3 +330,22 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+//js for feedback popup
+const openPopupBtn = document.getElementById('openPopupBtn');
+const closePopupBtn = document.getElementById('closePopupBtn');
+const popupModal = document.getElementById('popupModal');
+
+openPopupBtn.addEventListener('click', () => {
+  popupModal.style.display = 'flex'; 
+});
+
+closePopupBtn.addEventListener('click', () => {
+  popupModal.style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+  if (event.target === popupModal) {
+    popupModal.style.display = 'none';
+  }
+});

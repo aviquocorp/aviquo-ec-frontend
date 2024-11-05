@@ -7,7 +7,7 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #FFFAE5 0%, #FFFDF0 50%, #FFFAE5 100%);
+    background: rgb(250, 245, 252);
     padding-top: 72px; /* Adjust this value to match your nav height */
 }
 
@@ -22,12 +22,12 @@ nav {
     left: 0;
     right: 0;
     z-index: 1000;
-    color: #e2e8f0;
+    color: #000000;
     font-weight: bold;
 
     
     /* Glass effect styles */
-    background: linear-gradient(135deg, rgba(0, 100, 0, 0.9), rgba(0, 100, 0, 0.9));
+    background: linear-gradient(135deg, rgb(255, 255, 255), rgb(255, 255, 255));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
@@ -57,7 +57,7 @@ nav {
 
 .nav-links a {
     text-decoration: none;
-    color: #ffffff;
+    color: #000000;
     font-size: 0.95rem;
     transition: color 0.3s ease;
     font-weight: bold;
@@ -163,8 +163,6 @@ nav {
     margin-bottom: 2.5rem;
     line-height: 1.5;
 }
-
-
 
 .stats {
     display: flex;

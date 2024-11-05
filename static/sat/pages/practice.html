@@ -162,18 +162,31 @@
             </div>
 
             <div class="right-side">
-                <h1 id = "questionHeader">Question</h1>
-                <p class="p_question">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-                <div class="answer_container all-screen-options">
-                    <button class="option_button">Option A</button>
-                    <button class="option_button">Option B</button>
-                    <button class="option_button">Option C</button>
-                    <button class="option_button">Option D</button>
+                <h1 id="questionHeader">Question</h1>
+                <div id="questionNumber"></div>
+                <div id="questionText" class="p_question"></div>
+                <div id="questionDetails"></div>
+                
+                <div class="metadata">
+                    <div id="questionDifficulty"></div>
+                    <div id="questionCategory"></div>
+                    <div id="questionDomain"></div>
+                    <div id="questionSkill"></div>
                 </div>
-
-                <button class = "next_button">Next Question</button>
-
+            
+                <div class="answer_container">
+                    <!-- Answer buttons will be added dynamically -->
+                </div>
+            
+                <div id="feedback" style="display: none;">
+                    <div id="correctness"></div>
+                    <div id="rationale"></div>
+                </div>
+            
+                <div class="navigation-buttons">
+                    <button id="prevQuestionBtn">Previous Question</button>
+                    <button id="nextQuestionBtn">Next Question</button>
+                </div>
             </div>
         </div>
     </div>

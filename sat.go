@@ -180,7 +180,9 @@ func FindQuestionsHandlerv2(w http.ResponseWriter, r *http.Request) {
     var data SATQuestion
     err := json.NewDecoder(r.Body).Decode(&data)
     if err != nil {
-        log.Fatal(err)
+        // return 400 bad request
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
     }
 
     query := `

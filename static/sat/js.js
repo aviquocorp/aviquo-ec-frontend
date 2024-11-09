@@ -77,41 +77,6 @@ async function searchQuestions() {
     }
 }
 
-
-function displayQuestion(question) {
-    // Update question number
-    questionNumber.textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
-
-    // Display question text
-    questionDisplay.innerHTML = question.question || 'Question text not available';
-
-    // Display metadata
-    questionDetails.innerHTML = `
-        <div>Difficulty: ${question.difficulty || 'N/A'}</div>
-        <div>Category: ${question.category || 'N/A'}</div>
-        <div>Domain: ${question.domain || 'N/A'}</div>
-        <div>Skill: ${question.skill || 'N/A'}</div>
-    `;
-
-    // Clear previous answer choices
-    answerContainer.innerHTML = '';
-
-    // Display answer choices
-    try {
-        const choices = JSON.parse(question.answerChoices || '[]');
-        choices.forEach((choice, index) => {
-            const button = document.createElement('button');
-            button.className = 'answer_button';
-            button.textContent = `${String.fromCharCode(65 + index)}. ${choice.content}`;
-            button.addEventListener('click', () => checkAnswer(choice.id, question.answer));
-            answerContainer.appendChild(button);
-        });
-    } catch (error) {
-        console.error('Error parsing answer choices:', error);
-        answerContainer.innerHTML = 'Error loading answer choices';
-    }
-}
-
 function checkAnswer(selectedId, correctAnswer) {
     // Reset previous feedback
     const allButtons = document.querySelectorAll('.answer_button');
@@ -197,7 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Search button
     const searchButton = document.getElementById('searchButton');
-    searchButton.addEventListener('click', handleSearch);
 
     // Navigation buttons
     document.getElementById('prevQuestionBtn').addEventListener('click', showPreviousQuestion);
@@ -248,40 +212,6 @@ function handleSubdomainSelection() {
     document.getElementById('excludeQuestions').classList.remove('hidden');
 }
 
-async function handleSearch() {
-    const searchParams = {
-        test: getSelectedValue('assessmentCheckboxes'),
-        difficulty: getSelectedValues('difficultyCheckboxes'),
-        subdomain: getSelectedSubdomains()
-    };
-
-    try {
-        const response = await fetch('/sat/find-questions-v2', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(searchParams)
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const questions = await response.json();
-        currentQuestions = questions;
-        currentQuestionIndex = 0;
-        
-        if (questions.length > 0) {
-            displayQuestion(questions[0]);
-        } else {
-            displayNoQuestionsMessage();
-        }
-    } catch (error) {
-        console.error('Error fetching questions:', error);
-        displayErrorMessage();
-    }
-}
 
 // Helper Functions
 function uncheckOtherCheckboxes(container, checkedBox) {
@@ -314,7 +244,90 @@ function getSelectedSubdomains() {
 }
 //TODO: Display the passage
 function displayQuestionDetails(question) {
+    // Get the relevant DOM elements
+    const questionText = document.getElementById('questionText');
+    const questionDetails = document.getElementById('questionDetails');
     
+    // Function to decode HTML entities and escaped Unicode
+    function decodeText(text) {
+        const textarea = document.createElement('textarea');
+        return text
+            .replace(/\\u003c/g, '<')
+            .replace(/\\u003e/g, '>')
+            .replace(/\\u0026rsquo;/g, '\'')
+            .replace(/\\u0026/g, '&')
+            .replace(/\\"/g, '"')
+            // Add more replacements as needed
+            .split('\\n').join('\n'); // Handle newlines
+    }
+
+    // Check if details exist and create the content
+    if (question.details) {
+        // Create a details container if it doesn't exist
+        let detailsDiv = document.querySelector('.question-details');
+        if (!detailsDiv) {
+            detailsDiv = document.createElement('div');
+            detailsDiv.className = 'question-details';
+        }
+        
+        // Decode and format the details text
+        const formattedDetails = decodeText(question.details);
+        
+        // Create a wrapper for the decoded content
+        const contentWrapper = document.createElement('div');
+        contentWrapper.innerHTML = formattedDetails;
+        
+        // Clear existing content and append new content
+        detailsDiv.innerHTML = '';
+        detailsDiv.appendChild(contentWrapper);
+        
+        // Insert the details before the question text
+        if (questionText.parentNode) {
+            // Remove any existing details first
+            const existingDetails = document.querySelector('.question-details');
+            if (existingDetails) {
+                existingDetails.remove();
+            }
+            questionText.parentNode.insertBefore(detailsDiv, questionText);
+        }
+    }
+    
+    // Update question metadata
+    if (questionDetails) {
+        const metadataHTML = `
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <span class="metadata-label">Difficulty:</span>
+                    <span class="metadata-value">${question.difficulty || 'N/A'}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Category:</span>
+                    <span class="metadata-value">${question.category || 'N/A'}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Domain:</span>
+                    <span class="metadata-value">${question.domain || 'N/A'}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Skill:</span>
+                    <span class="metadata-value">${question.skill || 'N/A'}</span>
+                </div>
+            </div>
+        `;
+        questionDetails.innerHTML = metadataHTML;
+    }
+
+    // Add error handling
+    try {
+        // Parse and display the question text
+        if (question.question) {
+            const decodedQuestion = decodeText(question.question);
+            questionText.innerHTML = decodedQuestion;
+        }
+    } catch (error) {
+        console.error('Error displaying question details:', error);
+        questionText.innerHTML = 'Error displaying question. Please try again.';
+    }
 }
 
 function displayQuestion(question) {
@@ -323,7 +336,8 @@ function displayQuestion(question) {
     document.getElementById('questionCategory').textContent = `Category: ${question.category}`;
     document.getElementById('questionDomain').textContent = `Domain: ${question.domain}`;
     document.getElementById('questionSkill').textContent = `Skill: ${question.skill}`;
-    
+    displayQuestionDetails(question);
+
     // Display answer choices
     const answerContainer = document.querySelector('.answer_container');
     answerContainer.innerHTML = '';

@@ -77,6 +77,7 @@ async function searchQuestions() {
     }
 }
 
+// TODO: FIX THIS
 function checkAnswer(selectedId, correctAnswer) {
     // Reset previous feedback
     const allButtons = document.querySelectorAll('.answer_button');
@@ -92,8 +93,10 @@ function checkAnswer(selectedId, correctAnswer) {
     if (selectedButton) {
         if (selectedId === correctAnswer) {
             selectedButton.classList.add('correct');
+            console.log("correct")
         } else {
             selectedButton.classList.add('incorrect');
+            console.log("Not correct")
         }
     }
 }
@@ -353,7 +356,6 @@ function displayQuestion(question) {
         }
     } catch (e) {
         console.error('Error parsing answer choices:', e);
-        // Provide a default set of choices if parsing fails
         choices = [];
     }
 
@@ -376,7 +378,42 @@ function displayQuestion(question) {
             answerContainer.appendChild(button);
         });
     } else {
-        console.warn('No valid answer choices found for question');
+        // Create input container
+        const inputContainer = document.createElement('div');
+        inputContainer.className = 'answer-input-container';
+        
+        // Create text input
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = 'user-answer-input';
+        input.className = 'answer-input';
+        input.placeholder = 'Type your answer here...';
+        
+        // Create submit button
+        const submitButton = document.createElement('button');
+        submitButton.textContent = 'Submit Answer';
+        submitButton.className = 'submit-answer-button';
+        submitButton.addEventListener('click', () => {
+            const userAnswer = input.value.trim();
+            if (userAnswer) {
+                checkTextAnswer(userAnswer, question.answer);
+            }
+        });
+        
+        // Add enter key listener to input
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const userAnswer = input.value.trim();
+                if (userAnswer) {
+                    checkTextAnswer(userAnswer, question.answer);
+                }
+            }
+        });
+        
+        // Append elements
+        inputContainer.appendChild(input);
+        inputContainer.appendChild(submitButton);
+        answerContainer.appendChild(inputContainer);
     }
 
     // Update navigation buttons
@@ -384,6 +421,57 @@ function displayQuestion(question) {
     document.getElementById('nextQuestionBtn').disabled = currentQuestionIndex === currentQuestions.length - 1;
 }
 
+function checkTextAnswer(userAnswer, correctAnswer) {
+    const feedback = document.getElementById('feedback');
+    const correctness = document.getElementById('correctness');
+    
+    // Convert both answers to lowercase and trim whitespace for comparison
+    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
+    const normalizedCorrectAnswer = String(correctAnswer).toLowerCase().trim();
+    
+    feedback.style.display = 'block';
+    
+    // Check if the answer is correct
+    if (normalizedUserAnswer === normalizedCorrectAnswer) {
+        correctness.textContent = 'Correct!';
+        correctness.className = 'correct';
+    } else {
+        correctness.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+        correctness.className = 'incorrect';
+    }
+    
+    // Add some basic CSS styles for the input elements
+    const style = document.createElement('style');
+    style.textContent = `
+        .answer-input-container {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .answer-input {
+            flex: 1;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .submit-answer-button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .submit-answer-button:hover {
+            background-color: #0056b3;
+        }
+    `;
+    document.head.appendChild(style);
+}
 // Rest of the functions remain the same...
 function handleAnswerSelection(selectedId, correctAnswer) {
     const feedback = document.getElementById('feedback');

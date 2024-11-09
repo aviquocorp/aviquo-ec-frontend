@@ -1,7 +1,4 @@
 // Get DOM elements
-
-
-
 const searchButton = document.getElementById('searchButton');
 const questionDisplay = document.getElementById('questionText');
 const answerContainer = document.querySelector('.answer_container');
@@ -315,6 +312,10 @@ function getSelectedSubdomains() {
         : 'mathSubdomainCheckboxes';
     return getSelectedValues(containerId);
 }
+//TODO: Display the passage
+function displayQuestionDetails(question) {
+    
+}
 
 function displayQuestion(question) {
     document.getElementById('questionText').innerHTML = question.question;
@@ -327,15 +328,41 @@ function displayQuestion(question) {
     const answerContainer = document.querySelector('.answer_container');
     answerContainer.innerHTML = '';
     
-    if (question.answerChoices) {
-        const choices = JSON.parse(question.answerChoices);
+    // Safely parse the answer choices
+    let choices = [];
+    try {
+        // Check if answerChoices is already an array
+        if (Array.isArray(question.answerChoices)) {
+            choices = question.answerChoices;
+        } else if (typeof question.answerChoices === 'string') {
+            choices = JSON.parse(question.answerChoices);
+        }
+    } catch (e) {
+        console.error('Error parsing answer choices:', e);
+        // Provide a default set of choices if parsing fails
+        choices = [];
+    }
+
+    // Ensure choices is an array before using forEach
+    if (Array.isArray(choices) && choices.length > 0) {
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
             button.className = 'answer_button';
-            button.textContent = `${String.fromCharCode(65 + index)}. ${choice.content}`;
+            
+            // Format the monetary value
+            let content = choice.content;
+            // Remove HTML tags and format as currency
+            content = content.replace(/<[^>]*>/g, '');
+            content = content.replace(/(\d+),(\d+)/, (match, p1, p2) => {
+                return `$${p1},${p2} per month`;
+            });
+            
+            button.innerHTML = `${String.fromCharCode(65 + index)}. ${content}`;
             button.addEventListener('click', () => handleAnswerSelection(choice.id, question.answer));
             answerContainer.appendChild(button);
         });
+    } else {
+        console.warn('No valid answer choices found for question');
     }
 
     // Update navigation buttons
@@ -343,6 +370,7 @@ function displayQuestion(question) {
     document.getElementById('nextQuestionBtn').disabled = currentQuestionIndex === currentQuestions.length - 1;
 }
 
+// Rest of the functions remain the same...
 function handleAnswerSelection(selectedId, correctAnswer) {
     const feedback = document.getElementById('feedback');
     const correctness = document.getElementById('correctness');
@@ -369,14 +397,4 @@ function showNextQuestion() {
         currentQuestionIndex++;
         displayQuestion(currentQuestions[currentQuestionIndex]);
     }
-}
-
-function displayNoQuestionsMessage() {
-    document.getElementById('questionText').innerHTML = 'No questions found matching your criteria.';
-    document.querySelector('.answer_container').innerHTML = '';
-}
-
-function displayErrorMessage() {
-    document.getElementById('questionText').innerHTML = 'Error fetching questions. Please try again.';
-    document.querySelector('.answer_container').innerHTML = '';
 }

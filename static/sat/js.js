@@ -313,6 +313,9 @@ function displayQuestionDetails(question) {
 }
 
 function displayQuestion(question) {
+
+    clearFeedback();
+
     document.getElementById('questionText').innerHTML = question.question;
     document.getElementById('questionDifficulty').textContent = `Difficulty: ${question.difficulty}`;
     document.getElementById('questionCategory').textContent = `Category: ${question.category}`;
@@ -368,7 +371,7 @@ function displayQuestion(question) {
             button.innerHTML = `${letter}. ${content}`;
             
             // When clicked, send the letter (A, B, C, D) as the answer
-            button.addEventListener('click', () => checkButtonAnswer(letter, question.answer));
+            button.addEventListener('click', () => checkButtonAnswer(letter, question.answer, question));
             
             answerContainer.appendChild(button);
         });
@@ -404,7 +407,24 @@ function displayQuestion(question) {
     document.getElementById('nextQuestionBtn').disabled = currentQuestionIndex === currentQuestions.length - 1;
 }
 
-function checkButtonAnswer(selectedAnswer, correctAnswer) {
+function clearFeedback() {
+    const feedback = document.getElementById('feedback');
+    const correctness = document.getElementById('correctness');
+    const rationaleElement = document.getElementById('question-rationale');
+    
+    if (feedback) {
+        feedback.style.display = 'none';
+    }
+    if (correctness) {
+        correctness.textContent = '';
+        correctness.className = '';
+    }
+    if (rationaleElement) {
+        rationaleElement.innerHTML = '';
+    }
+}
+
+function checkButtonAnswer(selectedAnswer, correctAnswer, question) {
     // Get all answer buttons
     const allButtons = document.querySelectorAll('.answer_button');
     
@@ -427,6 +447,14 @@ function checkButtonAnswer(selectedAnswer, correctAnswer) {
     if (selectedButton) {
         feedback.style.display = 'block';
         
+        // Clear any existing rationale
+        let rationaleElement = document.getElementById('question-rationale');
+        if (!rationaleElement) {
+            rationaleElement = document.createElement('div');
+            rationaleElement.id = 'question-rationale';
+            feedback.appendChild(rationaleElement);
+        }
+        
         // Compare the selected answer letter with the correct answer letter
         if (selectedAnswer === correctAnswer) {
             // Correct answer case
@@ -438,6 +466,16 @@ function checkButtonAnswer(selectedAnswer, correctAnswer) {
             selectedButton.classList.add('incorrect');
             correctness.textContent = 'Incorrect. Try again.';
             correctness.className = 'incorrect';
+        }
+
+        // Display rationale if it exists
+        if (question && question.rationale) {
+            rationaleElement.innerHTML = `
+                <div class="rationale-container">
+                    <h3>Explanation:</h3>
+                    <p>${question.rationale}</p>
+                </div>
+            `;
         }
     }
 
@@ -496,6 +534,26 @@ function checkButtonAnswer(selectedAnswer, correctAnswer) {
                 color: #721c24;
                 background-color: #f8d7da;
                 border-color: #f5c6cb;
+            }
+
+            .rationale-container {
+                margin-top: 15px;
+                padding: 15px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+                border-left: 4px solid #0d6efd;
+            }
+
+            .rationale-container h3 {
+                margin-top: 0;
+                color: #0d6efd;
+                font-size: 1.1em;
+            }
+
+            .rationale-container p {
+                margin: 10px 0 0;
+                line-height: 1.5;
+                color: #212529;
             }
         `;
         document.head.appendChild(style);

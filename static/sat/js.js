@@ -9,6 +9,7 @@ const prevButton = document.getElementById('prevQuestionBtn');
 // Initialize state variables
 let currentQuestions = [];
 let currentQuestionIndex = 0;
+let correctAnswer;
 
 searchButton.addEventListener('click', searchQuestions);
 async function searchQuestions() {
@@ -74,30 +75,6 @@ async function searchQuestions() {
     } catch (error) {
         console.error('Error fetching questions:', error);
         displayError(error);
-    }
-}
-
-// TODO: FIX THIS
-function checkAnswer(selectedId, correctAnswer) {
-    // Reset previous feedback
-    const allButtons = document.querySelectorAll('.answer_button');
-    allButtons.forEach(button => {
-        button.classList.remove('correct', 'incorrect');
-    });
-
-    // Find and update selected button
-    const selectedButton = Array.from(allButtons).find(button => 
-        button.textContent.startsWith(String.fromCharCode(65 + selectedId))
-    );
-
-    if (selectedButton) {
-        if (selectedId === correctAnswer) {
-            selectedButton.classList.add('correct');
-            console.log("correct")
-        } else {
-            selectedButton.classList.add('incorrect');
-            console.log("Not correct")
-        }
     }
 }
 
@@ -255,11 +232,13 @@ function displayQuestionDetails(question) {
     function decodeText(text) {
         const textarea = document.createElement('textarea');
         return text
+            
             .replace(/\\u003c/g, '<')
             .replace(/\\u003e/g, '>')
             .replace(/\\u0026rsquo;/g, '\'')
             .replace(/\\u0026/g, '&')
             .replace(/\\"/g, '"')
+            
             // Add more replacements as needed
             .split('\\n').join('\n'); // Handle newlines
     }
@@ -339,6 +318,7 @@ function displayQuestion(question) {
     document.getElementById('questionCategory').textContent = `Category: ${question.category}`;
     document.getElementById('questionDomain').textContent = `Domain: ${question.domain}`;
     document.getElementById('questionSkill').textContent = `Skill: ${question.skill}`;
+    
     displayQuestionDetails(question);
 
     // Display answer choices
@@ -359,26 +339,41 @@ function displayQuestion(question) {
         choices = [];
     }
 
+    // Map to store the letter mapping for answers
+    const letterMapping = {
+        '0': 'A',
+        '1': 'B',
+        '2': 'C',
+        '3': 'D'
+    };
+
     // Ensure choices is an array before using forEach
     if (Array.isArray(choices) && choices.length > 0) {
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
             button.className = 'answer_button';
             
-            // Format the monetary value
+            // Format the monetary value and clean the content
             let content = choice.content;
-            // Remove HTML tags and format as currency
+            // Remove HTML tags and format as currency if needed
             content = content.replace(/<[^>]*>/g, '');
             content = content.replace(/(\d+),(\d+)/, (match, p1, p2) => {
                 return `$${p1},${p2} per month`;
             });
+
+            // Get the letter for this answer choice
+            const letter = letterMapping[index.toString()];
             
-            button.innerHTML = `${String.fromCharCode(65 + index)}. ${content}`;
-            button.addEventListener('click', () => handleAnswerSelection(choice.id, question.answer));
+            // Set the button's display text
+            button.innerHTML = `${letter}. ${content}`;
+            
+            // When clicked, send the letter (A, B, C, D) as the answer
+            button.addEventListener('click', () => checkButtonAnswer(letter, question.answer));
+            
             answerContainer.appendChild(button);
         });
     } else {
-        // Create input container
+        // Create input container for free response questions
         const inputContainer = document.createElement('div');
         inputContainer.className = 'answer-input-container';
         
@@ -395,19 +390,7 @@ function displayQuestion(question) {
         submitButton.className = 'submit-answer-button';
         submitButton.addEventListener('click', () => {
             const userAnswer = input.value.trim();
-            if (userAnswer) {
-                checkTextAnswer(userAnswer, question.answer);
-            }
-        });
-        
-        // Add enter key listener to input
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const userAnswer = input.value.trim();
-                if (userAnswer) {
-                    checkTextAnswer(userAnswer, question.answer);
-                }
-            }
+            
         });
         
         // Append elements
@@ -421,71 +404,104 @@ function displayQuestion(question) {
     document.getElementById('nextQuestionBtn').disabled = currentQuestionIndex === currentQuestions.length - 1;
 }
 
-function checkTextAnswer(userAnswer, correctAnswer) {
+function checkButtonAnswer(selectedAnswer, correctAnswer) {
+    // Get all answer buttons
+    const allButtons = document.querySelectorAll('.answer_button');
+    
+    // Reset all buttons to default state
+    allButtons.forEach(button => {
+        button.classList.remove('correct', 'incorrect');
+        button.style.backgroundColor = '';
+        button.style.color = '';
+    });
+
+    // Get feedback elements
     const feedback = document.getElementById('feedback');
     const correctness = document.getElementById('correctness');
     
-    // Convert both answers to lowercase and trim whitespace for comparison
-    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
-    const normalizedCorrectAnswer = String(correctAnswer).toLowerCase().trim();
+    // Find the selected button based on the letter (A, B, C, D)
+    const selectedButton = Array.from(allButtons).find(button => 
+        button.textContent.startsWith(selectedAnswer)
+    );
     
-    feedback.style.display = 'block';
-    
-    // Check if the answer is correct
-    if (normalizedUserAnswer === normalizedCorrectAnswer) {
-        correctness.textContent = 'Correct!';
-        correctness.className = 'correct';
-    } else {
-        correctness.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
-        correctness.className = 'incorrect';
+    if (selectedButton) {
+        feedback.style.display = 'block';
+        
+        // Compare the selected answer letter with the correct answer letter
+        if (selectedAnswer === correctAnswer) {
+            // Correct answer case
+            selectedButton.classList.add('correct');
+            correctness.textContent = 'Correct!';
+            correctness.className = 'correct';
+        } else {
+            // Incorrect answer case
+            selectedButton.classList.add('incorrect');
+            correctness.textContent = 'Incorrect. Try again.';
+            correctness.className = 'incorrect';
+        }
     }
-    
-    // Add some basic CSS styles for the input elements
-    const style = document.createElement('style');
-    style.textContent = `
-        .answer-input-container {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .answer-input {
-            flex: 1;
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        
-        .submit-answer-button {
-            padding: 8px 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .submit-answer-button:hover {
-            background-color: #0056b3;
-        }
-    `;
-    document.head.appendChild(style);
-}
-// Rest of the functions remain the same...
-function handleAnswerSelection(selectedId, correctAnswer) {
-    const feedback = document.getElementById('feedback');
-    const correctness = document.getElementById('correctness');
-    
-    feedback.style.display = 'block';
-    if (selectedId === correctAnswer) {
-        correctness.textContent = 'Correct!';
-        correctness.className = 'correct';
-    } else {
-        correctness.textContent = 'Incorrect. Try again.';
-        correctness.className = 'incorrect';
+
+    // Log for debugging
+    console.log('Selected Answer:', selectedAnswer);
+    console.log('Correct Answer:', correctAnswer);
+    console.log('Is Correct:', selectedAnswer === correctAnswer);
+
+    // Add styles if they haven't been added yet
+    if (!document.querySelector('#answer-button-styles')) {
+        const style = document.createElement('style');
+        style.id = 'answer-button-styles';
+        style.textContent = `
+            .answer_button {
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                background-color: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: left;
+                font-size: 16px;
+            }
+
+            .answer_button:hover {
+                background-color: #f0f0f0;
+            }
+
+            .answer_button.correct {
+                background-color: #d4edda !important;
+                border-color: #c3e6cb !important;
+                color: #155724 !important;
+            }
+
+            .answer_button.incorrect {
+                background-color: #f8d7da !important;
+                border-color: #f5c6cb !important;
+                color: #721c24 !important;
+            }
+
+            #feedback {
+                margin-top: 10px;
+                padding: 10px;
+                border-radius: 4px;
+            }
+
+            .correct {
+                color: #155724;
+                background-color: #d4edda;
+                border-color: #c3e6cb;
+            }
+
+            .incorrect {
+                color: #721c24;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+        `;
+        document.head.appendChild(style);
     }
 }
+
 
 function showPreviousQuestion() {
     if (currentQuestionIndex > 0) {

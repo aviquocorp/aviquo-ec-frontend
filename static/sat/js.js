@@ -423,13 +423,45 @@ function clearFeedback() {
     const rationaleElement = document.getElementById('question-rationale');
     
     if (feedback) {
+        // Clear all MathJax elements within feedback
+        const mathJaxElements = feedback.querySelectorAll('.MathJax');
+        mathJaxElements.forEach(element => element.remove());
+        
+        // Clear MathJax processing queue for this element
+        if (window.MathJax) {
+            try {
+                window.MathJax.typesetClear([feedback]);
+            } catch (err) {
+                console.error('Error clearing MathJax:', err);
+            }
+        }
+        
         feedback.style.display = 'none';
     }
+    
     if (correctness) {
+        // Clear MathJax elements in correctness
+        const mathJaxElements = correctness.querySelectorAll('.MathJax');
+        mathJaxElements.forEach(element => element.remove());
+        
         correctness.textContent = '';
         correctness.className = '';
     }
+    
     if (rationaleElement) {
+        // Clear MathJax elements in rationale
+        const mathJaxElements = rationaleElement.querySelectorAll('.MathJax');
+        mathJaxElements.forEach(element => element.remove());
+        
+        // Clear MathJax processing queue for rationale
+        if (window.MathJax) {
+            try {
+                window.MathJax.typesetClear([rationaleElement]);
+            } catch (err) {
+                console.error('Error clearing MathJax:', err);
+            }
+        }
+        
         rationaleElement.innerHTML = '';
     }
 }

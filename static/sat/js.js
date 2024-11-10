@@ -222,7 +222,30 @@ function getSelectedSubdomains() {
         : 'mathSubdomainCheckboxes';
     return getSelectedValues(containerId);
 }
-//TODO: Display the passage
+// First add MathJax CDN and configuration at the top of your file
+const mathjaxScript = document.createElement('script');
+mathjaxScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js';
+mathjaxScript.async = true;
+document.head.appendChild(mathjaxScript);
+
+// Add MathJax configuration
+const mathjaxConfig = document.createElement('script');
+mathjaxConfig.type = 'text/x-mathjax-config';
+mathjaxConfig.text = `
+    MathJax = {
+        tex: {
+            inlineMath: [['\\\\(', '\\\\)']],
+            displayMath: [['\\\\[', '\\\\]']],
+            processEscapes: true
+        },
+        options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+    };
+`;
+document.head.appendChild(mathjaxConfig);
+
+// Update the displayQuestionDetails function to handle MathJax rendering
 function displayQuestionDetails(question) {
     // Get the relevant DOM elements
     const questionText = document.getElementById('questionText');
@@ -232,45 +255,40 @@ function displayQuestionDetails(question) {
     function decodeText(text) {
         const textarea = document.createElement('textarea');
         return text
-            
             .replace(/\\u003c/g, '<')
             .replace(/\\u003e/g, '>')
             .replace(/\\u0026rsquo;/g, '\'')
             .replace(/\\u0026/g, '&')
             .replace(/\\"/g, '"')
-            
-            // Add more replacements as needed
             .split('\\n').join('\n'); // Handle newlines
     }
 
     // Check if details exist and create the content
     if (question.details) {
-        // Create a details container if it doesn't exist
         let detailsDiv = document.querySelector('.question-details');
         if (!detailsDiv) {
             detailsDiv = document.createElement('div');
             detailsDiv.className = 'question-details';
         }
         
-        // Decode and format the details text
         const formattedDetails = decodeText(question.details);
-        
-        // Create a wrapper for the decoded content
         const contentWrapper = document.createElement('div');
         contentWrapper.innerHTML = formattedDetails;
         
-        // Clear existing content and append new content
         detailsDiv.innerHTML = '';
         detailsDiv.appendChild(contentWrapper);
         
-        // Insert the details before the question text
         if (questionText.parentNode) {
-            // Remove any existing details first
             const existingDetails = document.querySelector('.question-details');
             if (existingDetails) {
                 existingDetails.remove();
             }
             questionText.parentNode.insertBefore(detailsDiv, questionText);
+            
+            // Typeset the details with MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise([detailsDiv]).catch((err) => console.error('MathJax error:', err));
+            }
         }
     }
     
@@ -299,12 +317,15 @@ function displayQuestionDetails(question) {
         questionDetails.innerHTML = metadataHTML;
     }
 
-    // Add error handling
     try {
-        // Parse and display the question text
         if (question.question) {
             const decodedQuestion = decodeText(question.question);
             questionText.innerHTML = decodedQuestion;
+            
+            // Typeset the question text with MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise([questionText]).catch((err) => console.error('MathJax error:', err));
+            }
         }
     } catch (error) {
         console.error('Error displaying question details:', error);
@@ -312,8 +333,8 @@ function displayQuestionDetails(question) {
     }
 }
 
+// Update the displayQuestion function to handle MathJax in answer choices
 function displayQuestion(question) {
-
     clearFeedback();
 
     document.getElementById('questionText').innerHTML = question.question;
@@ -324,14 +345,11 @@ function displayQuestion(question) {
     
     displayQuestionDetails(question);
 
-    // Display answer choices
     const answerContainer = document.querySelector('.answer_container');
     answerContainer.innerHTML = '';
     
-    // Safely parse the answer choices
     let choices = [];
     try {
-        // Check if answerChoices is already an array
         if (Array.isArray(question.answerChoices)) {
             choices = question.answerChoices;
         } else if (typeof question.answerChoices === 'string') {
@@ -342,7 +360,6 @@ function displayQuestion(question) {
         choices = [];
     }
 
-    // Map to store the letter mapping for answers
     const letterMapping = {
         '0': 'A',
         '1': 'B',
@@ -350,53 +367,47 @@ function displayQuestion(question) {
         '3': 'D'
     };
 
-    // Ensure choices is an array before using forEach
     if (Array.isArray(choices) && choices.length > 0) {
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
             button.className = 'answer_button';
             
-            // Format the monetary value and clean the content
             let content = choice.content;
-            // Remove HTML tags and format as currency if needed
             content = content.replace(/<[^>]*>/g, '');
             content = content.replace(/(\d+),(\d+)/, (match, p1, p2) => {
                 return `$${p1},${p2} per month`;
             });
 
-            // Get the letter for this answer choice
             const letter = letterMapping[index.toString()];
-            
-            // Set the button's display text
             button.innerHTML = `${letter}. ${content}`;
             
-            // When clicked, send the letter (A, B, C, D) as the answer
             button.addEventListener('click', () => checkButtonAnswer(letter, question.answer, question));
-            
             answerContainer.appendChild(button);
         });
+
+        // Typeset the answer choices with MathJax
+        if (window.MathJax) {
+            MathJax.typesetPromise([answerContainer]).catch((err) => console.error('MathJax error:', err));
+        }
     } else {
-        // Create input container for free response questions
+        // Handle free response questions...
         const inputContainer = document.createElement('div');
         inputContainer.className = 'answer-input-container';
         
-        // Create text input
         const input = document.createElement('input');
         input.type = 'text';
         input.id = 'user-answer-input';
         input.className = 'answer-input';
         input.placeholder = 'Type your answer here...';
         
-        // Create submit button
         const submitButton = document.createElement('button');
         submitButton.textContent = 'Submit Answer';
         submitButton.className = 'submit-answer-button';
         submitButton.addEventListener('click', () => {
             const userAnswer = input.value.trim();
-            
+            // Handle answer submission
         });
         
-        // Append elements
         inputContainer.appendChild(input);
         inputContainer.appendChild(submitButton);
         answerContainer.appendChild(inputContainer);
@@ -406,7 +417,6 @@ function displayQuestion(question) {
     document.getElementById('prevQuestionBtn').disabled = currentQuestionIndex === 0;
     document.getElementById('nextQuestionBtn').disabled = currentQuestionIndex === currentQuestions.length - 1;
 }
-
 function clearFeedback() {
     const feedback = document.getElementById('feedback');
     const correctness = document.getElementById('correctness');

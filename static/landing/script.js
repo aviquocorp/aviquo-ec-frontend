@@ -78,3 +78,32 @@ document.addEventListener('DOMContentLoaded', function() {
         getStartedBtn.addEventListener('click', navigateToSAT);
     }
 });
+
+
+// Add this to your landing page's JavaScript file (script.js)
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if form was submitted
+    const formSubmitted = localStorage.getItem('formSubmitted');
+    
+    if (formSubmitted) {
+        // Create and show notification
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = 'Thank you for your feedback!';
+        document.body.appendChild(notification);
+        
+        // Show the notification
+        notification.style.display = 'block';
+        
+        // Remove the flag from localStorage
+        localStorage.removeItem('formSubmitted');
+        
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+            notification.style.animation = 'fadeOut 0.3s ease-out';
+            notification.addEventListener('animationend', () => {
+                notification.remove();
+            });
+        }, 5000);
+    }
+});

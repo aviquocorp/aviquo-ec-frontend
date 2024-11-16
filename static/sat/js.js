@@ -11,8 +11,78 @@ let currentQuestions = [];
 let currentQuestionIndex = 0;
 let correctAnswer;
 
+const scrollStyles = document.createElement('style');
+scrollStyles.textContent = `
+    .mainContent {
+        scroll-behavior: smooth;
+    }
+    .right-side {
+        scroll-behavior: smooth;
+    }
+    .container {
+        scroll-behavior: smooth;
+    }
+`;
+document.head.appendChild(scrollStyles);
+
+// Replace the existing scrollToTop function with this improved version
+
 searchButton.addEventListener('click', searchQuestions);
+function scrollToTop() {
+    // Force layout recalculation
+    document.body.offsetHeight;
+    
+    // Scroll window
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+    
+    // Get all scrollable containers
+    const containers = [
+        document.querySelector('.mainContent'),
+        document.querySelector('.container'),
+        document.querySelector('.right-side'),
+        document.documentElement,
+        document.body
+    ].filter(Boolean); // Remove null elements
+    
+    // Scroll each container
+    containers.forEach(container => {
+        // Check if element is scrollable
+        if (container.scrollHeight > container.clientHeight) {
+            container.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    });
+    
+    // Fallback for older browsers or if smooth scroll fails
+    const fallbackScroll = () => {
+        window.scrollTo(0, 0);
+        containers.forEach(container => {
+            container.scrollTop = 0;
+        });
+    };
+    
+    // Set both immediate and delayed fallbacks
+    fallbackScroll();
+    setTimeout(fallbackScroll, 100);
+    
+    // Force scroll position with a slight delay to ensure it takes effect
+    setTimeout(() => {
+        containers.forEach(container => {
+            container.scrollTop = 0;
+        });
+    }, 150);
+}
+
 async function searchQuestions() {
+
+    scrollToTop();
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     questionDisplay.textContent = 'Loading questions...';
     
     const selectedTest = document.querySelector('#assessmentCheckboxes input:checked');
@@ -250,6 +320,8 @@ function displayQuestionDetails(question) {
     // Get the relevant DOM elements
     const questionText = document.getElementById('questionText');
     const questionDetails = document.getElementById('questionDetails');
+
+
     
     // Function to decode HTML entities and escaped Unicode
     function decodeText(text) {
@@ -332,65 +404,197 @@ function displayQuestionDetails(question) {
         questionText.innerHTML = 'Error displaying question. Please try again.';
     }
 }
+function createFreeResponseInput(container, question) {
+    const responseWrapper = document.createElement('div');
+    responseWrapper.className = 'free-response-wrapper';
 
+    const responseInput = document.createElement(question.multiline ? 'textarea' : 'input');
+    responseInput.className = 'free-response-input';
+    responseInput.placeholder = question.placeholder || 'Enter your answer here...';
+    
+    if (question.multiline) {
+        responseInput.rows = 4;
+    }
+
+    const submitButton = document.createElement('button');
+    submitButton.className = 'submit-button';
+    submitButton.textContent = 'Submit Answer';
+
+    let submitted = false;
+    
+    submitButton.addEventListener('click', () => {
+        if (submitted) return;
+        
+        const response = responseInput.value.trim();
+        if (!response) {
+            showFeedback('Please enter an answer before submitting.', 'warning');
+            return;
+        }
+
+        submitted = true;
+        responseInput.disabled = true;
+        submitButton.disabled = true;
+        
+        checkFreeResponseAnswer(response, question);
+    });
+
+    if (question.optional) {
+        const skipButton = document.createElement('button');
+        skipButton.className = 'skip-button';
+        skipButton.textContent = 'Skip Question';
+        skipButton.addEventListener('click', () => {
+            responseWrapper.innerHTML = '<p class="skipped-message">Question skipped</p>';
+            submitButton.disabled = true;
+            markQuestionSkipped(question.id);
+        });
+        responseWrapper.appendChild(skipButton);
+    }
+
+    responseWrapper.appendChild(responseInput);
+    responseWrapper.appendChild(submitButton);
+    container.appendChild(responseWrapper);
+
+    addFreeResponseStyles();
+}
 // Update the displayQuestion function to handle MathJax in answer choices
 function displayQuestion(question) {
+    console.log('Question payload:', {
+        fullQuestion: question,
+        questionText: question.question,
+        answerChoices: question.answerChoices,
+        parsedChoices: (() => {
+            try {
+                if (typeof question.answerChoices === 'string') {
+                    return JSON.parse(question.answerChoices);
+                }
+                return question.answerChoices;
+            } catch (e) {
+                return `Error parsing choices: ${e.message}`;
+            }
+        })()
+    });
+
     clearFeedback();
 
-    document.getElementById('questionText').innerHTML = question.question;
-    document.getElementById('questionDifficulty').textContent = `Difficulty: ${question.difficulty}`;
-    document.getElementById('questionCategory').textContent = `Category: ${question.category}`;
-    document.getElementById('questionDomain').textContent = `Domain: ${question.domain}`;
-    document.getElementById('questionSkill').textContent = `Skill: ${question.skill}`;
+    // Update question metadata
+    const questionNumber = document.getElementById('questionNumber');
+    const questionText = document.getElementById('questionText');
     
+    if (questionNumber) {
+        questionNumber.textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+    }
+
+    if (questionText && question.question) {
+        questionText.innerHTML = decodeText(question.question);
+        if (window.MathJax) {
+            MathJax.typesetPromise([questionText]).catch((err) => console.error('MathJax error:', err));
+        }
+    }
+
     displayQuestionDetails(question);
 
+
+    if (question.type === 'free-response') {
+        createFreeResponseInput(answerContainer, question);
+    } 
+
     const answerContainer = document.querySelector('.answer_container');
+    if (!answerContainer) return;
     answerContainer.innerHTML = '';
-    
+
+
     let choices = [];
     try {
         if (Array.isArray(question.answerChoices)) {
             choices = question.answerChoices;
-        } else if (typeof question.answerChoices === 'string') {
-            choices = JSON.parse(question.answerChoices);
+        } 
+        else if (typeof question.answerChoices === 'string') {
+            const parsed = JSON.parse(question.answerChoices);
+            if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+                choices = Object.entries(parsed).map(([key, value]) => ({
+                    content: value.body || value.content || value,
+                    letter: key.toUpperCase()
+                }));
+            } else {
+                choices = parsed;
+            }
+        }
+        else if (typeof question.answerChoices === 'object' && question.answerChoices !== null) {
+            const letters = ['a', 'b', 'c', 'd'];
+            choices = letters.map(letter => {
+                if (question.answerChoices[letter] && question.answerChoices[letter].body) {
+                    return {
+                        letter: letter.toUpperCase(),
+                        content: question.answerChoices[letter].body
+                    };
+                }
+                return null;
+            }).filter(choice => choice !== null);
         }
     } catch (e) {
         console.error('Error parsing answer choices:', e);
         choices = [];
     }
 
-    const letterMapping = {
-        '0': 'A',
-        '1': 'B',
-        '2': 'C',
-        '3': 'D'
-    };
+    function decodeText(text) {
+        if (!text) return '';
+        const decoded = text
+            .replace(/\\u003c/g, '<')
+            .replace(/\\u003e/g, '>')
+            .replace(/\\u0026rsquo;/g, '\'')
+            .replace(/\\u0026/g, '&')
+            .replace(/\\"/g, '"')
+            .replace(/\\n/g, '\n');
+        return decoded;
+    }
 
     if (Array.isArray(choices) && choices.length > 0) {
         choices.forEach((choice, index) => {
             const button = document.createElement('button');
             button.className = 'answer_button';
             
-            // Create a clean white background container for each answer
             const answerDiv = document.createElement('div');
             answerDiv.className = 'answer-option';
             
-            let content = choice.content;
-            // Remove any HTML tags
-            content = content.replace(/<[^>]*>/g, '');
-            // Remove "per month" if it exists
-            content = content.replace(' per month', '');
+            let content = '';
             
-            const letter = letterMapping[index.toString()];
-            answerDiv.textContent = `${letter}. ${content}`;
+            if (typeof choice === 'object') {
+                content = choice.content || choice.body || '';
+                if (typeof content === 'object' && content.body) {
+                    content = content.body;
+                }
+            } else {
+                content = choice;
+            }
             
+            content = decodeText(content);
+            
+            // Instead of removing HTML tags, properly render them
+            const letter = choice.letter || String.fromCharCode(65 + index);
+            
+            // Create a wrapper for the content
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'answer-content';
+            contentWrapper.innerHTML = `${letter}. ${content}`;
+            
+            // Process any math-container or math-img elements
+            const mathContainers = contentWrapper.querySelectorAll('.math-container');
+            mathContainers.forEach(container => {
+                const img = container.querySelector('img');
+                if (img) {
+                    img.style.display = 'inline-block';
+                    img.style.verticalAlign = 'middle';
+                    img.style.maxWidth = '100%';
+                }
+            });
+            
+            answerDiv.appendChild(contentWrapper);
             button.appendChild(answerDiv);
             button.addEventListener('click', () => checkButtonAnswer(letter, question.answer, question));
             answerContainer.appendChild(button);
         });
 
-        // Add the new styles
+        // Add enhanced styles for images in answers
         if (!document.querySelector('#answer-styles')) {
             const style = document.createElement('style');
             style.id = 'answer-styles';
@@ -402,21 +606,40 @@ function displayQuestion(question) {
                     margin-bottom: 8px;
                     cursor: pointer;
                     padding: 0;
+                    transition: all 0.2s ease;
                 }
 
                 .answer-option {
                     width: 100%;
-                    padding: 10px;
+                    padding: 12px 15px;
                     background: white;
                     border: 1px solid #ddd;
                     border-radius: 4px;
                     text-align: left;
                     font-size: 16px;
                     color: black;
+                    line-height: 1.4;
+                }
+
+                .answer-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .math-container {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+
+                .math-img {
+                    max-width: 100%;
+                    height: auto;
                 }
 
                 .answer_button:hover .answer-option {
                     background-color: #f8f9fa;
+                    border-color: #adb5bd;
                 }
 
                 .answer_button.correct .answer-option {
@@ -434,7 +657,6 @@ function displayQuestion(question) {
             document.head.appendChild(style);
         }
 
-        // Typeset the answer choices with MathJax if present
         if (window.MathJax) {
             MathJax.typesetPromise([answerContainer]).catch((err) => console.error('MathJax error:', err));
         }
@@ -520,12 +742,17 @@ function displayQuestion(question) {
         // Focus the input field
         input.focus();
     }
-    // Update navigation buttons
-    document.getElementById('prevQuestionBtn').disabled = currentQuestionIndex === 0;
-    document.getElementById('nextQuestionBtn').disabled = currentQuestionIndex === currentQuestions.length - 1;
+
+    const prevButton = document.getElementById('prevQuestionBtn');
+    const nextButton = document.getElementById('nextQuestionBtn');
+    
+    if (prevButton) {
+        prevButton.disabled = currentQuestionIndex === 0;
+    }
+    if (nextButton) {
+        nextButton.disabled = currentQuestionIndex === currentQuestions.length - 1;
+    }
 }
-
-
 function checkFreeResponseAnswer(userAnswer, correctAnswer, question) {
     const feedback = document.getElementById('feedback');
     const correctness = document.getElementById('correctness');

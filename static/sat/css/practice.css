@@ -11,6 +11,8 @@ html, body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
+
 }
 
 /* Menu Toggle Checkbox and Label */
@@ -101,6 +103,7 @@ html, body {
   /*padding-left: 250px;  Matches fixed sidebar width */
   width: 100%;
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 
 /* User Dropdown Menu */
@@ -314,7 +317,9 @@ form button[type="submit"]:hover {
   align-items: left;
   min-width: 0; /* Ensure it can shrink properly */
 }
-
+.container, .right-side {
+  scroll-behavior: smooth;
+}
 .right-side {
   background-color: #ddd;
   padding: 20px;
@@ -324,6 +329,8 @@ form button[type="submit"]:hover {
   justify-content: flex-start;
   align-items: stretch;
   min-width: 0; /* Ensure it can shrink properly */
+  scroll-behavior: smooth;
+
 }
 
 /* Hide checkbox containers by default */

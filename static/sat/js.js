@@ -1,4 +1,11 @@
-// Get DOM elements
+// Get DOM elements for sections
+const testSectionCheckboxes = document.getElementById('testSectionCheckboxes');
+const difficultyCheckboxes = document.getElementById('difficultyCheckboxes');
+const readingWritingSubdomainCheckboxes = document.getElementById('readingWritingSubdomainCheckboxes');
+const mathSubdomainCheckboxes = document.getElementById('mathSubdomainCheckboxes');
+const testSectionButton = document.querySelector('.test_section_button');
+
+// Get DOM elements for question display
 const searchButton = document.getElementById('searchButton');
 const questionDisplay = document.getElementById('questionText');
 const answerContainer = document.querySelector('.answer_container');
@@ -6,10 +13,75 @@ const questionNumber = document.getElementById('questionNumber');
 const questionDetails = document.getElementById('questionDetails');
 const nextButton = document.getElementById('nextQuestionBtn');
 const prevButton = document.getElementById('prevQuestionBtn');
+
 // Initialize state variables
 let currentQuestions = [];
 let currentQuestionIndex = 0;
 let correctAnswer;
+
+// Add click event listener to test section checkboxes
+testSectionCheckboxes.addEventListener('change', function(e) {
+    if (e.target.type === 'checkbox') {
+        // Uncheck other checkboxes in the same container
+        const checkboxes = testSectionCheckboxes.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            if (checkbox !== e.target) {
+                checkbox.checked = false;
+            }
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('popupModal');
+    const openBtn = document.getElementById('openPopupBtn');
+    const closeBtn = document.getElementById('closePopupBtn');
+
+    // Open modal when feedback button is clicked
+    openBtn.addEventListener('click', function() {
+        modal.style.display = 'flex';
+    });
+
+    // Close modal when X is clicked
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+// Add click event listener to the test section next button
+testSectionButton.addEventListener('click', function() {
+    // Get the selected checkbox
+    const selectedCheckbox = testSectionCheckboxes.querySelector('input[type="checkbox"]:checked');
+    
+    if (!selectedCheckbox) {
+        alert('Please select a test section before proceeding.');
+        return;
+    }
+
+    // Hide the test section checkboxes
+    testSectionCheckboxes.classList.add('hidden');
+
+    // Show the difficulty section
+    difficultyCheckboxes.classList.remove('hidden');
+
+    // Store the selected section for later use
+    const selectedSection = selectedCheckbox.name;
+
+    // Store which subdomain checkboxes to show later
+    if (selectedSection === 'Reading and Writing') {
+        readingWritingSubdomainCheckboxes.dataset.show = 'true';
+        mathSubdomainCheckboxes.dataset.show = 'false';
+    } else if (selectedSection === 'Math') {
+        readingWritingSubdomainCheckboxes.dataset.show = 'false';
+        mathSubdomainCheckboxes.dataset.show = 'true';
+    }
+});
+
 
 const scrollStyles = document.createElement('style');
 scrollStyles.textContent = `
@@ -196,12 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const testSectionCheckboxes = document.getElementById('testSectionCheckboxes');
     testSectionCheckboxes.addEventListener('change', handleTestSectionChange);
 
-    // Domain selections
-    const readingDomainBtn = document.querySelector('#readingDomainCheckboxes .domain_button');
-    const mathDomainBtn = document.querySelector('#mathDomainCheckboxes .domain_button');
-    if (readingDomainBtn) readingDomainBtn.addEventListener('click', handleDomainSelection);
-    if (mathDomainBtn) mathDomainBtn.addEventListener('click', handleDomainSelection);
-
     // Difficulty selection
     const difficultyBtn = document.querySelector('.difficulty_button');
     if (difficultyBtn) difficultyBtn.addEventListener('click', handleDifficultySelection);
@@ -234,18 +300,11 @@ function handleTestSectionChange(event) {
     if (checkbox.checked) {
         uncheckOtherCheckboxes(testSectionCheckboxes, checkbox);
         const targetId = checkbox.getAttribute('data-target');
-        
-        // Hide all domain checkbox containers
-        document.getElementById('readingDomainCheckboxes').classList.add('hidden');
-        document.getElementById('mathDomainCheckboxes').classList.add('hidden');
+    
         
         // Show the relevant domain checkboxes
         document.getElementById(targetId).classList.remove('hidden');
     }
-}
-
-function handleDomainSelection() {
-    document.getElementById('difficultyCheckboxes').classList.remove('hidden');
 }
 
 function handleDifficultySelection() {
@@ -377,10 +436,6 @@ function displayQuestionDetails(question) {
                     <span class="metadata-value">${question.category || 'N/A'}</span>
                 </div>
                 <div class="metadata-item">
-                    <span class="metadata-label">Domain:</span>
-                    <span class="metadata-value">${question.domain || 'N/A'}</span>
-                </div>
-                <div class="metadata-item">
                     <span class="metadata-label">Skill:</span>
                     <span class="metadata-value">${question.skill || 'N/A'}</span>
                 </div>
@@ -481,7 +536,7 @@ function displayQuestion(question) {
     const questionText = document.getElementById('questionText');
     
     if (questionNumber) {
-        questionNumber.textContent = `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
+        questionNumber.textContent = `Question ${currentQuestionIndex} of ${currentQuestions.length}`;
     }
 
     if (questionText && question.question) {
@@ -492,7 +547,6 @@ function displayQuestion(question) {
     }
 
     displayQuestionDetails(question);
-
 
     if (question.type === 'free-response') {
         createFreeResponseInput(answerContainer, question);
@@ -544,7 +598,8 @@ function displayQuestion(question) {
             .replace(/\\u0026rsquo;/g, '\'')
             .replace(/\\u0026/g, '&')
             .replace(/\\"/g, '"')
-            .replace(/\\n/g, '\n');
+            .replace(/\\n/g, '\n')
+            .replace(' comma ', ',');
         return decoded;
     }
 
@@ -991,7 +1046,7 @@ function showPreviousQuestion() {
 
 function showNextQuestion() {
     if (currentQuestionIndex < currentQuestions.length - 1) {
-        currentQuestionIndex++;
+        currentQuestionIndex;
         displayQuestion(currentQuestions[currentQuestionIndex]);
     }
 }

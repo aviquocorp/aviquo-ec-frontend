@@ -94,7 +94,7 @@
 .extracurricular-visual {
   flex: 1;
   position: relative;
-  height: 400px; /* Fixed height container */
+  height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;

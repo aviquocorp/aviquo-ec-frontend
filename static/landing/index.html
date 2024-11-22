@@ -1,55 +1,74 @@
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8C7GL4G017"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8C7GL4G017');
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aquarc - High School Made Easier</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8C7GL4G017"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-8C7GL4G017');
+    </script>
+    <link rel="icon" type="image/png" sizes="128x128" href="/static/landing/images/aquLogo.png">
+    <link rel="icon" type="image/x-icon" href="/static/landing/images/aquLogoWhiteCircle.png">
     <link rel="stylesheet" href="/static/landing/css/footer.css">
     <link rel="stylesheet" href="/static/landing/css/news.css">
     <link rel="stylesheet" href="/static/landing/styles.css">
     <link rel="stylesheet" href="/static/landing/css/ec.css">
     <link rel="stylesheet" href="/static/landing/css/sat.css">
 
-
 </head>
 <body>
-    <nav>
+  <nav>
       <div class="logo">
-        <img src="/static/landing/images/aquLogo.png" alt="Aquarc Logo" class="logo-icon">
-        <span>Aquarc</span>
+          <img src="/static/landing/images/aquLogo.png" alt="Aquarc Logo" class="logo-icon">
+          <span>Aquarc</span>
       </div>
-        
-        <div class="nav-links">
+      
+      <div class="menu-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+      </div>
+      
+      <div class="nav-links">
           <a href="/static/landing/index.html">Home</a>
           <div class="with-tag">
-            <a href="/sat">SAT</a>
+              <a href="/sat">SAT</a>
           </div>
           <a href="/static/ec/ec.html">Extracurriculars</a>
           <a href="https://aquarc.beehiiv.com">Newsletter</a>
-          <a href="/static/landing/feedback.html" type="submit">Feedback</a>
+          <a href="/static/landing/feedback.html">Feedback</a>
+      </div>
+      
+      <a href="/sat" class="submit-button">Get Started →</a>
+  </nav>
 
-          
-        </div>
-        
-        <a href="/sat" class="submit-button">Get Started →</a>
-      </nav>
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer">
+      <div class="nav-links">
+          <a href="/static/landing/index.html">Home</a>
+          <div class="with-tag">
+              <a href="/sat">SAT</a>
+          </div>
+          <a href="/static/ec/ec.html">Extracurriculars</a>
+          <a href="https://aquarc.beehiiv.com">Newsletter</a>
+          <a href="/static/landing/feedback.html">Feedback</a>
+      </div>
+      <a href="/sat" class="submit-button">Get Started →</a>
+  </div>
 
     <div class="main-content">
         
         <div class="headline-container">
           <span class="headline-text">make the </span><br>
           <span class="purple-text highlight-text">most </span>
-          <span class="end-text">of high school</span>
+          <span class="end-text">of high school.</span>
         </div>
 
         <div class="subheadline">
@@ -181,6 +200,6 @@
     </div>
   </div>
 </footer>
-    <script src="script.js"></script>
+    <script src="/static/landing/script.js"></script>
 </body>
 </html>

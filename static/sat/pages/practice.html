@@ -16,10 +16,11 @@
     <link href="/static/sat/css/practice.css" rel="stylesheet">
 </head>
 
-        <!--Feedback-->
-        <button  class = "feedback_button" id="openPopupBtn">Feedback</button>
+<body>
+    <!--Feedback-->
+    <button class="feedback_button" id="openPopupBtn">Feedback</button>
 
-        <div id="popupModal" class="modal">
+    <div id="popupModal" class="modal">
         <div class="modal-content">
             <span id="closePopupBtn" class="close">&times;</span>
             <form action="https://submit-form.com/VaXdTtgHh">
@@ -35,59 +36,29 @@
                   required=""
                 ></textarea>
                 <button type="submit">Send</button>
-              </form>
-              
+            </form>
         </div>
-        </div>
-
-        <!--<div class="user-dropdown">
-            <button class="user-button">
-                <img src="/static/sat/images/blankpfp.jpg" alt="Profile" class="profile-pic">
-                User
-                <img src="/static/sat/images/whiteuparrow.png" alt="arrow" class="arrow-icon">
-            </button>
-            <div class="dropdown-content">
-                <a href="#">My Account</a>
-                <a href="#">Support</a>
-                <a href="#">Sign Out</a>
-            </div>
-        </div>-->
     </div>
 
     <div class="mainContent">
         <div class="container">
             <div class="left-side">
-                <!--<h1 id = "questionBank">Question Bank</h1>-->
                 <h3 class="h3_question">Assessment</h3>
-                <p class = "p_description">Please select one</h4>
-                <div class="checkbox-container" id = "assessmentCheckboxes">
+                <p class="p_description">Please select one</p>
+                <div class="checkbox-container" id="assessmentCheckboxes">
                     <label><input type="checkbox" name="SAT">SAT</label>
                 </div>
+                
                 <h3 class="h3_question">Test Section</h3>
-                <p class = "p_description">Please select one</h4>
-                <div class="checkbox-container hidden" id = "testSectionCheckboxes">
+                <p class="p_description">Please select one</p>
+                <div class="checkbox-container hidden" id="testSectionCheckboxes">
                     <label><input type="checkbox" name="Reading and Writing" data-target="readingDomainCheckboxes">Reading and Writing</label>
                     <label><input type="checkbox" name="Math" data-target="mathDomainCheckboxes">Math</label>
-                
+                    <button class="test_section_button">Next</button>
                 </div>
-                <h3 class="h3_question">Domain</h3>
-                <p class = "p_description">Select all that apply</h4>
-                <div class="checkbox-container hidden" id="readingDomainCheckboxes">
-                    <label><input type="checkbox" name="Information and Ideas">Information and Ideas</label>
-                    <label><input type="checkbox" name="Craft and Structure">Craft and Structure</label>
-                    <label><input type="checkbox" name="Expression of Ideas">Expression of Ideas</label>
-                    <label><input type="checkbox" name="Standard English Conventions">Standard English Conventions</label>
-                    <button class="domain_button">Next</button>
-                </div>
-                <div class="checkbox-container hidden" id="mathDomainCheckboxes">
-                    <label><input type="checkbox" name="Algebra">Algebra</label>
-                    <label><input type="checkbox" name="Advanced Math">Advanced Math</label>
-                    <label><input type="checkbox" name="Problem-Solving and Data Analysis">Problem-Solving and Data Analysis</label>
-                    <label><input type="checkbox" name="Geometry and Trigonometry">Geometry and Trigonometry</label>
-                    <button class="domain_button">Next</button>
-                </div>
+
                 <h3 class="h3_question">Difficulty</h3>
-                <p class = "p_description">Select all that apply</h4>
+                <p class="p_description">Select all that apply</p>
                 <div class="checkbox-container hidden" id="difficultyCheckboxes">
                     <label><input type="checkbox" name="Easy">Easy</label>
                     <label><input type="checkbox" name="Medium">Medium</label>
@@ -96,7 +67,7 @@
                 </div>
 
                 <h3 class="h3_question">Subdomain</h3>
-                <p class = "p_description">Select all that apply</h4>
+                <p class="p_description">Select all that apply</p>
 
                 <!-- Reading and Writing Subdomains -->
                 <div class="checkbox-container hidden" id="readingWritingSubdomainCheckboxes">
@@ -146,20 +117,17 @@
                     <button class="subdomain_button">Next</button>
                 </div>
 
-
                 <h3 class="h3_question">Exclude Active Questions</h3>
-                <p class = "p_description">Exclude questions on Bluebook practice tests</h4>
+                <p class="p_description">Exclude questions on Bluebook practice tests</p>
                 <div class="checkbox-container hidden" id="excludeQuestions">
-                <label><input type="checkbox" name="active_questions">Yes</label>
+                    <label><input type="checkbox" name="active_questions">Yes</label>
                 </div>
-
-                <button class="search_button" id = "searchButton">Search For Questions</button>
-
-
+                <button class="search_button" id="searchButton">Search For Questions</button>
             </div>
 
             <div class="right-side">
                 <h1 id="questionHeader">Question</h1>
+                
                 <div id="questionNumber"></div>
                 <div id="questionText" class="p_question"></div>
                 <div id="questionDetails"></div>
@@ -167,23 +135,22 @@
                 <div class="metadata">
                     <div id="questionDifficulty"></div>
                     <div id="questionCategory"></div>
-                    <div id="questionDomain"></div>
                     <div id="questionSkill"></div>
                 </div>
                 <div id="passageContainer" class="passage-container">
-
-                <div class="answer_container">
-                    <!-- Answer buttons will be added dynamically -->
-                </div>
-            
-                <div id="feedback" style="display: none;">
-                    <div id="correctness"></div>
-                    <div id="rationale"></div>
-                </div>
-            
-                <div class="navigation-buttons">
-                    <button id="prevQuestionBtn">Previous Question</button>
-                    <button id="nextQuestionBtn">Next Question</button>
+                    <div class="answer_container">
+                        <!-- Answer buttons will be added dynamically -->
+                    </div>
+                
+                    <div id="feedback" style="display: none;">
+                        <div id="correctness"></div>
+                        <div id="rationale"></div>
+                    </div>
+                
+                    <div class="navigation-buttons">
+                        <button id="prevQuestionBtn">Previous Question</button>
+                        <button id="nextQuestionBtn">Next Question</button>
+                    </div>
                 </div>
             </div>
         </div>

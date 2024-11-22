@@ -48,7 +48,63 @@ nav {
         transform: translateY(-100%);
     }
 }
+@media (max-width: 768px) {
+    /* Newsletter Section Mobile */
+    .newsletter-section {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+    }
 
+    .newsletter-content {
+        order: 2; /* Move content below image */
+        padding-right: 0;
+        text-align: center;
+    }
+
+    .newsletter-visual {
+        order: 1; /* Move image above content */
+        height: auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .newsletter-image {
+        width: 300px;
+        height: 200px;
+    }
+
+    /* Extracurricular Section Mobile */
+    .extracurricular-section {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .extracurricular-content {
+        order: 2; /* Move content below image */
+        padding-left: 0;
+    }
+
+    .extracurricular-visual {
+        order: 1; /* Move image above content */
+        width: 100%;
+        height: 200px;
+    }
+
+    /* Feature List Mobile Adjustments */
+    .feature-list {
+        align-items: center;
+    }
+
+    /* CTA Button Mobile Adjustments */
+    .cta-button {
+        display: inline-flex;
+        justify-content: center;
+    }
+}
 .nav-links {
     display: flex;
     gap: 2rem;
@@ -320,4 +376,174 @@ nav {
 
 .social-icons img:hover {
     transform: scale(1.1);
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #2d3748;
+    transition: all 0.3s ease;
+}
+
+/* Reset conflicting mobile drawer styles */
+.mobile-drawer {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 72px);
+    background: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 998;
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-drawer.active {
+    transform: translateX(0);
+}
+
+.mobile-drawer .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.mobile-drawer .nav-links a {
+    font-size: 1.2rem;
+    width: 100%;
+    padding: 0.5rem 0;
+}
+
+.mobile-drawer .submit-button {
+    margin-top: 2rem;
+    width: fit-content;
+}
+
+/* Updated menu toggle styles */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 999;
+    background: transparent;
+    border: none;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: #333;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    nav .nav-links {
+        display: none;
+    }
+
+    nav .submit-button {
+        display: none;
+    }
+
+    .mobile-drawer .nav-links {
+        display: flex !important;
+    }
+}
+.mobile-drawer {
+    position: fixed;
+    top: 0;  /* Changed from 72px to calculate dynamically in JS */
+    left: 0;
+    width: 100%;
+    height: 100vh;  /* Changed from calc to calculate dynamically in JS */
+    background: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 998;  /* Changed to be below nav */
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-drawer.active {
+    transform: translateX(0);
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 999;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: #333;
+    transition: all 0.3s ease;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    nav .submit-button {
+        display: none;
+    }
 }

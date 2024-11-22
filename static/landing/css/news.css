@@ -8,6 +8,14 @@
     min-height: 400px;
     position: relative;
   }
+  .newsletter-image {
+    width: 600px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10%;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(73, 38, 134, 0.25);
+}
   
   .newsletter-content {
     flex: 1;

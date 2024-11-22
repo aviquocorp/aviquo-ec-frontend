@@ -1,3 +1,6 @@
+console.log("Script loaded");
+
+
 // Add smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -14,20 +17,22 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Rotating headlines functionality
 const headlines = [
     {
-        main: 'find the best',
-        highlight: 'extracurriculars ',
+        main: 'better SAT ',
+        highlight: '2 clicks ',
+        end:'away.'
 
     },
     {
-        main: 'finding your',
-        highlight: 'passion and reaching ',
-        end: 'it has never been easier.'
+        main: 'find your dream ',
+        highlight: 'summer program',
+        end:'.'
     },
     {
-        main: 'your path to the ',
-        highlight: 'ivy league ',
-        end: 'starts here.'
+        main: 'get your',
+        highlight: 'internships ',
+        end: 'weekly,\nfor free.'
     },
+
 ];
 
 let currentIndex = 0;
@@ -40,7 +45,12 @@ function updateText() {
     const current = headlines[currentIndex];
     mainText.textContent = current.main;
     highlightText.textContent = current.highlight;
-    endText.textContent = current.end;
+    // Replace \n with <br> for line break
+    if (current.end) {
+        endText.innerHTML = current.end.replace('\n', '<br>');
+    } else {
+        endText.innerHTML = '';
+    }
 }
 
 function rotateHeadlines() {
@@ -56,7 +66,7 @@ function rotateHeadlines() {
 }
 
 // Start the rotation
-setInterval(rotateHeadlines, 6000);
+setInterval(rotateHeadlines, 4000);
 
 // Add this to your script.js file
 document.addEventListener('DOMContentLoaded', function() {
@@ -67,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add click event listeners
     const navigateToSAT = (e) => {
         e.preventDefault();
-        window.location.href = '/static/sat/index.html';
+        window.location.href = '/sat';
     };
 
     if (startLearningBtn) {
@@ -79,31 +89,56 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-
 // Add this to your landing page's JavaScript file (script.js)
+// Mobile drawer functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if form was submitted
-    const formSubmitted = localStorage.getItem('formSubmitted');
-    
-    if (formSubmitted) {
-        // Create and show notification
-        const notification = document.createElement('div');
-        notification.className = 'notification';
-        notification.textContent = 'Thank you for your feedback!';
-        document.body.appendChild(notification);
-        
-        // Show the notification
-        notification.style.display = 'block';
-        
-        // Remove the flag from localStorage
-        localStorage.removeItem('formSubmitted');
-        
-        // Remove notification after 5 seconds
-        setTimeout(() => {
-            notification.style.animation = 'fadeOut 0.3s ease-out';
-            notification.addEventListener('animationend', () => {
-                notification.remove();
-            });
-        }, 5000);
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mobileDrawer = document.querySelector('.mobile-drawer');
+    const body = document.body;
+
+    // Function to update drawer height based on nav height
+    function updateDrawerHeight() {
+        const navHeight = document.querySelector('nav').offsetHeight;
+        mobileDrawer.style.top = `${navHeight}px`;
+        mobileDrawer.style.height = `calc(100vh - ${navHeight}px)`;
     }
+
+    // Initial setup
+    updateDrawerHeight();
+
+    // Toggle menu
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menuToggle.classList.toggle('active');
+        mobileDrawer.classList.toggle('active');
+        body.style.overflow = mobileDrawer.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close drawer when clicking a link
+    mobileDrawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            menuToggle.classList.remove('active');
+            mobileDrawer.classList.remove('active');
+            body.style.overflow = '';
+        });
+    });
+
+    // Close drawer when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!menuToggle.contains(e.target) && !mobileDrawer.contains(e.target)) {
+            menuToggle.classList.remove('active');
+            mobileDrawer.classList.remove('active');
+            body.style.overflow = '';
+        }
+    });
+
+    // Update drawer height on resize
+    window.addEventListener('resize', () => {
+        updateDrawerHeight();
+        if (window.innerWidth > 768) {
+            menuToggle.classList.remove('active');
+            mobileDrawer.classList.remove('active');
+            body.style.overflow = '';
+        }
+    });
 });

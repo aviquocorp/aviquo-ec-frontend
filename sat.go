@@ -33,6 +33,11 @@ type SATQuestion struct {
     Subdomain []string `json:"subdomain"`
 }
 
+type Register struct {
+    Email string `json:"email"`
+    Password string `json:"password"`
+}
+
 func indexSat(w http.ResponseWriter, r *http.Request) {
 	// load index.html from static/
 	http.ServeFile(w, r, "./static/sat/pages/practice.html")
@@ -266,6 +271,28 @@ func FindQuestionsHandlerv2(w http.ResponseWriter, r *http.Request) {
     w.Write(jsonData)
 } 
 
+func register(w http.ResponseWriter, r *http.Request) {
+    var data Register
+    err := json.NewDecoder(r.Body).Decode(&data)
+    if err != nil {
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
+    }
+
+    // TODO: hash password
+    
+    // insert into database
+    _, err = db.Exec("INSERT INTO sat_users (username, password) VALUES (?, ?)", data.Email, data.Password)
+    if err != nil {
+        http.Error(w, "Error inserting into database: " + err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    w.WriteHeader(http.StatusOK)
+    w.Write([]byte("User registered successfully"))
+}
+
+
 func initializeSat(db *sql.DB) {
     // create table if not exists
     _, err := db.Exec(`CREATE TABLE IF NOT EXISTS sat_questions (
@@ -282,6 +309,11 @@ func initializeSat(db *sql.DB) {
         answer TEXT,
         rationale TEXT
     )`)
+
+    _, err = db.Exec(`CREATE TABLE IF NOT EXISTS sat_users (
+        username TEXT PRIMARY KEY,
+        password TEXT
+    )`)
     if err != nil {
         log.Fatal(err)
     }
@@ -290,4 +322,5 @@ func initializeSat(db *sql.DB) {
 	http.HandleFunc("/sat/test", ServeForm)
 	http.HandleFunc("/sat/find-questions", FindQuestionsHandler)
     http.HandleFunc("/sat/find-questions-v2", FindQuestionsHandlerv2)
+    http.HandleFunc("/sat/register", register)
 }

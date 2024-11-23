@@ -547,3 +547,59 @@ nav {
         display: none;
     }
 }
+
+.footer-contact {
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-heading {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #333;
+  }
+  
+  .contact-info {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .contact-link {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .contact-link:hover {
+    color: #8B5CF6;
+  }
+  
+  /* Grid layout */
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      text-align: left;
+      padding-left: 1rem;
+    }
+    
+    .footer-contact {
+      margin: 1rem 0;
+    }
+  
+    .footer-brand, 
+    .footer-contact,
+    .footer-social {
+      text-align: left;
+    }
+  
+    .social-icons {
+      justify-content: flex-start;
+    }
+  }

@@ -381,7 +381,6 @@ function displayQuestionDetails(question) {
     const questionDetails = document.getElementById('questionDetails');
 
 
-    
     // Function to decode HTML entities and escaped Unicode
     function decodeText(text) {
         const textarea = document.createElement('textarea');
@@ -422,7 +421,6 @@ function displayQuestionDetails(question) {
             }
         }
     }
-    
     // Update question metadata
     if (questionDetails) {
         const metadataHTML = `
@@ -459,6 +457,7 @@ function displayQuestionDetails(question) {
         questionText.innerHTML = 'Error displaying question. Please try again.';
     }
 }
+
 function createFreeResponseInput(container, question) {
     const responseWrapper = document.createElement('div');
     responseWrapper.className = 'free-response-wrapper';
@@ -809,23 +808,44 @@ function displayQuestion(question) {
     }
 }
 function checkFreeResponseAnswer(userAnswer, correctAnswer, question) {
+    // Ensure feedback styles are added
+    addFeedbackStyles();
+    
     const feedback = document.getElementById('feedback');
     const correctness = document.getElementById('correctness');
     
     feedback.style.display = 'block';
     
-    // Clean up and normalize both answers for comparison
+    // Clean up and normalize answers
     const normalizedUserAnswer = userAnswer.toLowerCase().trim().replace(/\s+/g, '');
-    const normalizedCorrectAnswer = correctAnswer.toLowerCase().trim().replace(/\s+/g, '');
     
-    // Check if the answer is correct
-    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+    function fractionToDecimal(fraction) {
+        if (!isNaN(fraction)) {
+            return parseFloat(fraction);
+        }
+        
+        const parts = fraction.split('/');
+        if (parts.length === 2) {
+            const numerator = parseFloat(parts[0]);
+            const denominator = parseFloat(parts[1]);
+            if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
+                return numerator / denominator;
+            }
+        }
+        return NaN;
+    }
     
-    // Update the correctness display
+    const userDecimal = fractionToDecimal(normalizedUserAnswer);
+    const correctDecimal = fractionToDecimal(correctAnswer);
+    
+    const tolerance = 0.0001;
+    const isCorrect = Math.abs(userDecimal - correctDecimal) < tolerance;
+    
+    // Update correctness display with proper styling
     correctness.textContent = isCorrect ? 'Correct!' : 'Incorrect. Try again.';
     correctness.className = isCorrect ? 'correct' : 'incorrect';
     
-    // Display rationale if it exists
+    // Create or update rationale element
     let rationaleElement = document.getElementById('question-rationale');
     if (!rationaleElement) {
         rationaleElement = document.createElement('div');
@@ -833,17 +853,16 @@ function checkFreeResponseAnswer(userAnswer, correctAnswer, question) {
         feedback.appendChild(rationaleElement);
     }
     
-    if (question.rationale) {
+    if (question && question.rationale) {
         rationaleElement.innerHTML = `
             <div class="rationale-container">
                 <h3>Explanation:</h3>
                 <p>${question.rationale}</p>
-                <p>Correct answer: ${correctAnswer}</p>
             </div>
         `;
     }
     
-    // If MathJax is present, typeset the new content
+    // Typeset MathJax content if present
     if (window.MathJax) {
         MathJax.typesetPromise([rationaleElement]).catch((err) => 
             console.error('MathJax error:', err)
@@ -901,21 +920,19 @@ function clearFeedback() {
 }
 
 function checkButtonAnswer(selectedAnswer, correctAnswer, question) {
-    // Get all answer buttons
-    const allButtons = document.querySelectorAll('.answer_button');
+    // Ensure feedback styles are added
+    addFeedbackStyles();
     
-    // Reset all buttons to default state
+    const allButtons = document.querySelectorAll('.answer_button');
     allButtons.forEach(button => {
         button.classList.remove('correct', 'incorrect');
         button.style.backgroundColor = '';
         button.style.color = '';
     });
 
-    // Get feedback elements
     const feedback = document.getElementById('feedback');
     const correctness = document.getElementById('correctness');
     
-    // Find the selected button based on the letter (A, B, C, D)
     const selectedButton = Array.from(allButtons).find(button => 
         button.textContent.startsWith(selectedAnswer)
     );
@@ -923,7 +940,6 @@ function checkButtonAnswer(selectedAnswer, correctAnswer, question) {
     if (selectedButton) {
         feedback.style.display = 'block';
         
-        // Clear any existing rationale
         let rationaleElement = document.getElementById('question-rationale');
         if (!rationaleElement) {
             rationaleElement = document.createElement('div');
@@ -931,20 +947,16 @@ function checkButtonAnswer(selectedAnswer, correctAnswer, question) {
             feedback.appendChild(rationaleElement);
         }
         
-        // Compare the selected answer letter with the correct answer letter
         if (selectedAnswer === correctAnswer) {
-            // Correct answer case
             selectedButton.classList.add('correct');
             correctness.textContent = 'Correct!';
             correctness.className = 'correct';
         } else {
-            // Incorrect answer case
             selectedButton.classList.add('incorrect');
             correctness.textContent = 'Incorrect. Try again.';
             correctness.className = 'incorrect';
         }
 
-        // Display rationale if it exists
         if (question && question.rationale) {
             rationaleElement.innerHTML = `
                 <div class="rationale-container">
@@ -953,47 +965,33 @@ function checkButtonAnswer(selectedAnswer, correctAnswer, question) {
                 </div>
             `;
         }
+        
+        if (window.MathJax) {
+            MathJax.typesetPromise([rationaleElement]).catch((err) => 
+                console.error('MathJax error:', err)
+            );
+        }
     }
+}
+function showPreviousQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion(currentQuestions[currentQuestionIndex]);
+    }
+}
 
-    // Log for debugging
-    console.log('Selected Answer:', selectedAnswer);
-    console.log('Correct Answer:', correctAnswer);
-    console.log('Is Correct:', selectedAnswer === correctAnswer);
+function showNextQuestion() {
+    if (currentQuestionIndex < currentQuestions.length - 1) {
+        currentQuestionIndex;
+        displayQuestion(currentQuestions[currentQuestionIndex]);
+    }
+}
 
-    // Add styles if they haven't been added yet
-    if (!document.querySelector('#answer-button-styles')) {
+function addFeedbackStyles() {
+    if (!document.querySelector('#feedback-styles')) {
         const style = document.createElement('style');
-        style.id = 'answer-button-styles';
+        style.id = 'feedback-styles';
         style.textContent = `
-            .answer_button {
-                width: 100%;
-                padding: 10px;
-                margin: 5px 0;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                background-color: white;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                text-align: left;
-                font-size: 16px;
-            }
-
-            .answer_button:hover {
-                background-color: #f0f0f0;
-            }
-
-            .answer_button.correct {
-                background-color: #d4edda !important;
-                border-color: #c3e6cb !important;
-                color: #155724 !important;
-            }
-
-            .answer_button.incorrect {
-                background-color: #f8d7da !important;
-                border-color: #f5c6cb !important;
-                color: #721c24 !important;
-            }
-
             #feedback {
                 margin-top: 10px;
                 padding: 10px;
@@ -1004,12 +1002,18 @@ function checkButtonAnswer(selectedAnswer, correctAnswer, question) {
                 color: #155724;
                 background-color: #d4edda;
                 border-color: #c3e6cb;
+                padding: 10px;
+                border-radius: 4px;
+                margin-bottom: 15px;
             }
 
             .incorrect {
                 color: #721c24;
                 background-color: #f8d7da;
                 border-color: #f5c6cb;
+                padding: 10px;
+                border-radius: 4px;
+                margin-bottom: 15px;
             }
 
             .rationale-container {
@@ -1033,20 +1037,5 @@ function checkButtonAnswer(selectedAnswer, correctAnswer, question) {
             }
         `;
         document.head.appendChild(style);
-    }
-}
-
-
-function showPreviousQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        displayQuestion(currentQuestions[currentQuestionIndex]);
-    }
-}
-
-function showNextQuestion() {
-    if (currentQuestionIndex < currentQuestions.length - 1) {
-        currentQuestionIndex;
-        displayQuestion(currentQuestions[currentQuestionIndex]);
     }
 }

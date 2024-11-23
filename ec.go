@@ -105,10 +105,6 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 		args = append(args, grade, grade)
 	}
 
-	// print query and args
-	fmt.Println(query)
-	fmt.Println(args)
-
 	// execute the query
 	rows, err := db.Query(query, args...)
 	if err != nil {
@@ -121,7 +117,7 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
 		var startGrade int
 		var endGrade int
 		var amount string
-		var deadline string
+		var deadline sql.NullString 
 		var link string
 		var notes string
 		var category string
@@ -137,8 +133,13 @@ func resultsScholarship(w http.ResponseWriter, r *http.Request) {
               <div id="` + name + `"
                 data-link="` + link + `"
                 data-amount="` + amount + `"
-                data-grades="` + fmt.Sprintf("%d-%d", startGrade, endGrade) + `"
-                data-deadline="` + deadline + `"
+                data-grades="` + fmt.Sprintf("%d-%d", startGrade, endGrade) + `"`
+
+        if deadline.Valid {
+            htmlToInsert += `data-deadline="` + deadline.String + `"`
+        }
+
+        htmlToInsert += `
                 data-category="` + category + `"
                 data-notes="` + notes + `">
                 <div class="program-name">` + name + `</div>

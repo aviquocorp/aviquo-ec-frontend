@@ -64,7 +64,8 @@ testSectionButton.addEventListener('click', function() {
     }
 
     // Hide the test section checkboxes
-    testSectionCheckboxes.classList.add('hidden');
+    // is this necessary?
+    // testSectionCheckboxes.classList.add('hidden');
 
     // Show the difficulty section
     difficultyCheckboxes.classList.remove('hidden');

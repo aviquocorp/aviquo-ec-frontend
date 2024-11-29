@@ -32,3 +32,5 @@ jobs:
       with:
         name: 'logs'
         path: 'logs'
+
+runs-on: self-hosted

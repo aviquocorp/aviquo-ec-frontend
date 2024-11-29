@@ -12,7 +12,7 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
 
@@ -33,4 +33,4 @@ jobs:
         name: 'logs'
         path: 'logs'
 
-runs-on: self-hosted
+
